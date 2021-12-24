@@ -13,6 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{9161b8f5-f065-45d6-8906-4675fffb8601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\01.Core">
+      <UniqueIdentifier>{51297a90-86c6-4c23-9739-7ca99531c854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\02.Object">
+      <UniqueIdentifier>{ba9c0e73-0d34-4482-8d0b-92a7eb5f7c5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\03.Stage">
+      <UniqueIdentifier>{e134e289-5614-44b3-9656-7db561c04f53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\04.Time">
+      <UniqueIdentifier>{b13540ef-4ec2-4c74-af57-26578d41aa4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05.Input">
+      <UniqueIdentifier>{1797a340-72d2-4ff6-b65b-0df35d803a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\00.Header">
+      <UniqueIdentifier>{9494b4e2-1c18-4d2a-9126-13e98ed4117b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -27,10 +48,22 @@
     <ClInclude Include="AvoidPoopGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Game\01.Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game\00.Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>Game\00.Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AvoidPoopGame.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Game\01.Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

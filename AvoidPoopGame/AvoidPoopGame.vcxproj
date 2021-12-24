@@ -140,12 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AvoidPoopGame.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Define.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AvoidPoopGame.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Core.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AvoidPoopGame.rc" />
