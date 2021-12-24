@@ -1,7 +1,7 @@
 #include "Core.h"
 
 Core* Core::mCore = nullptr;
-bool Core::mFlag  = true;
+bool Core::mFlag = true;
 
 Core::Core()
 	: mHinstance(nullptr)
@@ -16,7 +16,7 @@ Core::~Core()
 	ReleaseDC(mHwnd, mHdc);
 	mHdc = nullptr;
 
-	if (nullptr != mHbitmap) 
+	if (nullptr != mHbitmap)
 	{
 		DeleteObject(mHbitmap);
 		mHbitmap = nullptr;
@@ -54,7 +54,6 @@ bool Core::init(HINSTANCE hInstance)
 
 	return true;
 }
-
 
 int Core::run()
 {
@@ -108,8 +107,12 @@ bool Core::Create()
 
 	mHdc = GetDC(mHwnd);
 
-
+	RECT window = { 0, 0, 1200, 600 };
+	AdjustWindowRect(&window, WS_OVERLAPPEDWINDOW, false);
+	SetWindowPos(mHwnd, HWND_TOP, window.left, 0, window.right - window.left, window.bottom - window.top, SWP_SHOWWINDOW);
 	ShowWindow(mHwnd, SW_SHOW);
+
+	GetClientRect(mHwnd, &window); // 크기 확인용 코드
 
 	return true;
 }
