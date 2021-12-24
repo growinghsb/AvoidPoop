@@ -73,6 +73,12 @@ struct FPOINT
 	float mY;
 };
 
+struct LENGTH 
+{
+	int mWidth;
+	int mVertical;
+};
+
 // 키의 상태 정보를 가지는 구조체
 struct KEY_INFO 
 {

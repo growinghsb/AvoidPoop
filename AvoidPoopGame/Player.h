@@ -7,7 +7,7 @@ class Player :
 public:
 	Player();
 	Player(FPOINT pos, int size, float speed);
-	~Player() = default;
+	~Player();
 
 	void init()   override;
 	void update() override;
@@ -15,5 +15,6 @@ public:
 
 private:
 	float mSpeed;
+	class Gun* mGun;
 };
 

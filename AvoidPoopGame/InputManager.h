@@ -13,9 +13,14 @@ public:
 
 	bool isPress(KEY_LIST key) const
 	{
-		return	mKeyInfo[(UINT)key].mKeyState == KEY_STATE::TIC ||
-				mKeyInfo[(UINT)key].mKeyState == KEY_STATE::PRESS ?
+		return	mKeyInfo[(UINT)key].mKeyState == KEY_STATE::PRESS ?
 				true : false;
+	}
+
+	bool isTic(KEY_LIST key) const
+	{
+		return	mKeyInfo[(UINT)key].mKeyState == KEY_STATE::TIC ?
+			true : false;
 	}
 
 private:

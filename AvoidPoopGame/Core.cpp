@@ -103,6 +103,8 @@ void Core::render()
 {
 	// mBackDC 를 전달 하면서 렌더링을 진행 하고,
 	// 최종적으로 BitBlt() 를 통해 화면에 나타낸다.
+	FillRect(mBackDC, &mWindow, (HBRUSH)(COLOR_WINDOW + 1));
+
 	Stage::getInstance()->render(mBackDC);
 
 	BitBlt(mHdc, 0, 0, mWindow.right, mWindow.bottom, mBackDC, 0, 0, SRCCOPY);

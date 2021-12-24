@@ -37,6 +37,12 @@
     <Filter Include="Game\00.Header">
       <UniqueIdentifier>{9494b4e2-1c18-4d2a-9126-13e98ed4117b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\06.Weapon">
+      <UniqueIdentifier>{0ce9d00a-8862-4a40-9d7b-e3a7c8811679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\02.Object\Bullet">
+      <UniqueIdentifier>{4d07bd09-4bad-40fc-8f0a-2ce759bca064}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -78,6 +84,12 @@
     <ClInclude Include="Stage.h">
       <Filter>Game\03.Stage</Filter>
     </ClInclude>
+    <ClInclude Include="Gun.h">
+      <Filter>Game\06.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Game\02.Object\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -100,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>Game\03.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun.cpp">
+      <Filter>Game\06.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Game\02.Object\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

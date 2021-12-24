@@ -37,6 +37,10 @@ void Stage::deleteInstance()
 
 void Stage::init()
 {
+	for (int i = 0; i < mObjs.size(); ++i)
+	{
+		mObjs[i]->init();
+	}
 }
 
 void Stage::update()
