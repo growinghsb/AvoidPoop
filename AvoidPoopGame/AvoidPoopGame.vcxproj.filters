@@ -57,6 +57,9 @@
     <ClInclude Include="Define.h">
       <Filter>Game\00.Header</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Game\04.Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -64,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="Core.cpp">
       <Filter>Game\01.Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Game\04.Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "Timer.h"
 
 Core* Core::mCore = nullptr;
 bool Core::mFlag = true;
@@ -39,6 +40,8 @@ void Core::deleteInstance()
 		delete mCore;
 		mCore = nullptr;
 	}
+
+	Timer::deleteInstance();
 }
 
 bool Core::init(HINSTANCE hInstance)
@@ -52,8 +55,11 @@ bool Core::init(HINSTANCE hInstance)
 		return false;
 	}
 
+	Timer::getInstance()->init();
+
 	return true;
 }
+
 
 int Core::run()
 {
@@ -69,9 +75,16 @@ int Core::run()
 		else
 		{
 			// 실제 게임 로직 실행
+			update();
 		}
 	}
 	return (int)msg.wParam;
+}
+
+
+void Core::update()
+{
+	Timer::getInstance()->update(mHwnd);
 }
 
 ATOM Core::MyRegisterClass()

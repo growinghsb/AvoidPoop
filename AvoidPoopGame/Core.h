@@ -5,18 +5,20 @@
 class Core
 {
 public:
-	ATOM					   MyRegisterClass();
-	bool					   Create();
-	static LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-	int run();
-
 	static Core* getInstance();
 	static void  deleteInstance();
+
 	bool		 init(HINSTANCE hInstance);
+	void		 update();
+	int			 run();
 
 private:
 	Core();
 	~Core();
+
+	ATOM					   MyRegisterClass();
+	bool					   Create();
+	static LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
 	static Core* mCore;
 	static bool  mFlag;
