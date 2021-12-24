@@ -2,6 +2,10 @@
 
 #include "framework.h"
 #include "AvoidPoopGame.h"
+#include "Define.h"
+#include "Sturct.h"
+
+#include <crtdbg.h>
 
 #include <iostream>
 #include <vector>

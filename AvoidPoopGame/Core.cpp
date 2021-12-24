@@ -1,5 +1,5 @@
 #include "Core.h"
-#include "Timer.h"
+#include "TimeManager.h"
 
 Core* Core::mCore = nullptr;
 bool Core::mFlag = true;
@@ -8,20 +8,17 @@ Core::Core()
 	: mHinstance(nullptr)
 	, mHwnd(nullptr)
 	, mHdc(nullptr)
-	, mHbitmap(nullptr)
+	, mBackBuffer(nullptr)
+	, mBackDC(nullptr)
+	, mWindow{}
 {
 }
 
 Core::~Core()
 {
 	ReleaseDC(mHwnd, mHdc);
-	mHdc = nullptr;
-
-	if (nullptr != mHbitmap)
-	{
-		DeleteObject(mHbitmap);
-		mHbitmap = nullptr;
-	}
+	DeleteObject(mBackBuffer);
+	DeleteDC(mBackDC);
 }
 
 Core* Core::getInstance()
@@ -41,7 +38,7 @@ void Core::deleteInstance()
 		mCore = nullptr;
 	}
 
-	Timer::deleteInstance();
+	TimeManager::deleteInstance();
 }
 
 bool Core::init(HINSTANCE hInstance)
@@ -55,7 +52,13 @@ bool Core::init(HINSTANCE hInstance)
 		return false;
 	}
 
-	Timer::getInstance()->init();
+	mBackDC = CreateCompatibleDC(mHdc);
+	mBackBuffer = CreateCompatibleBitmap(mHdc, mWindow.right, mWindow.bottom);
+
+	HBITMAP prevBitmap = (HBITMAP)SelectObject(mBackDC, mBackBuffer);
+	DeleteObject(prevBitmap);
+
+	TimeManager::getInstance()->init();
 
 	return true;
 }
@@ -76,6 +79,7 @@ int Core::run()
 		{
 			// 실제 게임 로직 실행
 			update();
+			render();
 		}
 	}
 	return (int)msg.wParam;
@@ -84,7 +88,13 @@ int Core::run()
 
 void Core::update()
 {
-	Timer::getInstance()->update(mHwnd);
+	TimeManager::getInstance()->update(mHwnd);
+}
+
+void Core::render()
+{
+	// mBackDC 를 전달 하면서 렌더링을 진행 하고,
+	// 최종적으로 BitBlt() 를 통해 화면에 나타낸다.
 }
 
 ATOM Core::MyRegisterClass()
@@ -120,12 +130,12 @@ bool Core::Create()
 
 	mHdc = GetDC(mHwnd);
 
-	RECT window = { 0, 0, 1200, 600 };
-	AdjustWindowRect(&window, WS_OVERLAPPEDWINDOW, false);
-	SetWindowPos(mHwnd, HWND_TOP, window.left, 0, window.right - window.left, window.bottom - window.top, SWP_SHOWWINDOW);
+	mWindow = { 0, 0, 1200, 600 };
+	AdjustWindowRect(&mWindow, WS_OVERLAPPEDWINDOW, false);
+	SetWindowPos(mHwnd, HWND_TOP, mWindow.left, 0, mWindow.right - mWindow.left, mWindow.bottom - mWindow.top, SWP_SHOWWINDOW);
 	ShowWindow(mHwnd, SW_SHOW);
 
-	GetClientRect(mHwnd, &window); // 크기 확인용 코드
+	GetClientRect(mHwnd, &mWindow); // 크기 확인용 코드
 
 	return true;
 }

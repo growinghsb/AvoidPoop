@@ -10,6 +10,7 @@ public:
 
 	bool		 init(HINSTANCE hInstance);
 	void		 update();
+	void		 render();
 	int			 run();
 
 private:
@@ -26,6 +27,11 @@ private:
 	HINSTANCE mHinstance;
 	HWND	  mHwnd;
 	HDC		  mHdc;
-	HBITMAP	  mHbitmap;
+	
+	HBITMAP	  mBackBuffer;
+	HDC	      mBackDC;
+
+	RECT mWindow;
+
 };
 

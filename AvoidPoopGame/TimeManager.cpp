@@ -1,8 +1,8 @@
-#include "Timer.h"
+#include "TimeManager.h"
 
-Timer* Timer::mTimer = nullptr;
+TimeManager* TimeManager::mTimeManager = nullptr;
 
-Timer::Timer()
+TimeManager::TimeManager()
 	: mFrequency{}
 	, mPrevCounter{}
 	, mCurCounter{}
@@ -12,31 +12,31 @@ Timer::Timer()
 {
 }
 
-Timer* Timer::getInstance()
+TimeManager* TimeManager::getInstance()
 {
-	if (nullptr == mTimer)
+	if (nullptr == mTimeManager)
 	{
-		mTimer = new Timer;
+		mTimeManager = new TimeManager;
 	}
-	return mTimer;
+	return mTimeManager;
 }
 
-void Timer::deleteInstance()
+void TimeManager::deleteInstance()
 {
-	if (nullptr != mTimer)
+	if (nullptr != mTimeManager)
 	{
-		delete mTimer;
-		mTimer = nullptr;
+		delete mTimeManager;
+		mTimeManager = nullptr;
 	}
 }
 
-void Timer::init()
+void TimeManager::init()
 {
 	QueryPerformanceFrequency(&mFrequency);
 	QueryPerformanceCounter(&mPrevCounter);
 }
 
-void Timer::update(HWND hWnd)
+void TimeManager::update(HWND hWnd)
 {
 	static float ds = 0.f;
 

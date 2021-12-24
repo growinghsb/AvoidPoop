@@ -34,6 +34,9 @@
     <Filter Include="Game\00.Header">
       <UniqueIdentifier>{9494b4e2-1c18-4d2a-9126-13e98ed4117b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\02.Object\Player">
+      <UniqueIdentifier>{d6c4d190-86ec-44ff-88f4-251a272216e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -57,8 +60,17 @@
     <ClInclude Include="Define.h">
       <Filter>Game\00.Header</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
+    <ClInclude Include="TimeManager.h">
       <Filter>Game\04.Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj.h">
+      <Filter>Game\02.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\02.Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Sturct.h">
+      <Filter>Game\00.Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,8 +80,14 @@
     <ClCompile Include="Core.cpp">
       <Filter>Game\01.Core</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
+    <ClCompile Include="TimeManager.cpp">
       <Filter>Game\04.Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj.cpp">
+      <Filter>Game\02.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\02.Object\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
