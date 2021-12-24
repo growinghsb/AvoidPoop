@@ -11,7 +11,7 @@ public:
 
 	void init()   override;
 	void update() override;
-	void render() override;
+	void render(HDC backDC) override;
 
 private:
 	float mSpeed;

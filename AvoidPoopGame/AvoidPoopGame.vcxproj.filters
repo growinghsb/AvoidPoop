@@ -31,11 +31,11 @@
     <Filter Include="Game\05.Input">
       <UniqueIdentifier>{1797a340-72d2-4ff6-b65b-0df35d803a17}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\00.Header">
-      <UniqueIdentifier>{9494b4e2-1c18-4d2a-9126-13e98ed4117b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\02.Object\Player">
       <UniqueIdentifier>{d6c4d190-86ec-44ff-88f4-251a272216e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\00.Header">
+      <UniqueIdentifier>{9494b4e2-1c18-4d2a-9126-13e98ed4117b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +72,12 @@
     <ClInclude Include="Sturct.h">
       <Filter>Game\00.Header</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Game\05.Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Game\03.Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -88,6 +94,12 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Game\02.Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Game\05.Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Game\03.Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

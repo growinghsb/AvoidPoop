@@ -1,5 +1,7 @@
 #include "Core.h"
 #include "TimeManager.h"
+#include "InputManager.h"
+#include "Stage.h"
 
 Core* Core::mCore = nullptr;
 bool Core::mFlag = true;
@@ -39,6 +41,8 @@ void Core::deleteInstance()
 	}
 
 	TimeManager::deleteInstance();
+	InputManager::deleteInstance();
+	Stage::deleteInstance();
 }
 
 bool Core::init(HINSTANCE hInstance)
@@ -59,6 +63,8 @@ bool Core::init(HINSTANCE hInstance)
 	DeleteObject(prevBitmap);
 
 	TimeManager::getInstance()->init();
+	InputManager::getInstance()->init();
+	Stage::getInstance()->init();
 
 	return true;
 }
@@ -89,12 +95,17 @@ int Core::run()
 void Core::update()
 {
 	TimeManager::getInstance()->update(mHwnd);
+	InputManager::getInstance()->update();
+	Stage::getInstance()->update();
 }
 
 void Core::render()
 {
 	// mBackDC 를 전달 하면서 렌더링을 진행 하고,
 	// 최종적으로 BitBlt() 를 통해 화면에 나타낸다.
+	Stage::getInstance()->render(mBackDC);
+
+	BitBlt(mHdc, 0, 0, mWindow.right, mWindow.bottom, mBackDC, 0, 0, SRCCOPY);
 }
 
 ATOM Core::MyRegisterClass()

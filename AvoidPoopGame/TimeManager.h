@@ -10,6 +10,11 @@ public:
 
 	void init();
 	void update(HWND hWnd);
+	
+	float getDS() const 
+	{
+		return mDS;
+	}
 
 private:
 	TimeManager();

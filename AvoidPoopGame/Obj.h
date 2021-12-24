@@ -9,7 +9,7 @@ public:
 
 	virtual void init() = 0;
 	virtual void update() = 0;
-	virtual void render() = 0;
+	virtual void render(HDC backDC) = 0;
 
 protected:
 	Obj(FPOINT pos, int size);
