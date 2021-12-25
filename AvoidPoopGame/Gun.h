@@ -13,6 +13,16 @@ public:
 	void render(HDC backDC);
 	void createBullet();
 
+	LENGTH getLength()
+	{
+		return mLength;
+	}
+
+	bool isTop() 
+	{
+		return (int)mPos.mY <= 0;
+	}
+
 private:
 	FPOINT mPos;
 	LENGTH mLength;

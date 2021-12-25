@@ -13,6 +13,11 @@ public:
 	void		 render();
 	int			 run();
 
+	RECT getWindowSize() 
+	{
+		return mWindow;
+	}
+
 private:
 	Core();
 	~Core();
@@ -32,6 +37,5 @@ private:
 	HDC	      mBackDC;
 
 	RECT mWindow;
-
 };
 

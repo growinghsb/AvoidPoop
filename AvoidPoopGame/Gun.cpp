@@ -9,7 +9,9 @@ Gun::Gun(FPOINT pos, LENGTH length)
 
 Gun::~Gun()
 {
-	for (int i = 0; i < mBullets.size(); ++i) 
+	int size = (int)mBullets.size();
+
+	for (int i = 0; i < size; ++i)
 	{
 		delete mBullets.front();
 		mBullets.pop_front();
@@ -29,7 +31,7 @@ void Gun::render(HDC backDC)
 	list<Bullet*>::iterator iter = mBullets.begin();
 	list<Bullet*>::iterator endIter = mBullets.end();
 
-	for (; iter != endIter; ++iter) 
+	for (; iter != endIter; ++iter)
 	{
 		(*iter)->update();
 		(*iter)->render(backDC);
@@ -38,11 +40,11 @@ void Gun::render(HDC backDC)
 
 void Gun::createBullet()
 {
-	if (mBullets.empty()) 
+	if (mBullets.empty())
 	{
 		mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mLength.mWidth));
 	}
-	else 
+	else
 	{
 		if (mBullets.front()->isValid())
 		{
@@ -50,11 +52,11 @@ void Gun::createBullet()
 		}
 		else
 		{
-			Bullet* bullet = mBullets.front();
+			Bullet* invalidBullet = mBullets.front();
 			mBullets.pop_front();
 
-			bullet->changePos(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth });
-			mBullets.push_back(bullet);
+			invalidBullet->changePos(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth });
+			mBullets.push_back(invalidBullet);
 		}
 	}
 }

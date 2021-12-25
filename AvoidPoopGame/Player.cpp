@@ -4,36 +4,28 @@
 #include "Gun.h"
 #include "Stage.h"
 #include "Bullet.h"
+#include "Core.h"
 
 Player::Player()
-	: Obj(FPOINT{}, 50)
-	, mSpeed(200.f)
-	, mGun(nullptr)
+	: Player(FPOINT{}, 60, 200.f)
 {
 }
 
 Player::Player(FPOINT pos, int size, float speed)
 	: Obj(pos, size)
 	, mSpeed(speed)
-	, mGun(nullptr)
+	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }))
 {
 }
 
 Player::~Player()
 {
-	if (nullptr != mGun)
-	{
-		delete mGun;
-		mGun = nullptr;
-	}
+	delete mGun;
+	mGun = nullptr;
 }
 
 void Player::init()
 {
-	if (nullptr == mGun)
-	{
-		mGun = new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY });
-	}
 }
 
 void Player::update()
@@ -41,25 +33,53 @@ void Player::update()
 	// 키 입력 이동 처리
 	if (ISPRESS(KEY_LIST::LEFT))
 	{
-		mPos.mX -= mSpeed * DS;
+		if ((int)mPos.mX > 0) 
+		{
+			mPos.mX -= mSpeed * DS;
+		}
+		else 
+		{
+			mPos.mX = 0.f;
+		}
 	}
 
 	if (ISPRESS(KEY_LIST::TOP))
 	{
-		mPos.mY -= mSpeed * DS;
+		if (!mGun->isTop()) 
+		{
+			mPos.mY -= mSpeed * DS;
+		}
+		else 
+		{
+			mPos.mY = 0.f + mGun->getLength().mVertical;
+		}
 	}
 
 	if (ISPRESS(KEY_LIST::RIGHT))
 	{
-		mPos.mX += mSpeed * DS;
+		if ((int)mPos.mX + mSize < WINDOW.right)
+		{
+			mPos.mX += mSpeed * DS;
+		}
+		else 
+		{
+			mPos.mX = (float)WINDOW.right - (float)mSize;
+		}
 	}
 
 	if (ISPRESS(KEY_LIST::BOTTOM))
 	{
-		mPos.mY += mSpeed * DS;
+		if ((int)mPos.mY + mSize < WINDOW.bottom) 
+		{
+			mPos.mY += mSpeed * DS;
+		}
+		else 
+		{
+			mPos.mY = (float)WINDOW.bottom - (float)mSize;
+		}
 	}
 
-	if (ISTIC(KEY_LIST::SPACE)) 
+	if (ISTIC(KEY_LIST::SPACE))
 	{
 		mGun->createBullet();
 	}

@@ -9,8 +9,8 @@ public:
 	Player(FPOINT pos, int size, float speed);
 	~Player();
 
-	void init()   override;
-	void update() override;
+	void init()				override;
+	void update()			override;
 	void render(HDC backDC) override;
 
 private:
