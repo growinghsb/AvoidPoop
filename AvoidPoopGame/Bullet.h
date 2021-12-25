@@ -6,7 +6,7 @@ class Bullet
 	: public Obj
 {
 public:
-	Bullet(FPOINT pos, int size, float speed);
+	Bullet(FPOINT pos, int size, float speed, float scale);
 	~Bullet() = default;
 
 	void init() override;
@@ -18,33 +18,9 @@ public:
 		return (int)mPos.mY > 0;
 	}
 
-	void changePos(FPOINT pos) 
+	void setScale(float scale)
 	{
-		mPos = pos;
-	}
-
-	void scaleUp() 
-	{
-		if ((int)mScale < 2) 
-		{
-			mScale += 0.1f;
-		}
-		else 
-		{
-			mScale = 1.9f;
-		}
-	}
-
-	void scaleDown() 
-	{
-		if ((int)mScale >= 1) 
-		{
-			mScale -= 0.1f;
-		}
-		else 
-		{
-			mScale = 1.0f;
-		}
+		mScale = scale;
 	}
 
 private:

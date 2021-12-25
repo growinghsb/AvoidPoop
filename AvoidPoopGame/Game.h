@@ -17,3 +17,4 @@ using std::list;
 using std::string;
 using std::wstring;
 using std::to_string;
+using std::abs;

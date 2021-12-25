@@ -1,10 +1,10 @@
 #include "Bullet.h"
 #include "TimeManager.h"
 
-Bullet::Bullet(FPOINT pos, int size, float speed)
+Bullet::Bullet(FPOINT pos, int size, float speed, float scale)
 	: Obj(pos, size)
 	, mSpeed(speed)
-	, mScale(1.0f)
+	, mScale(scale)
 {
 }
 

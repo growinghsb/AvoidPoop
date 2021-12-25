@@ -13,23 +13,19 @@ public:
     virtual void render(HDC backDC) override;
 
     bool isValid();
-    void changePos(FPOINT pos) 
-    {
-        mPos = pos;
-    }
-
-    void changeSize(int size) 
-    {
-        mSize = size;
-    }
-    
     void changeSpeed(float speed)
     {
         mSpeed = speed;
     }
 
+    float getRegenTime() const 
+    {
+        return mRegenTime;
+    }
+
 private:
     float mSpeed;
     float mScale;
+    float mRegenTime;
 };
 

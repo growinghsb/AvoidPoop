@@ -27,10 +27,13 @@ public:
 	void bulletScaleDown();
 
 private:
+	void setBulletScale();
+	
 	FPOINT mPos;
 	LENGTH mLength;
 
 	list<class Bullet*> mBullets;
 	float mBulletSpeed;
+	float mBulletScale;
 };
 

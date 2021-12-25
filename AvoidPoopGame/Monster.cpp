@@ -6,6 +6,7 @@ Monster::Monster(FPOINT pos, int size, float speed, float scale)
 	: Obj(pos, size)
 	, mSpeed(speed)
 	, mScale(scale)
+	, mRegenTime(0.4f)
 {
 }
 

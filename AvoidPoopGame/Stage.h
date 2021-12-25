@@ -12,6 +12,8 @@ public:
 	void update();
 	void render(HDC backDC);
 
+	bool CrushMonsterRemove(class Bullet& bullet);
+
 private:
 	Stage();
 	~Stage();

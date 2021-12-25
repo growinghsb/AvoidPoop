@@ -16,6 +16,7 @@ Player::Player(FPOINT pos, int size, float speed)
 	, mSpeed(speed)
 	, mScale(1.0f)
 	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }, 400.f))
+	, mLaunchMode(true)
 {
 }
 
@@ -114,11 +115,27 @@ void Player::update()
 		mGun->bulletScaleDown();
 	}
 
-	if (ISTIC(KEY_LIST::SPACE))
+	if (ISTIC(KEY_LIST::LSHIFT)) 
 	{
-		mGun->createBullet();
+		mLaunchMode ? mLaunchMode = false : mLaunchMode = true;
 	}
 
+	// 연사모드
+	if (mLaunchMode) 
+	{
+		if (ISTIC(KEY_LIST::SPACE))
+		{
+			mGun->createBullet();
+		}
+	}
+	// 속사모드
+	else 
+	{
+		if (ISPRESS(KEY_LIST::SPACE))
+		{
+			mGun->createBullet();
+		}
+	}
 	mGun->update(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY });
 }
 
