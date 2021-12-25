@@ -16,9 +16,6 @@
     <Filter Include="Game">
       <UniqueIdentifier>{9161b8f5-f065-45d6-8906-4675fffb8601}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\01.Core">
-      <UniqueIdentifier>{51297a90-86c6-4c23-9739-7ca99531c854}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\02.Object">
       <UniqueIdentifier>{ba9c0e73-0d34-4482-8d0b-92a7eb5f7c5b}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,12 @@
     </Filter>
     <Filter Include="Game\02.Object\Bullet">
       <UniqueIdentifier>{4d07bd09-4bad-40fc-8f0a-2ce759bca064}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\01.Core">
+      <UniqueIdentifier>{51297a90-86c6-4c23-9739-7ca99531c854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\02.Object\Monster">
+      <UniqueIdentifier>{c9436b42-ea0a-4562-925e-7d641e0125e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +93,9 @@
     <ClInclude Include="Bullet.h">
       <Filter>Game\02.Object\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Game\02.Object\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -118,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Game\02.Object\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Game\02.Object\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

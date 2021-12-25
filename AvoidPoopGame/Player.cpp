@@ -14,7 +14,8 @@ Player::Player()
 Player::Player(FPOINT pos, int size, float speed)
 	: Obj(pos, size)
 	, mSpeed(speed)
-	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }))
+	, mScale(1.0f)
+	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }, 400.f))
 {
 }
 
@@ -35,7 +36,7 @@ void Player::update()
 	{
 		if ((int)mPos.mX > 0) 
 		{
-			mPos.mX -= mSpeed * DS;
+			mPos.mX -= (mSpeed * DS) * mScale;
 		}
 		else 
 		{
@@ -47,7 +48,7 @@ void Player::update()
 	{
 		if (!mGun->isTop()) 
 		{
-			mPos.mY -= mSpeed * DS;
+			mPos.mY -= (mSpeed * DS) * mScale;
 		}
 		else 
 		{
@@ -59,7 +60,7 @@ void Player::update()
 	{
 		if ((int)mPos.mX + mSize < WINDOW.right)
 		{
-			mPos.mX += mSpeed * DS;
+			mPos.mX += (mSpeed * DS) * mScale;
 		}
 		else 
 		{
@@ -71,12 +72,46 @@ void Player::update()
 	{
 		if ((int)mPos.mY + mSize < WINDOW.bottom) 
 		{
-			mPos.mY += mSpeed * DS;
+			mPos.mY += (mSpeed * DS) * mScale;
 		}
 		else 
 		{
 			mPos.mY = (float)WINDOW.bottom - (float)mSize;
 		}
+	}
+
+	if (ISTIC(KEY_LIST::_1)) 
+	{
+		if ((int)mScale < 2) 
+		{
+			mScale += 0.1f;
+		}
+		else 
+		{
+			mScale = 1.9f;
+		}
+	}
+
+	if (ISTIC(KEY_LIST::_2))
+	{
+		if ((int)mScale >= 1)
+		{
+			mScale -= 0.1f;
+		}
+		else
+		{
+			mScale = 1.0f;
+		}
+	}
+
+	if (ISTIC(KEY_LIST::_3))
+	{
+		mGun->bulletScaleUp();
+	}
+
+	if (ISTIC(KEY_LIST::_4))
+	{
+		mGun->bulletScaleDown();
 	}
 
 	if (ISTIC(KEY_LIST::SPACE))

@@ -1,9 +1,10 @@
 #include "Bullet.h"
 #include "TimeManager.h"
 
-Bullet::Bullet(FPOINT pos, int size)
+Bullet::Bullet(FPOINT pos, int size, float speed)
 	: Obj(pos, size)
-	, mSpeed(400.f)
+	, mSpeed(speed)
+	, mScale(1.0f)
 {
 }
 
@@ -13,7 +14,7 @@ void Bullet::init()
 
 void Bullet::update()
 {
-	mPos.mY -= mSpeed * DS;
+	mPos.mY -= (mSpeed * DS) * mScale;
 }
 
 void Bullet::render(HDC backDC)

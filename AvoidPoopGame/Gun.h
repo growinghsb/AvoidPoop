@@ -6,7 +6,7 @@
 class Gun
 {
 public:
-	Gun(FPOINT pos, LENGTH length);
+	Gun(FPOINT pos, LENGTH length, float bulletSpeed);
 	~Gun();
 
 	void update(FPOINT pos, LENGTH length);
@@ -23,10 +23,14 @@ public:
 		return (int)mPos.mY <= 0;
 	}
 
+	void bulletScaleUp();
+	void bulletScaleDown();
+
 private:
 	FPOINT mPos;
 	LENGTH mLength;
 
 	list<class Bullet*> mBullets;
+	float mBulletSpeed;
 };
 

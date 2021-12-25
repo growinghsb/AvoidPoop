@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     int resultValue = Core::getInstance()->run();
 
-    Core::deleteInstance();
+    //Core::deleteInstance();
 
     return resultValue;
 }

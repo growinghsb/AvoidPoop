@@ -15,6 +15,7 @@ public:
 
 private:
 	float mSpeed;
+	float mScale;
 	class Gun* mGun;
 };
 

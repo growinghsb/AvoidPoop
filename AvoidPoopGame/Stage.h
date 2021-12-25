@@ -16,8 +16,11 @@ private:
 	Stage();
 	~Stage();
 
+	void createMonster();
+
 	static Stage* mStage;
 
 	vector<class Obj*> mObjs;
+	list<class Monster*> mMonsters;
 };
 

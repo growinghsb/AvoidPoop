@@ -47,6 +47,8 @@ void Core::deleteInstance()
 
 bool Core::init(HINSTANCE hInstance)
 {
+	srand((UINT)time(nullptr));
+
 	mHinstance = hInstance;
 
 	MyRegisterClass();
