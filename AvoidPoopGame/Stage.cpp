@@ -8,6 +8,7 @@
 Stage* Stage::mStage = nullptr;
 
 Stage::Stage()
+	: mMonsterScale(1.f)
 {
 	mObjs.reserve(128);
 	mObjs.push_back(new Player(FPOINT{ 80, 80 }, 60, 200.f));
@@ -18,6 +19,13 @@ Stage::Stage()
 Stage::~Stage()
 {
 	size_t size = mObjs.size();
+
+	for (int i = size - 1; i >= 0; --i) 
+	{	
+		delete mObjs[i];
+		mObjs.pop_back();
+	}
+
 	for (size_t i = 0; i < size; ++i)
 	{
 		delete mObjs[i];
@@ -112,13 +120,13 @@ void Stage::createMonster()
 
 	if (mMonsters.empty())
 	{
-		mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, 1.f));
+		mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale));
 	}
 	else
 	{
 		if (mMonsters.front()->isValid())
 		{
-			mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, 1.f));
+			mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale));
 		}
 		else
 		{
