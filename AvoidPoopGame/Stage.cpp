@@ -23,17 +23,22 @@ Stage::Stage()
 Stage::~Stage()
 {
 	int size = (int)mObjs.size();
-
-	for (int i = size - 1; i >= 0; --i)
+	for (int i = 0; i < size; ++i)
 	{
 		delete mObjs[i];
-		mObjs.pop_back();
 	}
+	mObjs.clear();
 
 	while (!mMonsters.empty())
 	{
 		delete mMonsters.front();
 		mMonsters.pop_front();
+	}
+
+	while (!mItems.empty())
+	{
+		delete mItems.front();
+		mItems.pop_front();
 	}
 }
 
@@ -76,12 +81,13 @@ void Stage::update()
 		createMonster();
 	}
 
-	auto iter = mMonsters.begin();
-	auto endIter = mMonsters.end();
+	auto monsterIter = mMonsters.begin();
+	auto monsterEndIter = mMonsters.end();
 
-	for (; iter != endIter; ++iter)
+	while (monsterIter != monsterEndIter)
 	{
-		(*iter)->update();
+		(*monsterIter)->update();
+		++monsterIter;
 	}
 
 	// obj
@@ -94,7 +100,7 @@ void Stage::update()
 	auto itemIter = mItems.begin();
 	auto itemEndIter = mItems.end();
 
-	while (itemIter != itemEndIter) 
+	while (itemIter != itemEndIter)
 	{
 		(*itemIter)->update();
 		++itemIter;
@@ -114,7 +120,6 @@ void Stage::render(HDC backDC)
 
 	// obj
 	SetDCBrushColor(backDC, RGB(255, 255, 255));
-
 	for (int i = 0; i < mObjs.size(); ++i)
 	{
 		mObjs[i]->render(backDC);
@@ -172,13 +177,13 @@ void Stage::createItem(Monster& monster)
 	{
 		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum]));
 	}
-	else 
+	else
 	{
-		if (mItems.front()->isValid()) 
+		if (mItems.front()->isValid())
 		{
 			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum]));
 		}
-		else 
+		else
 		{
 			Item* inValidItem = mItems.front();
 			mItems.pop_front();
@@ -203,27 +208,36 @@ bool Stage::CrushMonsterRemove(Bullet& bullet)
 	int x2y2;
 	int radiusSum;
 
+	int bulletCenterX = bullet.getCenter().x;
+	int bulletCenterY = bullet.getCenter().y;
+	int bulletRadius = bullet.getSize() / 2;
+	int bulletOffensePower = bullet.getOffensePower();
+
 	while (iter != endIter)
 	{
-		x2 = abs((*iter)->getCenter().x - bullet.getCenter().x);
+		x2 = abs((*iter)->getCenter().x - bulletCenterX);
 		x2 *= x2;
 
-		y2 = abs((*iter)->getCenter().y - bullet.getCenter().y);
+		y2 = abs((*iter)->getCenter().y - bulletCenterY);
 		y2 *= y2;
 
 		x2y2 = x2 + y2;
 
-		radiusSum = (*iter)->getSize() / 2 + bullet.getSize() / 2;
+		radiusSum = (*iter)->getSize() / 2 + bulletRadius;
 		radiusSum *= radiusSum;
 
 		if (x2y2 <= radiusSum)
 		{
 			// HP 비교 후 죽었는지 체크, 죽었으면 지우고, 아니면 그대로 진행
-			(*iter)->changeHP((*iter)->getHP() - bullet.getOffensePower());
+			(*iter)->changeHP((*iter)->getHP() - bulletOffensePower);
 
 			if ((*iter)->isDie())
 			{
 				createItem(*(*iter)); // 몬스터 위치로부터 아이템 생성
+
+				// 꼭 erase 하기 전에 포인터를 먼저 해제해야 한다. 
+				// 그래야 주소를 잃어버리지 않고 지울 수 있다. 
+				delete (*iter);
 				mMonsters.erase(iter);
 			}
 			return true;

@@ -40,6 +40,7 @@ void Gun::update(FPOINT pos, LENGTH length)
 		if (Stage::getInstance()->CrushMonsterRemove(*(*iter)))
 		{
 			// 몬스터와 충돌 됐으므로 총알 지우기
+			delete (*iter);
 			iter = mBullets.erase(iter);
 			endIter = mBullets.end();
 		}

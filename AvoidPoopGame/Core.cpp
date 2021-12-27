@@ -71,7 +71,6 @@ bool Core::init(HINSTANCE hInstance)
 	return true;
 }
 
-
 int Core::run()
 {
 	MSG msg = {};
@@ -92,7 +91,6 @@ int Core::run()
 	}
 	return (int)msg.wParam;
 }
-
 
 void Core::update()
 {
