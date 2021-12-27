@@ -18,9 +18,14 @@ public:
 		return mWindow;
 	}
 
-	HWND getHWnd() 
+	HWND getHWnd() const 
 	{
 		return mHwnd;
+	}
+
+	HINSTANCE getHInstance() const 
+	{
+		return mHinstance;
 	}
 
 private:

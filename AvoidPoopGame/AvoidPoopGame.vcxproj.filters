@@ -49,6 +49,12 @@
     <Filter Include="Game\02.Object\Item">
       <UniqueIdentifier>{b0d20c50-bca0-4ad9-b6a8-ff9d4a2de2c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\03.Stage\Intro">
+      <UniqueIdentifier>{ec22af9f-74b8-4c82-a82b-bc10d7d717c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\03.Stage\Play">
+      <UniqueIdentifier>{1a5bf42a-c155-4243-8d1e-41aaf8849df3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -102,6 +108,15 @@
     <ClInclude Include="Item.h">
       <Filter>Game\02.Object\Item</Filter>
     </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>Game\03.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroStage.h">
+      <Filter>Game\03.Stage\Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayStage.h">
+      <Filter>Game\03.Stage\Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -136,6 +151,15 @@
     </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Game\02.Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>Game\03.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroStage.cpp">
+      <Filter>Game\03.Stage\Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayStage.cpp">
+      <Filter>Game\03.Stage\Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

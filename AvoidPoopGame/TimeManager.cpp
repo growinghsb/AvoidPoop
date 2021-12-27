@@ -2,6 +2,9 @@
 
 TimeManager* TimeManager::mTimeManager = nullptr;
 
+static float ds = 0.f;
+static int second = 0;
+
 TimeManager::TimeManager()
 	: mFrequency{}
 	, mPrevCounter{}
@@ -10,6 +13,8 @@ TimeManager::TimeManager()
 	, mFPS(0)
 	, mSecond(0)
 {
+	ds = 0.f;
+	second = 0;
 }
 
 TimeManager* TimeManager::getInstance()
@@ -38,8 +43,7 @@ void TimeManager::init()
 
 void TimeManager::update(HWND hWnd)
 {
-	static float ds = 0.f;
-	static int second = 0;
+
 
 	QueryPerformanceCounter(&mCurCounter);
 	mDS = (float)(mCurCounter.QuadPart - mPrevCounter.QuadPart) / (float)mFrequency.QuadPart;

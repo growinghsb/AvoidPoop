@@ -5,6 +5,7 @@
 #include "Stage.h"
 #include "Bullet.h"
 #include "Core.h"
+#include "StageManager.h"
 
 static int hpBarSize = 20;
 
@@ -20,7 +21,7 @@ Player::Player(FPOINT pos, int size, float speed)
 	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }, 400.f))
 	, mLaunchMode(true)
 	, mHP(100)
-	, mHPBarColor{200, 0, 0}
+	, mHPBarColor{ 200, 0, 0 }
 {
 }
 
@@ -39,11 +40,11 @@ void Player::update()
 	// 키 입력 이동 처리
 	if (ISPRESS(KEY_LIST::LEFT))
 	{
-		if ((int)mPos.mX > 0) 
+		if ((int)mPos.mX > 0)
 		{
 			mPos.mX -= (mSpeed * DS) * mScale;
 		}
-		else 
+		else
 		{
 			mPos.mX = 0.f;
 		}
@@ -51,11 +52,11 @@ void Player::update()
 
 	if (ISPRESS(KEY_LIST::TOP))
 	{
-		if (!mGun->isTop()) 
+		if (!mGun->isTop())
 		{
 			mPos.mY -= (mSpeed * DS) * mScale;
 		}
-		else 
+		else
 		{
 			mPos.mY = 0.f + mGun->getLength().mVertical;
 		}
@@ -67,7 +68,7 @@ void Player::update()
 		{
 			mPos.mX += (mSpeed * DS) * mScale;
 		}
-		else 
+		else
 		{
 			mPos.mX = (float)WINDOW.right - (float)mSize;
 		}
@@ -79,19 +80,19 @@ void Player::update()
 		{
 			mPos.mY += (mSpeed * DS) * mScale;
 		}
-		else 
+		else
 		{
 			mPos.mY = (float)WINDOW.bottom - (float)mSize - hpBarSize;
 		}
 	}
 
-	if (ISTIC(KEY_LIST::_1)) 
+	if (ISTIC(KEY_LIST::_1))
 	{
-		if ((int)mScale < 2) 
+		if ((int)mScale < 2)
 		{
 			mScale += 0.1f;
 		}
-		else 
+		else
 		{
 			mScale = 1.9f;
 		}
@@ -119,13 +120,13 @@ void Player::update()
 		mGun->bulletScaleDown();
 	}
 
-	if (ISTIC(KEY_LIST::LSHIFT)) 
+	if (ISTIC(KEY_LIST::LSHIFT))
 	{
 		mLaunchMode ? mLaunchMode = false : mLaunchMode = true;
 	}
 
 	// 연사모드
-	if (mLaunchMode) 
+	if (mLaunchMode)
 	{
 		if (ISTIC(KEY_LIST::SPACE))
 		{
@@ -133,7 +134,7 @@ void Player::update()
 		}
 	}
 	// 속사모드
-	else 
+	else
 	{
 		if (ISPRESS(KEY_LIST::SPACE))
 		{
@@ -151,10 +152,15 @@ void Player::render(HDC backDC)
 	static int hpBarX = (mHP - mSize) / 2;
 	SetDCBrushColor(backDC, RGB(mHPBarColor.r, mHPBarColor.g, mHPBarColor.b));
 	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize + hpBarSize / 4, (int)mPos.mX - hpBarX + mHP, (int)mPos.mY + mSize + hpBarSize / 2);
-	
+
 	// player
 	SetDCBrushColor(backDC, COLOR_WHITE);
 	Rectangle(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mSize, (int)mPos.mY + mSize);
-	
+
 	mGun->render(backDC);
+}
+
+void Player::decreaseHP(int offensePower)
+{
+	mHP -= offensePower;
 }

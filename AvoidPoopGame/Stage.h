@@ -6,31 +6,25 @@
 class Stage
 {
 public:
-	static Stage* getInstance();
-	static void deleteInstance();
+	Stage(int order);
+	virtual ~Stage() = default;
 
-	void init();
-	void update();
-	void render(HDC backDC);
+	virtual void init() = 0;
+	virtual void update() = 0;
+	virtual void render(HDC backDC) = 0;
+	virtual void enter() = 0;
+	virtual void exit() = 0;
 
-	bool crushMonsterRemove(class Bullet& bullet);
-	void crushCheckWithPlayer();
+	int getOrder() const
+	{
+		return mOrder;
+	}
 
-private:
-	Stage();
-	~Stage();
+	virtual void stageClear() = 0;
 
-	void createMonster();
-	void createItem(class Monster& monster);
-
-	static Stage* mStage;
-
-	vector<class Obj*> mObjs;
-	list<class Monster*> mMonsters;
-	float mMonsterScale;
-	float mMonsterRegenTime;
-	list<class Item*> mItems;
-	ITEM_TYPE mItemTypes[(UINT)ITEM_TYPE::END];
-	COLOR mItemColors[(UINT)ITEM_TYPE_COLOR::END];
+protected:
+	// 모든 자식 스테이지들이 가지는,
+	// 몇 번째 스테이지인지에 대한 인덱스 값
+	int mOrder;
 };
 

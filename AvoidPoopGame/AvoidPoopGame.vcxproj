@@ -147,12 +147,15 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="IntroStage.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayStage.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageManager.h" />
     <ClInclude Include="Sturct.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TimeManager.h" />
@@ -161,13 +164,16 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="IntroStage.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Obj.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayStage.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
   </ItemGroup>
   <ItemGroup>

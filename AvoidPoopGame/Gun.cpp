@@ -1,6 +1,7 @@
 #include "Gun.h"
 #include "Bullet.h"
-#include "Stage.h"
+#include "StageManager.h"
+#include "PlayStage.h"
 
 Gun::Gun(FPOINT pos, LENGTH length, float bulletSpeed)
 	: mPos(pos)
@@ -38,7 +39,8 @@ void Gun::update(FPOINT pos, LENGTH length)
 		(*iter)->update();
 
 		// 총알 하나에 대해서 몬스터와의 충돌체크
-		if (Stage::getInstance()->crushMonsterRemove(*(*iter)))
+		PlayStage* playStage = (PlayStage*)StageManager::getInstance()->getCurrentStage();
+		if (playStage->crushMonsterRemove(*(*iter)))
 		{
 			// 몬스터와 충돌 됐으므로 총알 지우기
 			delete (*iter);

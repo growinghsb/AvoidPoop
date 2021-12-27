@@ -1,10 +1,12 @@
 #include "Core.h"
 #include "TimeManager.h"
 #include "InputManager.h"
-#include "Stage.h"
+#include "StageManager.h"
 
 Core* Core::mCore = nullptr;
 bool Core::mFlag = true;
+
+bool gameStart = false;
 
 Core::Core()
 	: mHinstance(nullptr)
@@ -42,7 +44,7 @@ void Core::deleteInstance()
 
 	TimeManager::deleteInstance();
 	InputManager::deleteInstance();
-	Stage::deleteInstance();
+	StageManager::deleteInstance();
 }
 
 bool Core::init(HINSTANCE hInstance)
@@ -64,9 +66,10 @@ bool Core::init(HINSTANCE hInstance)
 	HBITMAP prevBitmap = (HBITMAP)SelectObject(mBackDC, mBackBuffer);
 	DeleteObject(prevBitmap);
 
-	TimeManager::getInstance()->init();
+	// Timer 초기화는 게임 시작시부터 실행시키기 위해
+	// introStage 내부에서 게임 시작 시 init() 실행
 	InputManager::getInstance()->init();
-	Stage::getInstance()->init();
+	StageManager::getInstance()->init();
 
 	return true;
 }
@@ -94,9 +97,14 @@ int Core::run()
 
 void Core::update()
 {
-	TimeManager::getInstance()->update(mHwnd);
+	// 기본값은 false, 게임 시작시에 true 로 변경
+	// 게임 시작은 IntroStage 에서 시작 버튼 눌렀을 때
+	if (gameStart) 
+	{
+		TimeManager::getInstance()->update(mHwnd);
+	}
 	InputManager::getInstance()->update();
-	Stage::getInstance()->update();
+	StageManager::getInstance()->update();
 }
 
 void Core::render()
@@ -105,7 +113,7 @@ void Core::render()
 	// 최종적으로 BitBlt() 를 통해 화면에 나타낸다.
 	FillRect(mBackDC, &mWindow, (HBRUSH)(COLOR_WINDOW + 1));
 
-	Stage::getInstance()->render(mBackDC);
+	StageManager::getInstance()->render(mBackDC);
 
 	BitBlt(mHdc, 0, 0, mWindow.right, mWindow.bottom, mBackDC, 0, 0, SRCCOPY);
 }

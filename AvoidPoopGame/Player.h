@@ -13,17 +13,14 @@ public:
 	void update()			override;
 	void render(HDC backDC) override;
 
-	void decreaseHP(int offensePower)
-	{
-		mHP -= offensePower;
-		
-		// 추후 함수로 플레이어 생사 확인 후 죽었으면 Stage 다시 시작
-		if (mHP <= 0) 
-		{
-			mHP = 100;
-		}
-	}
+	void decreaseHP(int offensePower);
 
+	// 생사 확인
+	bool isAlive() 
+	{
+		return mHP > 0;
+	}
+	
 	// 사각형 대 사각형 충돌 시 사용
 	bool isOverlapX(float x) 
 	{
