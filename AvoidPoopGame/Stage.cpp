@@ -18,18 +18,12 @@ Stage::Stage()
 
 Stage::~Stage()
 {
-	size_t size = mObjs.size();
+	int size = (int)mObjs.size();
 
-	for (int i = size - 1; i >= 0; --i) 
-	{	
-		delete mObjs[i];
-		mObjs.pop_back();
-	}
-
-	for (size_t i = 0; i < size; ++i)
+	for (int i = size - 1; i >= 0; --i)
 	{
 		delete mObjs[i];
-		mObjs[i] = nullptr;
+		mObjs.pop_back();
 	}
 
 	while (!mMonsters.empty())

@@ -39,6 +39,7 @@ void TimeManager::init()
 void TimeManager::update(HWND hWnd)
 {
 	static float ds = 0.f;
+	static int second = 0;
 
 	QueryPerformanceCounter(&mCurCounter);
 	mDS = (float)(mCurCounter.QuadPart - mPrevCounter.QuadPart) / (float)mFrequency.QuadPart;
@@ -50,10 +51,19 @@ void TimeManager::update(HWND hWnd)
 	{
 		ds = ds - 1.f;
 		mSecond += 1;
+		second += 1;
+
+		if (second > 59) 
+		{
+			second = 0;
+		}
+
+		int minute = mSecond / 60;
+		int hour = (mSecond / 60) / 60;
 
 		enum { LENGTH = 128 };
 		wchar_t text[LENGTH] = {};
-		swprintf(text, LENGTH, L"FPS: %d DS: %f Second: %d초", mFPS, mDS, mSecond);
+		swprintf(text, LENGTH, L"FPS: %d DS: %f Time: %d시간 %d분 %d초", mFPS, mDS, hour, minute, second);
 		SetWindowTextW(hWnd, text);
 
 		mFPS = 0;
