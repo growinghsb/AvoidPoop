@@ -25,5 +25,6 @@ private:
 	vector<class Obj*> mObjs;
 	list<class Monster*> mMonsters;
 	float mMonsterScale;
+	float mMonsterRegenTime;
 };
 

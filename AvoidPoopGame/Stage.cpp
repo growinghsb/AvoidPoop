@@ -9,6 +9,7 @@ Stage* Stage::mStage = nullptr;
 
 Stage::Stage()
 	: mMonsterScale(1.f)
+	, mMonsterRegenTime(0.4f)
 {
 	mObjs.reserve(128);
 	mObjs.push_back(new Player(FPOINT{ 80, 80 }, 60, 200.f));
@@ -92,8 +93,7 @@ void Stage::render(HDC backDC)
 	auto iter = mMonsters.begin();
 	auto endIter = mMonsters.end();
 
-	SelectObject(backDC, GetStockObject(DC_BRUSH));
-	SetDCBrushColor(backDC, RGB(200, 0, 0));
+
 	for (; iter != endIter; ++iter)
 	{
 		(*iter)->render(backDC);
@@ -111,16 +111,17 @@ void Stage::createMonster()
 	float randX = float(rand() % WINDOW.right);
 	int randSize = rand() % 130 + 20;
 	float randSpeed = (float)(rand() % 500) + 200;
+	int hp = randSize / 10;
 
 	if (mMonsters.empty())
 	{
-		mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale));
+		mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale, mMonsterRegenTime, hp));
 	}
 	else
 	{
 		if (mMonsters.front()->isValid())
 		{
-			mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale));
+			mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale, mMonsterRegenTime, hp));
 		}
 		else
 		{
@@ -130,6 +131,7 @@ void Stage::createMonster()
 			inValidMonster->changePos(FPOINT{ randX, 0 });
 			inValidMonster->changeSize(randSize);
 			inValidMonster->changeSpeed(randSpeed);
+			inValidMonster->changeHP(hp);
 
 			mMonsters.push_back(inValidMonster);
 		}
@@ -162,8 +164,13 @@ bool Stage::CrushMonsterRemove(Bullet& bullet)
 
 		if (x2y2 <= radiusSum)
 		{
-			// 지금은 지우지만 나중에는 hp 깎는걸로 변경
-			mMonsters.erase(iter);
+			// HP 비교 후 죽었는지 체크, 죽었으면 지우고, 아니면 그대로 진행
+			(*iter)->changeHP((*iter)->getHP() - bullet.getOffensePower());
+			
+			if ((*iter)->isDie())
+			{
+				mMonsters.erase(iter);	
+			}
 			return true;
 		}
 		++iter;

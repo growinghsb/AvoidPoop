@@ -7,6 +7,7 @@ Gun::Gun(FPOINT pos, LENGTH length, float bulletSpeed)
 	, mLength(length)
 	, mBulletSpeed(bulletSpeed)
 	, mBulletScale(1.f)
+	, mBulletOffensePower(3)
 {
 }
 
@@ -70,13 +71,13 @@ void Gun::createBullet()
 {
 	if (mBullets.empty())
 	{
-		mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mLength.mWidth, mBulletSpeed, mBulletScale));
+		mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mLength.mWidth, mBulletSpeed, mBulletScale, mBulletOffensePower));
 	}
 	else
 	{
 		if (mBullets.front()->isValid())
 		{
-			mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mLength.mWidth, mBulletSpeed, mBulletScale));
+			mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mLength.mWidth, mBulletSpeed, mBulletScale, mBulletOffensePower));
 		}
 		else
 		{

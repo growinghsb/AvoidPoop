@@ -1,10 +1,11 @@
 #include "Bullet.h"
 #include "TimeManager.h"
 
-Bullet::Bullet(FPOINT pos, int size, float speed, float scale)
+Bullet::Bullet(FPOINT pos, int size, float speed, float scale, int offensePower)
 	: Obj(pos, size)
 	, mSpeed(speed)
 	, mScale(scale)
+	, mOffensePower(offensePower)
 {
 }
 

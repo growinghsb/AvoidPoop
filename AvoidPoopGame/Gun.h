@@ -35,5 +35,6 @@ private:
 	list<class Bullet*> mBullets;
 	float mBulletSpeed;
 	float mBulletScale;
+	int mBulletOffensePower;
 };
 

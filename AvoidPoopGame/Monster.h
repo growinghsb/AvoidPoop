@@ -5,11 +5,11 @@ class Monster :
     public Obj
 {
 public:
-    Monster(FPOINT pos, int size, float speed, float scale);
+    Monster(FPOINT pos, int size, float speed, float scale, float regenTime, int hp);
     ~Monster() = default;
 
-    virtual void init() override;
-    virtual void update() override;
+    virtual void init()             override;
+    virtual void update()           override;
     virtual void render(HDC backDC) override;
 
     bool isValid();
@@ -23,9 +23,25 @@ public:
         return mRegenTime;
     }
 
+    int getHP() const
+    {
+        return mHP;
+    }
+    
+    void changeHP(int hp) 
+    {
+        mHP = hp;
+    }
+
+    bool isDie() 
+    {
+        return mHP <= 0;
+    }
+
 private:
     float mSpeed;
     float mScale;
     float mRegenTime;
+    int mHP;
 };
 
