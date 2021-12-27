@@ -38,7 +38,7 @@ void Gun::update(FPOINT pos, LENGTH length)
 		(*iter)->update();
 
 		// 총알 하나에 대해서 몬스터와의 충돌체크
-		if (Stage::getInstance()->CrushMonsterRemove(*(*iter)))
+		if (Stage::getInstance()->crushMonsterRemove(*(*iter)))
 		{
 			// 몬스터와 충돌 됐으므로 총알 지우기
 			delete (*iter);
@@ -123,8 +123,9 @@ void Gun::setBulletScale()
 	auto iter = mBullets.begin();
 	auto endIter = mBullets.end();
 
-	for (; iter != endIter; ++iter)
+	while (iter != endIter)
 	{
 		(*iter)->setScale(mBulletScale);
+		++iter;
 	}
 }

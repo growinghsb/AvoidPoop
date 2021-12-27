@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 #include "Game.h"
 
@@ -12,7 +13,8 @@ public:
 	void update();
 	void render(HDC backDC);
 
-	bool CrushMonsterRemove(class Bullet& bullet);
+	bool crushMonsterRemove(class Bullet& bullet);
+	void crushCheckWithPlayer();
 
 private:
 	Stage();

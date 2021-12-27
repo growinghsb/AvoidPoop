@@ -6,6 +6,8 @@
 #include "Bullet.h"
 #include "Core.h"
 
+static int hpBarSize = 20;
+
 Player::Player()
 	: Player(FPOINT{}, 60, 200.f)
 {
@@ -73,13 +75,13 @@ void Player::update()
 
 	if (ISPRESS(KEY_LIST::BOTTOM))
 	{
-		if ((int)mPos.mY + mSize < WINDOW.bottom) 
+		if ((int)mPos.mY + mSize + hpBarSize < WINDOW.bottom)
 		{
 			mPos.mY += (mSpeed * DS) * mScale;
 		}
 		else 
 		{
-			mPos.mY = (float)WINDOW.bottom - (float)mSize;
+			mPos.mY = (float)WINDOW.bottom - (float)mSize - hpBarSize;
 		}
 	}
 
@@ -145,10 +147,14 @@ void Player::render(HDC backDC)
 {
 	SelectObject(backDC, GetStockObject(DC_BRUSH));
 
+	// hp bar
+	static int hpBarX = (mHP - mSize) / 2;
 	SetDCBrushColor(backDC, RGB(mHPBarColor.r, mHPBarColor.g, mHPBarColor.b));
-	Rectangle(backDC, (int)mPos.mX - 20, (int)mPos.mY + mSize + 5, (int)mPos.mX + mSize + 20, (int)mPos.mY + mSize + 15);
+	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize + hpBarSize / 4, (int)mPos.mX - hpBarX + mHP, (int)mPos.mY + mSize + hpBarSize / 2);
 	
+	// player
 	SetDCBrushColor(backDC, COLOR_WHITE);
 	Rectangle(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mSize, (int)mPos.mY + mSize);
+	
 	mGun->render(backDC);
 }

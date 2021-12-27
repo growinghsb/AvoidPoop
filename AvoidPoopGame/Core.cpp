@@ -143,7 +143,7 @@ bool Core::Create()
 
 	mHdc = GetDC(mHwnd);
 
-	mWindow = { 0, 0, 1200, 600 };
+	mWindow = { 0, 0, 750, 768 };
 	AdjustWindowRect(&mWindow, WS_OVERLAPPEDWINDOW, false);
 	SetWindowPos(mHwnd, HWND_TOP, mWindow.left, 0, mWindow.right - mWindow.left, mWindow.bottom - mWindow.top, SWP_SHOWWINDOW);
 	ShowWindow(mHwnd, SW_SHOW);

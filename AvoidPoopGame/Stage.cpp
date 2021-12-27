@@ -16,7 +16,7 @@ Stage::Stage()
 	, mItemColors{ COLOR{238, 247, 106}, COLOR{255, 264, 238} }
 {
 	mObjs.reserve(128);
-	mObjs.push_back(new Player(FPOINT{ 80, 80 }, 60, 200.f));
+	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f));
 
 	createMonster();
 }
@@ -96,6 +96,9 @@ void Stage::update()
 	{
 		mObjs[i]->update();
 	}
+
+	// 여기서 몬스터 대 플레이어 충돌체크
+	crushCheckWithPlayer();
 
 	// item
 	auto itemIter = mItems.begin();
@@ -202,7 +205,7 @@ void Stage::createItem(Monster& monster)
 }
 
 // 총알 하나에 대해서 모든 몬스터 충돌 체크
-bool Stage::CrushMonsterRemove(Bullet& bullet)
+bool Stage::crushMonsterRemove(Bullet& bullet)
 {
 	auto iter = mMonsters.begin();
 	auto endIter = mMonsters.end();
@@ -237,7 +240,7 @@ bool Stage::CrushMonsterRemove(Bullet& bullet)
 
 			if ((*iter)->isDie())
 			{
-				if (rand() % 3 == 0) 
+				if (rand() % 3 == 0)
 				{
 					createItem(*(*iter)); // 몬스터 위치로부터 아이템 생성
 				}
@@ -252,4 +255,77 @@ bool Stage::CrushMonsterRemove(Bullet& bullet)
 		++iter;
 	}
 	return false;
+}
+
+// 플레이어 하나에 대해서 모든 몬스터 충돌체크
+void Stage::crushCheckWithPlayer()
+{
+	Player* player = (Player*)mObjs[0]; // 벡터의 0번은 무조건 player 이다. 
+
+	auto monsterIter = mMonsters.begin();
+	auto monsterEndIter = mMonsters.end();
+
+	int x2 = 0;
+	int y2 = 0;
+	int x2y2 = 0;
+	int radius = 0;
+
+	int monsterX = 0;
+	int monsterY = 0;
+
+	while (monsterIter != monsterEndIter)
+	{
+		if (player->isOverlapY((*monsterIter)->getPos().mY + (*monsterIter)->getSize()))
+		{
+			// 몬스터 반지름
+			radius = (*monsterIter)->getSize() / 2;
+			radius *= radius;
+		
+			monsterX = (*monsterIter)->getCenter().x;
+			monsterY = (*monsterIter)->getCenter().y;
+
+			// 사각형의 꼭지점과 원점 사이의 거리
+			x2 = abs((int)player->getPos().mX - monsterX);
+			y2 = abs((int)player->getPos().mY - monsterY);
+
+			x2 *= x2;
+			y2 *= y2;
+			x2y2 = x2 + y2;
+
+			if (x2y2 <= radius)
+			{
+				player->decreaseHP((*monsterIter)->getHP());
+				delete (*monsterIter);
+
+				monsterIter = mMonsters.erase(monsterIter);
+				monsterEndIter = mMonsters.end();
+
+				continue;
+			}
+
+			// 사각형의 다른쪽 꼭지점과 원점 사이의 거리
+			x2 = abs((int)player->getPos().mX + player->getSize() - monsterX);
+			y2 = abs((int)player->getPos().mY + player->getSize() - monsterY);
+
+			x2 *= x2;
+			y2 *= y2;
+			x2y2 = x2 + y2;
+
+			if (x2y2 <= radius)
+			{
+				player->decreaseHP((*monsterIter)->getHP());
+				delete (*monsterIter);
+
+				monsterIter = mMonsters.erase(monsterIter);
+				monsterEndIter = mMonsters.end();
+
+				continue;
+			}
+			++monsterIter;
+		}
+		else
+		{
+			++monsterIter;
+		}
+	}
 }

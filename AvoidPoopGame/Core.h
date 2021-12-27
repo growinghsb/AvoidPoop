@@ -18,6 +18,11 @@ public:
 		return mWindow;
 	}
 
+	HWND getHWnd() 
+	{
+		return mHwnd;
+	}
+
 private:
 	Core();
 	~Core();
