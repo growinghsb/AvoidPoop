@@ -36,5 +36,6 @@ private:
 	float mBulletSpeed;
 	float mBulletScale;
 	int mBulletOffensePower;
+	COLOR mBulletColor;
 };
 

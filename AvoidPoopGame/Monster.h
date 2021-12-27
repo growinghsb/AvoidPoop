@@ -48,5 +48,8 @@ private:
     float mScale;
     float mRegenTime;
     int mHP;
+
+    COLOR mBodyColor;
+    COLOR mHPBarColor;
 };
 

@@ -13,6 +13,7 @@ Stage::Stage()
 	, mMonsterRegenTime(0.4f)
 	, mItemTypes{ ITEM_TYPE::BULLTE_SIZE_UP,
 				ITEM_TYPE::OFFENCE_POWER_UP }
+	, mItemColors{ COLOR{238, 247, 106}, COLOR{255, 264, 238} }
 {
 	mObjs.reserve(128);
 	mObjs.push_back(new Player(FPOINT{ 80, 80 }, 60, 200.f));
@@ -110,16 +111,16 @@ void Stage::update()
 void Stage::render(HDC backDC)
 {
 	// monster
-	auto iter = mMonsters.begin();
-	auto endIter = mMonsters.end();
+	auto monsterIter = mMonsters.begin();
+	auto monsterEndIter = mMonsters.end();
 
-	for (; iter != endIter; ++iter)
+	for (; monsterIter != monsterEndIter; ++monsterIter)
 	{
-		(*iter)->render(backDC);
+		(*monsterIter)->render(backDC);
 	}
 
 	// obj
-	SetDCBrushColor(backDC, RGB(255, 255, 255));
+	SetDCBrushColor(backDC, COLOR_WHITE);
 	for (int i = 0; i < mObjs.size(); ++i)
 	{
 		mObjs[i]->render(backDC);
@@ -128,10 +129,12 @@ void Stage::render(HDC backDC)
 	// item
 	auto itemIter = mItems.begin();
 	auto itemEndIter = mItems.end();
-	SetDCBrushColor(backDC, RGB(238, 247, 106));
+	COLOR color;
 
 	while (itemIter != itemEndIter)
 	{
+		color = (*itemIter)->getItemColor();
+		SetDCBrushColor(backDC, RGB(color.r, color.g, color.b));
 		(*itemIter)->render(backDC);
 		++itemIter;
 	}
@@ -172,16 +175,17 @@ void Stage::createMonster()
 void Stage::createItem(Monster& monster)
 {
 	int typeNum = rand() % (UINT)ITEM_TYPE::END;
+	int colorNum = rand() % (UINT)ITEM_TYPE_COLOR::END;
 
 	if (mItems.empty())
 	{
-		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum]));
+		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum], mItemColors[colorNum]));
 	}
 	else
 	{
 		if (mItems.front()->isValid())
 		{
-			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum]));
+			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum], mItemColors[colorNum]));
 		}
 		else
 		{
@@ -191,7 +195,7 @@ void Stage::createItem(Monster& monster)
 			inValidItem->changePos(monster.getPos());
 			inValidItem->changeSpeed(monster.getSpeed());
 			inValidItem->changeItemType(mItemTypes[typeNum]);
-
+			inValidItem->changeItemColor(mItemColors[colorNum]);
 			mItems.push_back(inValidItem);
 		}
 	}
@@ -233,7 +237,10 @@ bool Stage::CrushMonsterRemove(Bullet& bullet)
 
 			if ((*iter)->isDie())
 			{
-				createItem(*(*iter)); // 몬스터 위치로부터 아이템 생성
+				if (rand() % 3 == 0) 
+				{
+					createItem(*(*iter)); // 몬스터 위치로부터 아이템 생성
+				}
 
 				// 꼭 erase 하기 전에 포인터를 먼저 해제해야 한다. 
 				// 그래야 주소를 잃어버리지 않고 지울 수 있다. 

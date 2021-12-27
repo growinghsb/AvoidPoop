@@ -17,6 +17,8 @@ Player::Player(FPOINT pos, int size, float speed)
 	, mScale(1.0f)
 	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }, 400.f))
 	, mLaunchMode(true)
+	, mHP(100)
+	, mHPBarColor{200, 0, 0}
 {
 }
 
@@ -141,6 +143,12 @@ void Player::update()
 
 void Player::render(HDC backDC)
 {
+	SelectObject(backDC, GetStockObject(DC_BRUSH));
+
+	SetDCBrushColor(backDC, RGB(mHPBarColor.r, mHPBarColor.g, mHPBarColor.b));
+	Rectangle(backDC, (int)mPos.mX - 20, (int)mPos.mY + mSize + 5, (int)mPos.mX + mSize + 20, (int)mPos.mY + mSize + 15);
+	
+	SetDCBrushColor(backDC, COLOR_WHITE);
 	Rectangle(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mSize, (int)mPos.mY + mSize);
 	mGun->render(backDC);
 }

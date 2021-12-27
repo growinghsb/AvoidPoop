@@ -8,15 +8,16 @@ Gun::Gun(FPOINT pos, LENGTH length, float bulletSpeed)
 	, mBulletSpeed(bulletSpeed)
 	, mBulletScale(1.f)
 	, mBulletOffensePower(3)
+	, mBulletColor{ 0, 255, 0 }
 {
 }
 
 Gun::~Gun()
 {
 	auto iter = mBullets.begin();
-	auto endIter = mBullets.end(); 
+	auto endIter = mBullets.end();
 
-	while (iter != endIter) 
+	while (iter != endIter)
 	{
 		delete (*iter);
 		iter = mBullets.erase(iter);
@@ -32,7 +33,7 @@ void Gun::update(FPOINT pos, LENGTH length)
 	auto iter = mBullets.begin();
 	auto endIter = mBullets.end();
 
-	while (iter != endIter) 
+	while (iter != endIter)
 	{
 		(*iter)->update();
 
@@ -55,17 +56,17 @@ void Gun::update(FPOINT pos, LENGTH length)
 void Gun::render(HDC backDC)
 {
 	Rectangle(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mLength.mWidth, mLength.mVertical);
-	
+
 	auto iter = mBullets.begin();
 	auto endIter = mBullets.end();
 
 	SelectObject(backDC, GetStockObject(DC_BRUSH));
-	SetDCBrushColor(backDC, RGB(0, 255, 0));
+	SetDCBrushColor(backDC, RGB(mBulletColor.r, mBulletColor.g, mBulletColor.b));
 	for (; iter != endIter; ++iter)
 	{
 		(*iter)->render(backDC);
 	}
-	SetDCBrushColor(backDC, RGB(0, 0, 0));
+	SetDCBrushColor(backDC, COLOR_WHITE);
 }
 
 void Gun::createBullet()

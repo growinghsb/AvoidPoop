@@ -73,6 +73,13 @@ enum class ITEM_TYPE
 	END
 };
 
+enum class ITEM_TYPE_COLOR
+{
+	YELLOW,
+	PINK,
+	END
+};
+
 // float 타입의 x, y 값을 나타내는 구조체
 struct FPOINT 
 {
@@ -91,6 +98,11 @@ struct KEY_INFO
 {
 	KEY_STATE mKeyState;
 	bool mPrevState;
+};
+
+struct COLOR 
+{
+	int r, g, b;
 };
 
 

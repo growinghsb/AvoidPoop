@@ -8,6 +8,8 @@ Monster::Monster(FPOINT pos, int size, float speed, float scale, float regenTime
 	, mScale(scale)
 	, mRegenTime(regenTime)
 	, mHP(hp)
+	, mBodyColor{ 115 , 22, 161 }
+	, mHPBarColor{ 200, 0, 0 }
 {
 }
 
@@ -24,11 +26,11 @@ void Monster::render(HDC backDC)
 {
 	SelectObject(backDC, GetStockObject(DC_BRUSH));
 
-	SetDCBrushColor(backDC, RGB(115, 22, 161)); // 진한 보라색
-	Ellipse(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mSize, (int)mPos.mY + mSize);
+	SetDCBrushColor(backDC, RGB(mBodyColor.r, mBodyColor.g, mBodyColor.b)); // 진한 보라색
+	Ellipse(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mSize, (int)mPos.mY + mSize); // monster
 
 	int hpBarY = (int)mPos.mY - 15;
-	SetDCBrushColor(backDC, RGB(200, 0, 0)); // 빨간색
+	SetDCBrushColor(backDC, RGB(mHPBarColor.r, mHPBarColor.g, mHPBarColor.b)); // 빨간색
 	Rectangle(backDC, (int)mPos.mX, hpBarY, (int)mPos.mX + (mHP * 10), hpBarY + 5); // Hp Bar
 }
 

@@ -2,7 +2,7 @@
 #include "Obj.h"
 
 class Player :
-    public Obj
+	public Obj
 {
 public:
 	Player();
@@ -13,10 +13,17 @@ public:
 	void update()			override;
 	void render(HDC backDC) override;
 
+	void changeHP(int hp)
+	{
+		mHP = hp;
+	}
+
 private:
 	float mSpeed;
 	float mScale;
 	bool mLaunchMode; // 속사, 연사 모드 설정 
 	class Gun* mGun;
+	int mHP;
+	COLOR mHPBarColor;
 };
 
