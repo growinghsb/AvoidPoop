@@ -4,12 +4,15 @@
 #include "Core.h"
 #include "TimeManager.h"
 #include "Bullet.h"
+#include "Item.h"
 
 Stage* Stage::mStage = nullptr;
 
 Stage::Stage()
 	: mMonsterScale(1.f)
 	, mMonsterRegenTime(0.4f)
+	, mItemTypes{ ITEM_TYPE::BULLTE_SIZE_UP,
+				ITEM_TYPE::OFFENCE_POWER_UP }
 {
 	mObjs.reserve(128);
 	mObjs.push_back(new Player(FPOINT{ 80, 80 }, 60, 200.f));
@@ -86,23 +89,46 @@ void Stage::update()
 	{
 		mObjs[i]->update();
 	}
+
+	// item
+	auto itemIter = mItems.begin();
+	auto itemEndIter = mItems.end();
+
+	while (itemIter != itemEndIter) 
+	{
+		(*itemIter)->update();
+		++itemIter;
+	}
 }
 
 void Stage::render(HDC backDC)
 {
+	// monster
 	auto iter = mMonsters.begin();
 	auto endIter = mMonsters.end();
-
 
 	for (; iter != endIter; ++iter)
 	{
 		(*iter)->render(backDC);
 	}
 
+	// obj
 	SetDCBrushColor(backDC, RGB(255, 255, 255));
+
 	for (int i = 0; i < mObjs.size(); ++i)
 	{
 		mObjs[i]->render(backDC);
+	}
+
+	// item
+	auto itemIter = mItems.begin();
+	auto itemEndIter = mItems.end();
+	SetDCBrushColor(backDC, RGB(238, 247, 106));
+
+	while (itemIter != itemEndIter)
+	{
+		(*itemIter)->render(backDC);
+		++itemIter;
 	}
 }
 
@@ -138,6 +164,34 @@ void Stage::createMonster()
 	}
 }
 
+void Stage::createItem(Monster& monster)
+{
+	int typeNum = rand() % (UINT)ITEM_TYPE::END;
+
+	if (mItems.empty())
+	{
+		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum]));
+	}
+	else 
+	{
+		if (mItems.front()->isValid()) 
+		{
+			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum]));
+		}
+		else 
+		{
+			Item* inValidItem = mItems.front();
+			mItems.pop_front();
+
+			inValidItem->changePos(monster.getPos());
+			inValidItem->changeSpeed(monster.getSpeed());
+			inValidItem->changeItemType(mItemTypes[typeNum]);
+
+			mItems.push_back(inValidItem);
+		}
+	}
+}
+
 // 총알 하나에 대해서 모든 몬스터 충돌 체크
 bool Stage::CrushMonsterRemove(Bullet& bullet)
 {
@@ -166,10 +220,11 @@ bool Stage::CrushMonsterRemove(Bullet& bullet)
 		{
 			// HP 비교 후 죽었는지 체크, 죽었으면 지우고, 아니면 그대로 진행
 			(*iter)->changeHP((*iter)->getHP() - bullet.getOffensePower());
-			
+
 			if ((*iter)->isDie())
 			{
-				mMonsters.erase(iter);	
+				createItem(*(*iter)); // 몬스터 위치로부터 아이템 생성
+				mMonsters.erase(iter);
 			}
 			return true;
 		}

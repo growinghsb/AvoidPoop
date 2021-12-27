@@ -28,6 +28,11 @@ public:
         return mHP;
     }
     
+    float getSpeed() const
+    {
+        return mSpeed;
+    }
+
     void changeHP(int hp) 
     {
         mHP = hp;

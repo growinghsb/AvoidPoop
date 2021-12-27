@@ -66,6 +66,13 @@ enum class KEY_STATE
 	END
 };
 
+enum class ITEM_TYPE 
+{
+	BULLTE_SIZE_UP, 
+	OFFENCE_POWER_UP,
+	END
+};
+
 // float 타입의 x, y 값을 나타내는 구조체
 struct FPOINT 
 {

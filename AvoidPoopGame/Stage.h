@@ -19,6 +19,7 @@ private:
 	~Stage();
 
 	void createMonster();
+	void createItem(class Monster& monster);
 
 	static Stage* mStage;
 
@@ -26,5 +27,7 @@ private:
 	list<class Monster*> mMonsters;
 	float mMonsterScale;
 	float mMonsterRegenTime;
+	list<class Item*> mItems;
+	ITEM_TYPE mItemTypes[(UINT)ITEM_TYPE::END];
 };
 
