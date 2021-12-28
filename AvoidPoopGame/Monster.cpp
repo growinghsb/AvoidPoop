@@ -3,7 +3,7 @@
 #include "TimeManager.h"
 
 Monster::Monster(FPOINT pos, int size, float speed, float scale, float regenTime, int hp)
-	: Obj(pos, size)
+	: Obj(pos, size, "monster")
 	, mSpeed(speed)
 	, mScale(scale)
 	, mRegenTime(regenTime)

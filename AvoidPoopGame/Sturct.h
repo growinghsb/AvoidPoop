@@ -70,6 +70,7 @@ enum class ITEM_TYPE
 {
 	BULLTE_SIZE_UP, 
 	OFFENCE_POWER_UP,
+	HP_UP,
 	END
 };
 
@@ -77,6 +78,7 @@ enum class ITEM_TYPE_COLOR
 {
 	YELLOW,
 	PINK,
+	RED,
 	END
 };
 

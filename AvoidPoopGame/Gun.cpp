@@ -9,6 +9,7 @@ Gun::Gun(FPOINT pos, LENGTH length, float bulletSpeed)
 	, mBulletSpeed(bulletSpeed)
 	, mBulletScale(1.f)
 	, mBulletOffensePower(3)
+	, mBulletSize(length.mWidth)
 	, mBulletColor{ 0, 255, 0 }
 {
 }
@@ -75,20 +76,20 @@ void Gun::createBullet()
 {
 	if (mBullets.empty())
 	{
-		mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mLength.mWidth, mBulletSpeed, mBulletScale, mBulletOffensePower));
+		mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mBulletSize, mBulletSpeed, mBulletScale, mBulletOffensePower));
 	}
 	else
 	{
 		if (mBullets.front()->isValid())
 		{
-			mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mLength.mWidth, mBulletSpeed, mBulletScale, mBulletOffensePower));
+			mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mBulletSize, mBulletSpeed, mBulletScale, mBulletOffensePower));
 		}
 		else
 		{
 			Bullet* invalidBullet = mBullets.front();
 			mBullets.pop_front();
 
-			invalidBullet->changePos(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth });
+			invalidBullet->changePos(FPOINT{ mPos.mX, mPos.mY - (float)mBulletSize });
 			mBullets.push_back(invalidBullet);
 		}
 	}
@@ -128,6 +129,30 @@ void Gun::setBulletScale()
 	while (iter != endIter)
 	{
 		(*iter)->setScale(mBulletScale);
+		++iter;
+	}
+}
+
+void Gun::setBulletSize()
+{
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
+
+	while (iter != endIter)
+	{
+		(*iter)->changeSize(mBulletSize);
+		++iter;
+	}
+}
+
+void Gun::setBulletOffensePower()
+{
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
+
+	while (iter != endIter)
+	{
+		(*iter)->changeOffensePower(mBulletOffensePower);
 		++iter;
 	}
 }

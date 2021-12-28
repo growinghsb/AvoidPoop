@@ -3,7 +3,7 @@
 #include "Core.h"
 
 Item::Item(FPOINT pos, int size, float speed, ITEM_TYPE itemType, COLOR itemColor)
-	: Obj(pos, size)
+	: Obj(pos, size, "item")
 	, mSpeed(speed)
 	, mScale(1.f)
 	, mItemType(itemType)

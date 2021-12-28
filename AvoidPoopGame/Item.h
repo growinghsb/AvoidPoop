@@ -39,6 +39,11 @@ public:
 		mSpeed = speed;
 	}
 
+	ITEM_TYPE getItemType() const
+	{
+		return mItemType;
+	}
+
 private:
 	float mSpeed;
 	float mScale;

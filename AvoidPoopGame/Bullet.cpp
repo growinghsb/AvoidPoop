@@ -2,7 +2,7 @@
 #include "TimeManager.h"
 
 Bullet::Bullet(FPOINT pos, int size, float speed, float scale, int offensePower)
-	: Obj(pos, size)
+	: Obj(pos, size, "bullet")
 	, mSpeed(speed)
 	, mScale(scale)
 	, mOffensePower(offensePower)

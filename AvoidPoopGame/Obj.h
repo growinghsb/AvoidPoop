@@ -16,31 +16,54 @@ public:
 		return mPos;
 	}
 
-	virtual int getSize() const
+	int getSize() const
 	{
 		return mSize;
 	}
 
-	virtual void changePos(FPOINT pos)
+	void changePos(FPOINT pos)
 	{
 		mPos = pos;
 	}
 
-	virtual void changeSize(int size)
+	void changeSize(int size)
 	{
 		mSize = size;
 	}
 
-	virtual POINT getCenter()
+	POINT getCenter() const 
 	{
 		int halfSize = mSize / 2;
 		return POINT{ (long)mPos.mX + halfSize, (long)mPos.mY + halfSize };
 	}
 
+	// 사각형 대 사각형 충돌 시 사용
+	bool isOverlapX(float x) const
+	{
+		if (x <= mPos.mX + mSize || x >= mPos.mX)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	// 사각형 대 사각형 충돌 시 사용
+	bool isOverlapY(float y) const
+	{
+		return y >= mPos.mY;
+	}
+
+	string getTag() const
+	{
+		return mObjTag;
+	}
+	
+
 protected:
-	Obj(FPOINT pos, int size);
+	Obj(FPOINT pos, int size, string objTag);
 
 	FPOINT mPos;
 	int mSize;
+	string mObjTag;
 };
 

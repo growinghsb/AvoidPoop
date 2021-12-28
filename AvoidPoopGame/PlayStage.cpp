@@ -11,9 +11,14 @@ PlayStage::PlayStage(int order)
 	: Stage(order)
 	, mMonsterScale(1.f)
 	, mMonsterRegenTime(0.4f)
-	, mItemTypes{ ITEM_TYPE::BULLTE_SIZE_UP,
-				ITEM_TYPE::OFFENCE_POWER_UP }
-	, mItemColors{ COLOR{238, 247, 106}, COLOR{255, 264, 238} }
+	, mItemTypes{
+				ITEM_TYPE::BULLTE_SIZE_UP,
+				ITEM_TYPE::OFFENCE_POWER_UP,
+				ITEM_TYPE::HP_UP }
+				, mItemColors{
+							COLOR{238, 247, 106},
+							COLOR{255, 264, 238},
+							COLOR{200, 0, 0} }
 {
 	mObjs.reserve(128);
 }
@@ -56,13 +61,13 @@ void PlayStage::update()
 		createMonster();
 	}
 
-	auto monsterIter = mMonsters.begin();
-	auto monsterEndIter = mMonsters.end();
+	auto iter = mMonsters.begin();
+	auto endIter = mMonsters.end();
 
-	while (monsterIter != monsterEndIter)
+	while (iter != endIter)
 	{
-		(*monsterIter)->update();
-		++monsterIter;
+		(*iter)->update();
+		++iter;
 	}
 
 	// obj
@@ -72,7 +77,7 @@ void PlayStage::update()
 	}
 
 	// 여기서 몬스터 대 플레이어 충돌체크
-	crushCheckWithPlayer();
+	crushCheckMonsterPlayer();
 
 	// item
 	auto itemIter = mItems.begin();
@@ -83,17 +88,20 @@ void PlayStage::update()
 		(*itemIter)->update();
 		++itemIter;
 	}
+
+	// 여기서 아이템 대 플레이어 충돌체크
+	crushCheckItemPlayer();
 }
 
 void PlayStage::render(HDC backDC)
 {
 	// monster
-	auto monsterIter = mMonsters.begin();
-	auto monsterEndIter = mMonsters.end();
+	auto iter = mMonsters.begin();
+	auto endIter = mMonsters.end();
 
-	for (; monsterIter != monsterEndIter; ++monsterIter)
+	for (; iter != endIter; ++iter)
 	{
-		(*monsterIter)->render(backDC);
+		(*iter)->render(backDC);
 	}
 
 	// obj
@@ -205,12 +213,12 @@ bool PlayStage::crushMonsterRemove(Bullet& bullet)
 	return false;
 }
 
-void PlayStage::crushCheckWithPlayer()
+void PlayStage::crushCheckMonsterPlayer()
 {
-	Player* player = (Player*)mObjs[0]; // 벡터의 0번은 무조건 player 이다. 
+	Player* player = (Player*)mObjs[0];
 
-	auto monsterIter = mMonsters.begin();
-	auto monsterEndIter = mMonsters.end();
+	auto iter = mMonsters.begin();
+	auto endIter = mMonsters.end();
 
 	int x2 = 0;
 	int y2 = 0;
@@ -220,16 +228,16 @@ void PlayStage::crushCheckWithPlayer()
 	int monsterX = 0;
 	int monsterY = 0;
 
-	while (monsterIter != monsterEndIter)
+	while (iter != endIter)
 	{
-		if (player->isOverlapY((*monsterIter)->getPos().mY + (*monsterIter)->getSize()))
+		if (player->isOverlapY((*iter)->getPos().mY + (*iter)->getSize()))
 		{
 			// 몬스터 반지름
-			radius = (*monsterIter)->getSize() / 2;
+			radius = (*iter)->getSize() / 2;
 			radius *= radius;
 
-			monsterX = (*monsterIter)->getCenter().x;
-			monsterY = (*monsterIter)->getCenter().y;
+			monsterX = (*iter)->getCenter().x;
+			monsterY = (*iter)->getCenter().y;
 
 			// 사각형의 꼭지점과 원점 사이의 거리
 			x2 = abs((int)player->getPos().mX - monsterX);
@@ -241,18 +249,18 @@ void PlayStage::crushCheckWithPlayer()
 
 			if (x2y2 <= radius)
 			{
-				player->decreaseHP((*monsterIter)->getHP());
-				
-				if (player->isAlive()) 
-				{
-					delete (*monsterIter);
+				player->decreaseHP((*iter)->getHP());
 
-					monsterIter = mMonsters.erase(monsterIter);
-					monsterEndIter = mMonsters.end();
+				if (player->isAlive())
+				{
+					delete (*iter);
+
+					iter = mMonsters.erase(iter);
+					endIter = mMonsters.end();
 
 					continue;
 				}
-				else 
+				else
 				{
 					StageManager::getInstance()->changePrevStage();
 					return;
@@ -269,12 +277,14 @@ void PlayStage::crushCheckWithPlayer()
 
 			if (x2y2 <= radius)
 			{
+				player->decreaseHP((*iter)->getHP());
+
 				if (player->isAlive())
 				{
-					delete (*monsterIter);
+					delete (*iter);
 
-					monsterIter = mMonsters.erase(monsterIter);
-					monsterEndIter = mMonsters.end();
+					iter = mMonsters.erase(iter);
+					endIter = mMonsters.end();
 
 					continue;
 				}
@@ -284,11 +294,82 @@ void PlayStage::crushCheckWithPlayer()
 					return;
 				}
 			}
-			++monsterIter;
+			++iter;
 		}
 		else
 		{
-			++monsterIter;
+			++iter;
+		}
+	}
+}
+
+void PlayStage::crushCheckItemPlayer()
+{
+	Player* player = (Player*)mObjs[0];
+
+	auto iter = mItems.begin();
+	auto endIter = mItems.end();
+
+	int x2 = 0;
+	int y2 = 0;
+	int x2y2 = 0;
+	int radius = 0;
+
+	int itemX = 0;
+	int itemY = 0;
+
+	while (iter != endIter)
+	{
+		if (player->isOverlapY((*iter)->getPos().mY + (*iter)->getSize()))
+		{
+			radius = (*iter)->getSize() / 2;
+			radius *= radius;
+
+			itemX = (*iter)->getCenter().x;
+			itemY = (*iter)->getCenter().y;
+
+			// 사각형의 꼭지점과 원점 사이의 거리
+			x2 = abs((int)player->getPos().mX - itemX);
+			y2 = abs((int)player->getPos().mY - itemY);
+
+			x2 *= x2;
+			y2 *= y2;
+			x2y2 = x2 + y2;
+
+			if (x2y2 <= radius)
+			{
+  				player->applyItemEffect((*iter)->getItemType());
+
+				delete (*iter);
+				iter = mItems.erase(iter);
+				endIter = mItems.end();
+
+				continue;
+			}
+
+			// 사각형의 다른쪽 꼭지점과 원점 사이의 거리
+			x2 = abs((int)player->getPos().mX + player->getSize() - itemX);
+			y2 = abs((int)player->getPos().mY + player->getSize() - itemY);
+
+			x2 *= x2;
+			y2 *= y2;
+			x2y2 = x2 + y2;
+
+			if (x2y2 <= radius)
+			{
+				player->applyItemEffect((*iter)->getItemType());
+
+				delete (*iter);
+				iter = mItems.erase(iter);
+				endIter = mItems.end();
+
+				continue;
+			}
+			++iter;
+		}
+		else
+		{
+			++iter;
 		}
 	}
 }
@@ -349,6 +430,7 @@ void PlayStage::createItem(Monster& monster)
 			inValidItem->changeSpeed(monster.getSpeed());
 			inValidItem->changeItemType(mItemTypes[typeNum]);
 			inValidItem->changeItemColor(mItemColors[colorNum]);
+
 			mItems.push_back(inValidItem);
 		}
 	}

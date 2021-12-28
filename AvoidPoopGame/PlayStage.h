@@ -18,9 +18,11 @@ public:
 	void stageClear();
 
 	bool crushMonsterRemove(class Bullet& bullet);
-	void crushCheckWithPlayer();
+	
 		
 private:
+	void crushCheckMonsterPlayer();
+	void crushCheckItemPlayer();
 	void createMonster();
 	void createItem(class Monster& monster);
 

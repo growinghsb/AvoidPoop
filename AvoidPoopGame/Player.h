@@ -14,28 +14,25 @@ public:
 	void render(HDC backDC) override;
 
 	void decreaseHP(int offensePower);
+	void increaseHP()
+	{
+		if (mHP + int(mHP * 0.2) < 100)
+		{
+			mHP += int(mHP * 0.2);
+		}
+		else
+		{
+			mHP = 100;
+		}
+	}
 
 	// 생사 확인
-	bool isAlive() 
+	bool isAlive()
 	{
 		return mHP > 0;
 	}
-	
-	// 사각형 대 사각형 충돌 시 사용
-	bool isOverlapX(float x) 
-	{
-		if (x <= mPos.mX + mSize || x >= mPos.mX)
-		{
-			return true;
-		}
-		return false;
-	}
 
-	// 사각형 대 사각형 충돌 시 사용
-	bool isOverlapY(float y) 
-	{
-		return y >= mPos.mY;
-	}
+	void applyItemEffect(ITEM_TYPE itemType);
 
 private:
 	float mSpeed;

@@ -15,7 +15,7 @@ Player::Player()
 }
 
 Player::Player(FPOINT pos, int size, float speed)
-	: Obj(pos, size)
+	: Obj(pos, size, "player")
 	, mSpeed(speed)
 	, mScale(1.0f)
 	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }, 400.f))
@@ -163,4 +163,28 @@ void Player::render(HDC backDC)
 void Player::decreaseHP(int offensePower)
 {
 	mHP -= offensePower;
+}
+
+void Player::applyItemEffect(ITEM_TYPE itemType)
+{
+	switch (itemType)
+	{
+	case ITEM_TYPE::BULLTE_SIZE_UP:
+	{
+		int bulletSize = mGun->getBulletSize();
+		mGun->changeBulletSize(bulletSize + int(bulletSize * 0.2));
+	}
+	break;
+
+	case ITEM_TYPE::OFFENCE_POWER_UP:
+		mGun->changeBulletOffensePower();
+		break;
+	
+	case ITEM_TYPE::HP_UP:
+		increaseHP();
+		break;
+	
+	case ITEM_TYPE::END:
+		break;
+	}
 }
