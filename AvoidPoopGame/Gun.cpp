@@ -10,7 +10,7 @@ Gun::Gun(Player* palyer, float bulletSpeed)
 	, mBulletScale(1.f)
 	, mBulletOffensePower(3)
 	, mBulletSize(20)
-	, mBulletColor{ 0, 255, 0 }
+	, mBulletColor(COLOR{ 0, 255,0 })
 {
 }
 
@@ -127,30 +127,6 @@ void Gun::setBulletScale()
 	while (iter != endIter)
 	{
 		(*iter)->setScale(mBulletScale);
-		++iter;
-	}
-}
-
-void Gun::setBulletSize()
-{
-	auto iter = mBullets.begin();
-	auto endIter = mBullets.end();
-
-	while (iter != endIter)
-	{
-		(*iter)->changeSize(mBulletSize);
-		++iter;
-	}
-}
-
-void Gun::setBulletOffensePower()
-{
-	auto iter = mBullets.begin();
-	auto endIter = mBullets.end();
-
-	while (iter != endIter)
-	{
-		(*iter)->changeOffensePower(mBulletOffensePower);
 		++iter;
 	}
 }

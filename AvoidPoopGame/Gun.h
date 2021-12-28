@@ -15,40 +15,10 @@ public:
 	void bulletScaleUp();
 	void bulletScaleDown();
 
-	void changeBulletSize(int size) 
-	{
-		if(size > mBulletSize)
-		{
-			mBulletSize = size;
-			setBulletSize();
-		}
-	}
-
-	int getBulletSize() const
-	{
-		return mBulletSize;
-	}
-
-	void changeBulletOffensePower() 
-	{
-		if (mBulletOffensePower + 2 < 10)
-		{
-			mBulletOffensePower += 2;
-		}
-		else 
-		{
-			mBulletOffensePower = 10;
-		}
-		setBulletOffensePower();
-	}
-
 private:
 	void setBulletScale();
-	void setBulletSize();
-	void setBulletOffensePower();
 
 	class Player* mPlayer;
-
 	list<class Bullet*> mBullets;
 	float mBulletSpeed;
 	float mBulletScale;

@@ -70,9 +70,6 @@ void PlayStage::update()
 		mObjs[i]->update();
 	}
 
-	// 여기서 몬스터 대 플레이어 충돌체크
-	crushCheckMonsterPlayer();
-
 	// item
 	auto itemIter = mItems.begin();
 	auto itemEndIter = mItems.end();
@@ -83,8 +80,11 @@ void PlayStage::update()
 		++itemIter;
 	}
 
-	// 여기서 아이템 대 플레이어 충돌체크
+	// 아이템 대 플레이어 충돌체크
 	crushCheckItemPlayer();
+
+	// 몬스터 대 플레이어 충돌체크
+	crushCheckMonsterPlayer();
 }
 
 void PlayStage::render(HDC backDC)
@@ -332,7 +332,7 @@ void PlayStage::crushCheckItemPlayer()
 
 			if (x2y2 <= radius)
 			{
-  				player->increaseHP();
+				player->increaseHP();
 
 				delete (*iter);
 				iter = mItems.erase(iter);
@@ -371,19 +371,20 @@ void PlayStage::crushCheckItemPlayer()
 void PlayStage::createMonster()
 {
 	float randX = float(rand() % WINDOW.right);
-	int randSize = rand() % 130 + 20;
 	float randSpeed = (float)(rand() % 500) + 200;
-	int hp = randSize / 10;
+	int hp = rand() % 15 + 5;
+	wstring tag(L"enemy");
+	tag += to_wstring(rand() % 5 + 1);
 
 	if (mMonsters.empty())
 	{
-		mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale, mMonsterRegenTime, hp));
+		mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, (Texture*)ResourceManager::getInstance()->findResource(tag.c_str()), randSpeed, mMonsterScale, mMonsterRegenTime, hp));
 	}
 	else
 	{
 		if (mMonsters.front()->isValid())
 		{
-			mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, randSize, randSpeed, mMonsterScale, mMonsterRegenTime, hp));
+			mMonsters.push_back(new Monster(FPOINT{ randX, 0 }, (Texture*)ResourceManager::getInstance()->findResource(tag.c_str()), randSpeed, mMonsterScale, mMonsterRegenTime, hp));
 		}
 		else
 		{
@@ -391,7 +392,6 @@ void PlayStage::createMonster()
 			mMonsters.pop_front();
 
 			inValidMonster->changePos(FPOINT{ randX, 0 });
-			inValidMonster->changeSize(randSize);
 			inValidMonster->changeSpeed(randSpeed);
 			inValidMonster->changeHP(hp);
 
@@ -404,13 +404,13 @@ void PlayStage::createItem(Monster& monster)
 {
 	if (mItems.empty())
 	{
-		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), COLOR{200, 0,0}));
+		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 40, monster.getSpeed(), COLOR{ 200, 0,0 }));
 	}
 	else
 	{
 		if (mItems.front()->isValid())
 		{
-			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), COLOR{ 200, 0,0 }));
+			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 40, monster.getSpeed(), COLOR{ 200, 0,0 }));
 		}
 		else
 		{

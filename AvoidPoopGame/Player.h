@@ -15,9 +15,9 @@ public:
 	void decreaseHP(int offensePower);
 	void increaseHP()
 	{
-		if (mHP + int(mHP * 0.2) < 100)
+		if (mHP + 7 < 100)
 		{
-			mHP += int(mHP * 0.2);
+			mHP += 7;
 		}
 		else
 		{

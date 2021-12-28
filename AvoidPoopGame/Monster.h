@@ -5,7 +5,7 @@ class Monster :
     public Obj
 {
 public:
-    Monster(FPOINT pos, int size, float speed, float scale, float regenTime, int hp);
+    Monster(FPOINT pos, class Texture* texture, float speed, float scale, float regenTime, int hp);
     ~Monster() = default;
 
     virtual void init()             override;
@@ -44,12 +44,12 @@ public:
     }
 
 private:
+    class Texture* mTexture;
+
     float mSpeed;
     float mScale;
     float mRegenTime;
     int mHP;
-
-    COLOR mBodyColor;
     COLOR mHPBarColor;
 };
 

@@ -21,5 +21,6 @@ using std::unordered_map;
 using std::string;
 using std::wstring;
 using std::to_string;
+using std::to_wstring;
 using std::abs;
 using std::make_pair;
