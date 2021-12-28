@@ -2,11 +2,10 @@
 #include "TimeManager.h"
 #include "Core.h"
 
-Item::Item(FPOINT pos, int size, float speed, ITEM_TYPE itemType, COLOR itemColor)
+Item::Item(FPOINT pos, int size, float speed, COLOR itemColor)
 	: Obj(pos, size, "item")
 	, mSpeed(speed)
 	, mScale(1.f)
-	, mItemType(itemType)
 	, mItemColor(itemColor)
 {
 }

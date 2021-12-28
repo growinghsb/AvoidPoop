@@ -32,8 +32,6 @@ public:
 		return mHP > 0;
 	}
 
-	void applyItemEffect(ITEM_TYPE itemType);
-
 private:
 	float mSpeed;
 	float mScale;

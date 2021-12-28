@@ -11,14 +11,6 @@ PlayStage::PlayStage(int order)
 	: Stage(order)
 	, mMonsterScale(1.f)
 	, mMonsterRegenTime(0.4f)
-	, mItemTypes{
-				ITEM_TYPE::BULLTE_SIZE_UP,
-				ITEM_TYPE::OFFENCE_POWER_UP,
-				ITEM_TYPE::HP_UP }
-				, mItemColors{
-							COLOR{238, 247, 106},
-							COLOR{255, 264, 238},
-							COLOR{200, 0, 0} }
 {
 	mObjs.reserve(128);
 }
@@ -30,7 +22,7 @@ PlayStage::~PlayStage()
 
 // 해당 스테이지가 처음 올라왔을 때 해야 할 일을 하는 함수
 // 일단 기본적으로 init 을 호출해 주어야 한다. 
-// 여기서밖에 init() 을 부를 수 있다. 이제.
+// 여기서만 init() 을 부를 수 있다.
 void PlayStage::enter()
 {
 	init();
@@ -338,7 +330,7 @@ void PlayStage::crushCheckItemPlayer()
 
 			if (x2y2 <= radius)
 			{
-  				player->applyItemEffect((*iter)->getItemType());
+  				player->increaseHP();
 
 				delete (*iter);
 				iter = mItems.erase(iter);
@@ -357,7 +349,7 @@ void PlayStage::crushCheckItemPlayer()
 
 			if (x2y2 <= radius)
 			{
-				player->applyItemEffect((*iter)->getItemType());
+				player->increaseHP();
 
 				delete (*iter);
 				iter = mItems.erase(iter);
@@ -408,18 +400,15 @@ void PlayStage::createMonster()
 
 void PlayStage::createItem(Monster& monster)
 {
-	int typeNum = rand() % (UINT)ITEM_TYPE::END;
-	int colorNum = rand() % (UINT)ITEM_TYPE_COLOR::END;
-
 	if (mItems.empty())
 	{
-		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum], mItemColors[colorNum]));
+		mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), COLOR{200, 0,0}));
 	}
 	else
 	{
 		if (mItems.front()->isValid())
 		{
-			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), mItemTypes[typeNum], mItemColors[colorNum]));
+			mItems.push_back(new Item(FPOINT{ monster.getPos() }, 30, monster.getSpeed(), COLOR{ 200, 0,0 }));
 		}
 		else
 		{
@@ -428,8 +417,6 @@ void PlayStage::createItem(Monster& monster)
 
 			inValidItem->changePos(monster.getPos());
 			inValidItem->changeSpeed(monster.getSpeed());
-			inValidItem->changeItemType(mItemTypes[typeNum]);
-			inValidItem->changeItemColor(mItemColors[colorNum]);
 
 			mItems.push_back(inValidItem);
 		}

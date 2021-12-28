@@ -5,7 +5,7 @@ class Item :
 	public Obj
 {
 public:
-	Item(FPOINT pos, int size, float speed, ITEM_TYPE itemType, COLOR itemColor);
+	Item(FPOINT pos, int size, float speed, COLOR itemColor);
 	~Item() = default;
 
 	void init() override;
@@ -24,11 +24,6 @@ public:
 		mScale = scale;
 	}
 
-	void changeItemType(ITEM_TYPE itemType)
-	{
-		mItemType = itemType;
-	}
-
 	void changeItemColor(COLOR color)
 	{
 		mItemColor = color;
@@ -39,15 +34,9 @@ public:
 		mSpeed = speed;
 	}
 
-	ITEM_TYPE getItemType() const
-	{
-		return mItemType;
-	}
-
 private:
 	float mSpeed;
 	float mScale;
-	ITEM_TYPE mItemType;
 	COLOR mItemColor;
 };
 

@@ -31,7 +31,5 @@ private:
 	float mMonsterScale;
 	float mMonsterRegenTime;
 	list<class Item*> mItems;
-	ITEM_TYPE mItemTypes[(UINT)ITEM_TYPE::END];
-	COLOR mItemColors[(UINT)ITEM_TYPE_COLOR::END];
 };
 
