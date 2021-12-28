@@ -28,6 +28,11 @@ public:
 		return mHinstance;
 	}
 
+	HDC getDC() const 
+	{
+		return mHdc;
+	}
+
 private:
 	Core();
 	~Core();

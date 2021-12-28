@@ -6,24 +6,14 @@
 class Gun
 {
 public:
-	Gun(FPOINT pos, LENGTH length, float bulletSpeed);
+	Gun(class Player* player, float bulletSpeed);
 	~Gun();
 
-	void update(FPOINT pos, LENGTH length);
+	void update();
 	void render(HDC backDC);
 	void createBullet();
 	void bulletScaleUp();
 	void bulletScaleDown();
-
-	LENGTH getLength() const
-	{
-		return mLength;
-	}
-
-	bool isTop() const
-	{
-		return (int)mPos.mY <= 0;
-	}
 
 	void changeBulletSize(int size) 
 	{
@@ -56,9 +46,8 @@ private:
 	void setBulletScale();
 	void setBulletSize();
 	void setBulletOffensePower();
-	
-	FPOINT mPos;
-	LENGTH mLength;
+
+	class Player* mPlayer;
 
 	list<class Bullet*> mBullets;
 	float mBulletSpeed;

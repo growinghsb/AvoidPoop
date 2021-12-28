@@ -5,8 +5,7 @@ class Player :
 	public Obj
 {
 public:
-	Player();
-	Player(FPOINT pos, int size, float speed);
+	Player(FPOINT pos, int size, float speed, class Texture* texture);
 	~Player();
 
 	void init()				override;
@@ -39,5 +38,6 @@ private:
 	class Gun* mGun;
 	int mHP;
 	COLOR mHPBarColor;
+	class Texture* mTexture;
 };
 

@@ -55,15 +55,21 @@
     <Filter Include="Game\03.Stage\Play">
       <UniqueIdentifier>{1a5bf42a-c155-4243-8d1e-41aaf8849df3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\07.Resource">
+      <UniqueIdentifier>{7ee2701d-ee75-4653-b8fa-468ab7910788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\07.Resource\Texture">
+      <UniqueIdentifier>{d8c46a1f-267f-468d-849c-a4135b5bc2d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\07.Resource\Sound">
+      <UniqueIdentifier>{3ed27bb8-b2db-4611-b4cd-de679764ee83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AvoidPoopGame.h">
@@ -117,6 +123,18 @@
     <ClInclude Include="PlayStage.h">
       <Filter>Game\03.Stage\Play</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Game\07.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Game\07.Resource\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CResource.h">
+      <Filter>Game\07.Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -160,6 +178,15 @@
     </ClCompile>
     <ClCompile Include="PlayStage.cpp">
       <Filter>Game\03.Stage\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Game\07.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Game\07.Resource\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="CResource.cpp">
+      <Filter>Game\07.Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

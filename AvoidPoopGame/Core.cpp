@@ -2,6 +2,7 @@
 #include "TimeManager.h"
 #include "InputManager.h"
 #include "StageManager.h"
+#include "ResourceManager.h"
 
 Core* Core::mCore = nullptr;
 bool Core::mFlag = true;
@@ -42,6 +43,7 @@ void Core::deleteInstance()
 		mCore = nullptr;
 	}
 
+	ResourceManager::deleteInstance();
 	TimeManager::deleteInstance();
 	InputManager::deleteInstance();
 	StageManager::deleteInstance();
@@ -68,6 +70,7 @@ bool Core::init(HINSTANCE hInstance)
 
 	// Timer 초기화는 게임 시작시부터 실행시키기 위해
 	// introStage 내부에서 게임 시작 시 init() 실행
+	ResourceManager::getInstance()->init();
 	InputManager::getInstance()->init();
 	StageManager::getInstance()->init();
 

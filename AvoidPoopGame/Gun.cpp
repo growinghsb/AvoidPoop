@@ -2,14 +2,14 @@
 #include "Bullet.h"
 #include "StageManager.h"
 #include "PlayStage.h"
+#include "Player.h"
 
-Gun::Gun(FPOINT pos, LENGTH length, float bulletSpeed)
-	: mPos(pos)
-	, mLength(length)
+Gun::Gun(Player* palyer, float bulletSpeed)
+	: mPlayer(palyer)
 	, mBulletSpeed(bulletSpeed)
 	, mBulletScale(1.f)
 	, mBulletOffensePower(3)
-	, mBulletSize(length.mWidth)
+	, mBulletSize(20)
 	, mBulletColor{ 0, 255, 0 }
 {
 }
@@ -27,11 +27,8 @@ Gun::~Gun()
 	}
 }
 
-void Gun::update(FPOINT pos, LENGTH length)
+void Gun::update()
 {
-	mPos = pos;
-	mLength = length;
-
 	auto iter = mBullets.begin();
 	auto endIter = mBullets.end();
 
@@ -58,8 +55,6 @@ void Gun::update(FPOINT pos, LENGTH length)
 
 void Gun::render(HDC backDC)
 {
-	Rectangle(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mLength.mWidth, mLength.mVertical);
-
 	auto iter = mBullets.begin();
 	auto endIter = mBullets.end();
 
@@ -74,22 +69,25 @@ void Gun::render(HDC backDC)
 
 void Gun::createBullet()
 {
+	float bulletPosX = float(mPlayer->getPos().mX + mPlayer->getSize() / 3);
+	float bulletPosY = float(mPlayer->getPos().mY);
+
 	if (mBullets.empty())
 	{
-		mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mBulletSize, mBulletSpeed, mBulletScale, mBulletOffensePower));
+		mBullets.push_back(new Bullet(FPOINT{ bulletPosX ,bulletPosY }, mBulletSize, mBulletSpeed, mBulletScale, mBulletOffensePower));
 	}
 	else
 	{
 		if (mBullets.front()->isValid())
 		{
-			mBullets.push_back(new Bullet(FPOINT{ mPos.mX, mPos.mY - (float)mLength.mWidth }, mBulletSize, mBulletSpeed, mBulletScale, mBulletOffensePower));
+			mBullets.push_back(new Bullet(FPOINT{ bulletPosX ,bulletPosY }, mBulletSize, mBulletSpeed, mBulletScale, mBulletOffensePower));
 		}
 		else
 		{
 			Bullet* invalidBullet = mBullets.front();
 			mBullets.pop_front();
 
-			invalidBullet->changePos(FPOINT{ mPos.mX, mPos.mY - (float)mBulletSize });
+			invalidBullet->changePos(FPOINT{ bulletPosX ,bulletPosY });
 			mBullets.push_back(invalidBullet);
 		}
 	}

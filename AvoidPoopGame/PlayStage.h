@@ -11,15 +11,12 @@ public:
 	void init() override;
 	void update() override;
 	void render(HDC backDC) override;
-
 	void enter() override;
 	void exit() override;
 	
 	void stageClear();
-
 	bool crushMonsterRemove(class Bullet& bullet);
 	
-		
 private:
 	void crushCheckMonsterPlayer();
 	void crushCheckItemPlayer();

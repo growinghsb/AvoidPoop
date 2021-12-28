@@ -6,6 +6,8 @@
 #include "Item.h"
 #include "Bullet.h"
 #include "StageManager.h"
+#include "ResourceManager.h"
+#include "Texture.h"
 
 PlayStage::PlayStage(int order)
 	: Stage(order)
@@ -30,7 +32,7 @@ void PlayStage::enter()
 
 void PlayStage::init()
 {
-	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f));
+	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f, (Texture*)ResourceManager::getInstance()->findResource(L"player1")));
 
 	createMonster();
 

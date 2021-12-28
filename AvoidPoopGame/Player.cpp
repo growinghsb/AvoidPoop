@@ -6,23 +6,21 @@
 #include "Bullet.h"
 #include "Core.h"
 #include "StageManager.h"
+#include "Texture.h"
 
 static int hpBarSize = 20;
 
-Player::Player()
-	: Player(FPOINT{}, 60, 200.f)
-{
-}
-
-Player::Player(FPOINT pos, int size, float speed)
+Player::Player(FPOINT pos, int size, float speed, Texture* texture)
 	: Obj(pos, size, "player")
 	, mSpeed(speed)
 	, mScale(1.0f)
-	, mGun(new Gun(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY }, 400.f))
+	, mGun(new Gun(this, 400.f))
 	, mLaunchMode(true)
 	, mHP(100)
 	, mHPBarColor{ 200, 0, 0 }
+	, mTexture(texture)
 {
+	mSize = mTexture->getResolution().x;
 }
 
 Player::~Player()
@@ -52,13 +50,13 @@ void Player::update()
 
 	if (ISPRESS(KEY_LIST::TOP))
 	{
-		if (!mGun->isTop())
+		if (mPos.mY > 0)
 		{
 			mPos.mY -= (mSpeed * DS) * mScale;
 		}
 		else
 		{
-			mPos.mY = 0.f + mGun->getLength().mVertical;
+			mPos.mY = 0.f;
 		}
 	}
 
@@ -141,7 +139,7 @@ void Player::update()
 			mGun->createBullet();
 		}
 	}
-	mGun->update(FPOINT{ mPos.mX + (mSize / 3), mPos.mY - mSize }, LENGTH{ mSize / 3, (int)mPos.mY });
+	mGun->update();
 }
 
 void Player::render(HDC backDC)
@@ -154,8 +152,7 @@ void Player::render(HDC backDC)
 	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize + hpBarSize / 4, (int)mPos.mX - hpBarX + mHP, (int)mPos.mY + mSize + hpBarSize / 2);
 
 	// player
-	SetDCBrushColor(backDC, COLOR_WHITE);
-	Rectangle(backDC, (int)mPos.mX, (int)mPos.mY, (int)mPos.mX + mSize, (int)mPos.mY + mSize);
+	BitBlt(backDC, (int)mPos.mX, (int)mPos.mY, mTexture->getResolution().x, mTexture->getResolution().y, mTexture->getTextureDC(), 0, 0, SRCCOPY);
 
 	mGun->render(backDC);
 }
