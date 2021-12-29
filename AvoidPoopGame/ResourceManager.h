@@ -21,12 +21,7 @@ public:
 	class CResource* findResource(const wchar_t* tag) 
 	{
 		auto iter = mResources.find(tag);
-
-		if (iter != mResources.end()) 
-		{
-			return (*iter).second;
-		}
-		return nullptr; // 찾는 리소스가 없을 때
+		return (*iter).second;
 	}
 
 private:

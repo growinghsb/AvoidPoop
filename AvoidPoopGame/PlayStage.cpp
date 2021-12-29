@@ -32,7 +32,7 @@ void PlayStage::enter()
 
 void PlayStage::init()
 {
-	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f, (Texture*)ResourceManager::getInstance()->findResource(L"player1")));
+	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f, (Texture*)ResourceManager::getInstance()->findResource(L"player3")));
 
 	createMonster();
 
@@ -160,37 +160,16 @@ bool PlayStage::crushMonsterRemove(Bullet& bullet)
 	auto iter = mMonsters.begin();
 	auto endIter = mMonsters.end();
 
-	int x2;
-	int y2;
-	int x2y2;
-	int radiusSum;
-
-	int bulletCenterX = bullet.getCenter().x;
-	int bulletCenterY = bullet.getCenter().y;
-	int bulletRadius = bullet.getSize() / 2;
-	int bulletOffensePower = bullet.getOffensePower();
-
 	while (iter != endIter)
 	{
-		x2 = abs((*iter)->getCenter().x - bulletCenterX);
-		x2 *= x2;
-
-		y2 = abs((*iter)->getCenter().y - bulletCenterY);
-		y2 *= y2;
-
-		x2y2 = x2 + y2;
-
-		radiusSum = (*iter)->getSize() / 2 + bulletRadius;
-		radiusSum *= radiusSum;
-
-		if (x2y2 <= radiusSum)
+		if (circleCrushCircle(bullet.getCenter(), bullet.getSize() / 2, (*iter)->getCenter(), (*iter)->getSize() / 2))
 		{
 			// HP 비교 후 죽었는지 체크, 죽었으면 지우고, 아니면 그대로 진행
-			(*iter)->changeHP((*iter)->getHP() - bulletOffensePower);
+			(*iter)->changeHP((*iter)->getHP() - bullet.getOffensePower());
 
 			if ((*iter)->isDie())
 			{
-				if (rand() % 3 == 0)
+				if (rand() % 4 == 0)
 				{
 					createItem(*(*iter)); // 몬스터 위치로부터 아이템 생성
 				}
@@ -202,7 +181,10 @@ bool PlayStage::crushMonsterRemove(Bullet& bullet)
 			}
 			return true;
 		}
-		++iter;
+		else
+		{
+			++iter;
+		}
 	}
 	return false;
 }
@@ -214,81 +196,23 @@ void PlayStage::crushCheckMonsterPlayer()
 	auto iter = mMonsters.begin();
 	auto endIter = mMonsters.end();
 
-	int x2 = 0;
-	int y2 = 0;
-	int x2y2 = 0;
-	int radius = 0;
-
-	int monsterX = 0;
-	int monsterY = 0;
-
 	while (iter != endIter)
 	{
-		if (player->isOverlapY((*iter)->getPos().mY + (*iter)->getSize()))
+		if (RectangleCrushRactangle(player->getPos(), player->getSize(), (*iter)->getPos(), (*iter)->getSize()))
 		{
-			// 몬스터 반지름
-			radius = (*iter)->getSize() / 2;
-			radius *= radius;
+			player->decreaseHP((*iter)->getHP());
 
-			monsterX = (*iter)->getCenter().x;
-			monsterY = (*iter)->getCenter().y;
-
-			// 사각형의 꼭지점과 원점 사이의 거리
-			x2 = abs((int)player->getPos().mX - monsterX);
-			y2 = abs((int)player->getPos().mY - monsterY);
-
-			x2 *= x2;
-			y2 *= y2;
-			x2y2 = x2 + y2;
-
-			if (x2y2 <= radius)
+			if (player->isAlive())
 			{
-				player->decreaseHP((*iter)->getHP());
-
-				if (player->isAlive())
-				{
-					delete (*iter);
-
-					iter = mMonsters.erase(iter);
-					endIter = mMonsters.end();
-
-					continue;
-				}
-				else
-				{
-					StageManager::getInstance()->changePrevStage();
-					return;
-				}
+				delete (*iter);
+				iter = mMonsters.erase(iter);
+				endIter = mMonsters.end();
 			}
-
-			// 사각형의 다른쪽 꼭지점과 원점 사이의 거리
-			x2 = abs((int)player->getPos().mX + player->getSize() - monsterX);
-			y2 = abs((int)player->getPos().mY + player->getSize() - monsterY);
-
-			x2 *= x2;
-			y2 *= y2;
-			x2y2 = x2 + y2;
-
-			if (x2y2 <= radius)
+			else
 			{
-				player->decreaseHP((*iter)->getHP());
-
-				if (player->isAlive())
-				{
-					delete (*iter);
-
-					iter = mMonsters.erase(iter);
-					endIter = mMonsters.end();
-
-					continue;
-				}
-				else
-				{
-					StageManager::getInstance()->changePrevStage();
-					return;
-				}
+				StageManager::getInstance()->changePrevStage();
+				return;
 			}
-			++iter;
 		}
 		else
 		{
@@ -304,62 +228,15 @@ void PlayStage::crushCheckItemPlayer()
 	auto iter = mItems.begin();
 	auto endIter = mItems.end();
 
-	int x2 = 0;
-	int y2 = 0;
-	int x2y2 = 0;
-	int radius = 0;
-
-	int itemX = 0;
-	int itemY = 0;
-
 	while (iter != endIter)
 	{
-		if (player->isOverlapY((*iter)->getPos().mY + (*iter)->getSize()))
+		if (circleCrushCircle(player->getCenter(), player->getSize() / 2, (*iter)->getCenter(), (*iter)->getSize() / 2))
 		{
-			radius = (*iter)->getSize() / 2;
-			radius *= radius;
+			player->increaseHP();
 
-			itemX = (*iter)->getCenter().x;
-			itemY = (*iter)->getCenter().y;
-
-			// 사각형의 꼭지점과 원점 사이의 거리
-			x2 = abs((int)player->getPos().mX - itemX);
-			y2 = abs((int)player->getPos().mY - itemY);
-
-			x2 *= x2;
-			y2 *= y2;
-			x2y2 = x2 + y2;
-
-			if (x2y2 <= radius)
-			{
-				player->increaseHP();
-
-				delete (*iter);
-				iter = mItems.erase(iter);
-				endIter = mItems.end();
-
-				continue;
-			}
-
-			// 사각형의 다른쪽 꼭지점과 원점 사이의 거리
-			x2 = abs((int)player->getPos().mX + player->getSize() - itemX);
-			y2 = abs((int)player->getPos().mY + player->getSize() - itemY);
-
-			x2 *= x2;
-			y2 *= y2;
-			x2y2 = x2 + y2;
-
-			if (x2y2 <= radius)
-			{
-				player->increaseHP();
-
-				delete (*iter);
-				iter = mItems.erase(iter);
-				endIter = mItems.end();
-
-				continue;
-			}
-			++iter;
+			delete (*iter);
+			iter = mItems.erase(iter);
+			endIter = mItems.end();
 		}
 		else
 		{
@@ -423,4 +300,27 @@ void PlayStage::createItem(Monster& monster)
 			mItems.push_back(inValidItem);
 		}
 	}
+}
+
+bool PlayStage::circleCrushCircle(POINT center1, int radius1, POINT center2, int radius2)
+{
+	int x2 = abs(center1.x - center2.x);
+	int y2 = abs(center1.y - center2.y);
+
+	x2 *= x2;
+	y2 *= y2;
+	int x2y2 = x2 + y2;
+
+	int radius = radius1 + radius2;
+	radius *= radius;
+
+	return x2y2 <= radius;
+}
+
+bool PlayStage::RectangleCrushRactangle(FPOINT pos1, int size1, FPOINT pos2, int size2)
+{
+	return	pos1.mX < pos2.mX + size2 &&
+		pos1.mX + size1 > pos2.mX &&
+		pos1.mY < pos2.mY + size2 &&
+		pos1.mY + size1 > pos2.mY;
 }

@@ -152,7 +152,12 @@ void Player::render(HDC backDC)
 	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize + hpBarSize / 4, (int)mPos.mX - hpBarX + mHP, (int)mPos.mY + mSize + hpBarSize / 2);
 
 	// player
-	BitBlt(backDC, (int)mPos.mX, (int)mPos.mY, mTexture->getResolution().x, mTexture->getResolution().y, mTexture->getTextureDC(), 0, 0, SRCCOPY);
+	
+	// 아래 함수는 일반적으로 DC -> DC 를 복사하는 함수이다.
+	//BitBlt(backDC, (int)mPos.mX, (int)mPos.mY, mTexture->getResolution().x, mTexture->getResolution().y, mTexture->getTextureDC(), 0, 0, SRCCOPY);
+
+	// 아래 함수는 DC -> DC 의 복사를 진행 하는데 특정 컬러를 RGB 로 지정해 제거할 수 있다. 이를 이용해 배경을 제거한다.
+	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, mTexture->getResolution().x, mTexture->getResolution().y, mTexture->getTextureDC(), 0, 0, mTexture->getResolution().x, mTexture->getResolution().y, COLOR_WHITE);
 
 	mGun->render(backDC);
 }

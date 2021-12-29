@@ -23,6 +23,9 @@ private:
 	void createMonster();
 	void createItem(class Monster& monster);
 
+	bool circleCrushCircle(POINT center1, int radius1, POINT center2, int radius2);
+	bool RectangleCrushRactangle(FPOINT pos1, int size1, FPOINT pos2, int size2);
+
 	vector<class Obj*> mObjs;
 	list<class Monster*> mMonsters;
 	float mMonsterScale;
