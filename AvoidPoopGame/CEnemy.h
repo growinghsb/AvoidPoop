@@ -6,7 +6,7 @@ class CEnemy :
     public CObj
 {
 public:
-    CEnemy(wstring tag, FPOINT pos, POINT size, class Texture* texture, float speed, int maxHp);
+    CEnemy(wstring tag, FPOINT pos, POINT size, class Texture* texture, class ObjLayer* layer, float speed, int maxHp);
     virtual ~CEnemy() = default;
 
     void init()   override;
@@ -27,6 +27,7 @@ public:
 private:
     void bulletCollision();
 
+    class ObjLayer* mLayer;
     float mSpeed;
     float mSpeedWeight;
     int mMaxHp;

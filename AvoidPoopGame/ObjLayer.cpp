@@ -8,6 +8,7 @@
 #include "CPlayer.h"
 #include "StageManager.h"
 #include "CItem.h" // 메모리 해제시에도 인클루드가 필요하다.
+#include "CBullet.h"
 
 ObjLayer::ObjLayer()
 {
@@ -29,13 +30,24 @@ ObjLayer::~ObjLayer()
 		iter = mCObjs.erase(iter);
 		endIter = mCObjs.end();
 	}
+
+	auto bulletIter = mBullets.begin();
+	auto bulletEndIter = mBullets.end();
+
+	while (bulletIter != bulletEndIter)
+	{
+		delete (*bulletIter);
+
+		bulletIter = mBullets.erase(bulletIter);
+		bulletEndIter = mBullets.end();
+	}
 }
 
 void ObjLayer::init()
 {
 	// 이전 스테이지에 이어서 플레이어 텍스처 가져온 뒤 플레이어 생성
 	Texture* texture = StageManager::getInstance()->getCurrentPlayerTexture();
-	mCObjs.push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, 250));
+	mCObjs.push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, this, 250.0f, mBullets));
 
 	createEnemy();
 
@@ -69,7 +81,10 @@ void ObjLayer::update()
 		++iter;
 	}
 
-	//충돌처리가 끝나고 유효하지 않은 오브젝트를 삭제한다.
+	// 불릿에 대한 update 및 render 는
+	// 각각 플레이어쪽에서 처리
+
+	// 유효하지 않은 오브젝트 삭제
 	deleteObject();
 }
 
@@ -105,7 +120,7 @@ void ObjLayer::createEnemy()
 	float speed = float((rand() % 300) + 200);
 	int	  hp = rand() % 15 + 5;
 
-	mCObjs.push_back(new CEnemy(L"enemy", FPOINT{ x, 0 }, size, texture, speed, hp));
+	mCObjs.push_back(new CEnemy(L"enemy", FPOINT{ x, 0 }, size, texture, this, speed, hp));
 }
 
 Texture* ObjLayer::getTexture(const wchar_t* tag)

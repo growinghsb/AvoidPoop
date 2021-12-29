@@ -3,21 +3,27 @@
 #include "Layer.h"
 
 class ObjLayer :
-    public Layer
+	public Layer
 {
 public:
-    ObjLayer();
-    ~ObjLayer();
+	ObjLayer();
+	~ObjLayer();
 
-    void init() override;
-    void update() override;
-    void collision() override;
-    void render(HDC backDC) override;
+	void init() override;
+	void update() override;
+	void collision() override;
+	void render(HDC backDC) override;
+
+	list<class CBullet*>& getBullets()
+	{
+		return mBullets;
+	}
 
 private:
-    class Texture* getTexture(const wchar_t* tag);
-    void createEnemy();
-    void deleteObject();
+	class Texture* getTexture(const wchar_t* tag);
+	void createEnemy();
+	void deleteObject();
 
-    list<class CObj*> mCObjs;
+	list<class CObj*> mCObjs;
+	list<class CBullet*> mBullets;
 };

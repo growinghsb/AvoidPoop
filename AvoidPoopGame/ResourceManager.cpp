@@ -16,7 +16,8 @@ ResourceManager::ResourceManager()
 	L"enemy3",
 	L"enemy4",
 	L"enemy5",
-	L"HPPotion1" }
+	L"HPPotion1",
+	L"defaultBullet1" }
 {
 	enum { LENGTH = 256 };
 

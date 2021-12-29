@@ -4,13 +4,18 @@
 #include "TimeManager.h"
 #include "Core.h"
 #include "Texture.h"
+#include "CBullet.h"
+#include "ResourceManager.h"
+#include "ObjLayer.h"
 
-CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, float speed)
+CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speed, list<CBullet*>& bullets)
 	: CObj(tag, pos, size, texture)
+	, mLayer(layer)
 	, mSpeed(speed)
 	, mSpeedWeight(1.0f)
 	, mMaxHp(100)
 	, mLaunchMode(true)
+	, mRefBullets(bullets)
 {
 }
 
@@ -113,7 +118,7 @@ void CPlayer::update()
 	{
 		if (ISTIC(KEY_LIST::SPACE))
 		{
-			// 총알 만들기
+			createBullet();
 		}
 	}
 	// 속사모드
@@ -121,10 +126,20 @@ void CPlayer::update()
 	{
 		if (ISPRESS(KEY_LIST::SPACE))
 		{
-			// 총알 만들기
+			createBullet();
 		}
 	}
-}
+
+	// 불릿 업데이트
+	auto bulletIter = mRefBullets.begin();
+	auto bulletEndIter = mRefBullets.end();
+
+	while (bulletIter != bulletEndIter)
+	{
+		(*bulletIter)->update();
+		++bulletIter;
+	}
+ }
 
 void CPlayer::render(HDC backDC)
 {
@@ -142,14 +157,53 @@ void CPlayer::render(HDC backDC)
 	// 아래 함수는 DC -> DC 의 복사를 진행 하는데 특정 컬러를 RGB 로 지정해 제거할 수 있다. 이를 이용해 배경을 제거한다.
 	POINT tRes = mTexture->getResolution();
 	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, tRes.x, tRes.y, mTexture->getTextureDC(), 0, 0, tRes.x, tRes.y, COLOR_WHITE);
+
+	// 불릿 렌더링
+	auto bulletIter = mRefBullets.begin();
+	auto bulletEndIter = mRefBullets.end();
+
+	while (bulletIter != bulletEndIter)
+	{
+		(*bulletIter)->render(backDC);
+		++bulletIter;
+	}
 }
 
 void CPlayer::collision()
 {
+	itemCollision();
+	enemyCollision();
 }
 
 void CPlayer::createBullet()
-{
+  {
+	mRefBullets = mLayer->getBullets();
+
+	wstring wstag(L"defaultBullet1");
+	Texture* texture = (Texture*)ResourceManager::getInstance()->findResource(wstag.c_str());
+	
+	float bulletPosX = float(mPos.mX + mSize.x / 3);
+	float bulletPosY = float(mPos.mY);
+
+	if (mRefBullets.empty())
+	{
+		mRefBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer));
+	}
+	else 
+	{
+		if (mRefBullets.front()->isValid())
+		{
+			mRefBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer));
+		}
+		else
+		{
+			CBullet* invalidBullet = mRefBullets.front();
+			mRefBullets.pop_front();
+
+			invalidBullet->changePos(FPOINT{ bulletPosX ,bulletPosY });
+			mRefBullets.push_back(invalidBullet);
+		}
+	}
 }
 
 void CPlayer::itemCollision()

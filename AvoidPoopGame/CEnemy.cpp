@@ -3,8 +3,9 @@
 #include "Texture.h"
 #include "TimeManager.h"
 
-CEnemy::CEnemy(wstring tag, FPOINT pos, POINT size, Texture* texture, float speed, int maxHp)
+CEnemy::CEnemy(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speed, int maxHp)
 	: CObj(tag, pos, size, texture)
+	, mLayer(layer)
 	, mSpeed(speed)
 	, mSpeedWeight(1.0f)
 	, mMaxHp(maxHp)

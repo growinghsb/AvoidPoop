@@ -6,7 +6,7 @@ class CPlayer :
 	public CObj
 {
 public:
-	CPlayer(wstring tag, FPOINT pos, POINT size, class Texture* texture, float speed);
+	CPlayer(wstring tag, FPOINT pos, POINT size, class Texture* texture, class ObjLayer* layer, float speed, list<class CBullet*>& bullets);
 	virtual ~CPlayer() = default;
 
 	void init() override;
@@ -19,10 +19,11 @@ private:
 	void itemCollision();
 	void enemyCollision();
 
+	class ObjLayer* mLayer;
 	float mSpeed;
 	float mSpeedWeight;
 	int mMaxHp;
 	bool mLaunchMode;
-	list<class CBullet*> mBullets;
+	list<class CBullet*>& mRefBullets;
 };
 
