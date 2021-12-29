@@ -142,8 +142,13 @@
   <ItemGroup>
     <ClInclude Include="AvoidPoopGame.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CBullet.h" />
     <ClInclude Include="CButton.h" />
+    <ClInclude Include="CEnemy.h" />
+    <ClInclude Include="CItem.h" />
+    <ClInclude Include="CObj.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CResource.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="framework.h" />
@@ -153,8 +158,10 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IntroStage.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Layer.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Obj.h" />
+    <ClInclude Include="ObjLayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayStage.h" />
     <ClInclude Include="PlayStage2.h" />
@@ -169,17 +176,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="CBullet.cpp" />
     <ClCompile Include="CButton.cpp" />
+    <ClCompile Include="CEnemy.cpp" />
+    <ClCompile Include="CItem.cpp" />
+    <ClCompile Include="CObj.cpp" />
+    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CResource.cpp" />
     <ClCompile Include="GenericButton.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="IntroStage.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Obj.cpp" />
+    <ClCompile Include="ObjLayer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayStage.cpp" />
     <ClCompile Include="PlayStage2.cpp" />

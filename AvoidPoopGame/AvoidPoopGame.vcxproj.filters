@@ -70,6 +70,36 @@
     <Filter Include="Game\08.Button\Generic">
       <UniqueIdentifier>{587fa9f7-11f9-4d12-b4dc-43489fb40e23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\09.Layer">
+      <UniqueIdentifier>{8dc594a8-33e0-4e49-8986-2f24cdadb06c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\09.Layer\Object">
+      <UniqueIdentifier>{8ee2b3aa-7b52-44c0-95d8-9f73dd01bf7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\09.Layer\Background">
+      <UniqueIdentifier>{99cdad2e-e7a9-4ed3-ba3d-f7ff692e0092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\09.Layer\UI">
+      <UniqueIdentifier>{3c139560-83bb-4dbe-9897-329ca99ac565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game2">
+      <UniqueIdentifier>{927b3357-e215-4ba2-9cc3-b20ab96e8538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game2\01.Object">
+      <UniqueIdentifier>{909170e5-9362-4cb4-a0d6-7620374aa78c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game2\01.Object\Player">
+      <UniqueIdentifier>{f4f9a59b-a1a2-47d7-9bcf-32c7e6d269e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game2\01.Object\Enemy">
+      <UniqueIdentifier>{634dccd6-93c5-4970-8669-ddab6d397a5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game2\01.Object\Bullet">
+      <UniqueIdentifier>{59bc2ad9-333a-4f8d-a404-353540916bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game2\01.Object\Item">
+      <UniqueIdentifier>{afc98f8c-679e-4c9b-8bc3-3e49bab31aa8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -150,6 +180,27 @@
     <ClInclude Include="PlayStage2.h">
       <Filter>Game\03.Stage\Play</Filter>
     </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Game\09.Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjLayer.h">
+      <Filter>Game\09.Layer\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CObj.h">
+      <Filter>Game2\01.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>Game2\01.Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CEnemy.h">
+      <Filter>Game2\01.Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="CBullet.h">
+      <Filter>Game2\01.Object\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="CItem.h">
+      <Filter>Game2\01.Object\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -211,6 +262,27 @@
     </ClCompile>
     <ClCompile Include="PlayStage2.cpp">
       <Filter>Game\03.Stage\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>Game\09.Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjLayer.cpp">
+      <Filter>Game\09.Layer\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CObj.cpp">
+      <Filter>Game2\01.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>Game2\01.Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CEnemy.cpp">
+      <Filter>Game2\01.Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="CBullet.cpp">
+      <Filter>Game2\01.Object\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="CItem.cpp">
+      <Filter>Game2\01.Object\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,8 @@ ResourceManager::ResourceManager()
 	L"enemy2",
 	L"enemy3",
 	L"enemy4",
-	L"enemy5" }
+	L"enemy5",
+	L"HPPotion1" }
 {
 	enum { LENGTH = 256 };
 
@@ -69,14 +70,14 @@ void ResourceManager::init()
 
 void ResourceManager::roadTexture(const wchar_t* tag)
 {
-	auto iter = mResources.find(tag);	
+	auto iter = mResources.find(tag);
 
-	if (iter == mResources.end()) 
+	if (iter == mResources.end())
 	{
 		// 현재 들어온 이름으로 생성된 텍스처가 없을 때 텍스처 생성
 		Texture* texture = new Texture(tag);
-		
-		if (texture->load()) 
+
+		if (texture->load())
 		{
 			mResources.insert(make_pair(tag, texture));
 		}

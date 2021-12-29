@@ -32,7 +32,7 @@ void PlayStage::enter()
 
 void PlayStage::init()
 {
-	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f, StageManager::getInstance()->getCurrentPlayer()));
+	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f, StageManager::getInstance()->getCurrentPlayerTexture()));
 
 	createMonster();
 
@@ -50,6 +50,8 @@ void PlayStage::update()
 	if ((int)second >= 5) 
 	{
 		StageManager::getInstance()->changeNextStage();
+		second = 0.f;
+
 		return;
 	}
 

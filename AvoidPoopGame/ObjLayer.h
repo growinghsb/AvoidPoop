@@ -1,0 +1,23 @@
+#pragma once
+
+#include "Layer.h"
+
+class ObjLayer :
+    public Layer
+{
+public:
+    ObjLayer();
+    ~ObjLayer();
+
+    void init() override;
+    void update() override;
+    void collision() override;
+    void render(HDC backDC) override;
+
+private:
+    class Texture* getTexture(const wchar_t* tag);
+    void createEnemy();
+    void deleteObject();
+
+    list<class CObj*> mCObjs;
+};

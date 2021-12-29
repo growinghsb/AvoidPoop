@@ -17,7 +17,7 @@ public:
 
 	class Stage* getCurrentStage() const;
 
-	class Texture* getCurrentPlayer() const
+	class Texture* getCurrentPlayerTexture() const
 	{
 		return mCurrentPlayer;
 	}

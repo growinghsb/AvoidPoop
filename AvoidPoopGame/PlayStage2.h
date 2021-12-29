@@ -13,5 +13,8 @@ public:
 	virtual void enter()			override;
 	virtual void exit()				override;
 	virtual void stageClear()		override;
+	
+private:
+	vector<class Layer*> mLayers;
 };
 
