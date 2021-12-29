@@ -11,7 +11,7 @@ public:
 	virtual void update() = 0;
 	virtual void render(HDC backDC) = 0;
 
-	virtual FPOINT getPos() const
+	 FPOINT getPos() const
 	{
 		return mPos;
 	}
@@ -58,7 +58,6 @@ public:
 		return mObjTag;
 	}
 	
-
 protected:
 	Obj(FPOINT pos, int size, string objTag);
 

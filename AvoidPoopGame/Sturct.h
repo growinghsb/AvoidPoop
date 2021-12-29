@@ -53,6 +53,9 @@ enum class KEY_LIST
 	LCTRL,
 	LALT,
 
+	LBUTTON, 
+	RBUTTON,
+
 	END
 };
 

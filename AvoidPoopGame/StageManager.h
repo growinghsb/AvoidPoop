@@ -17,6 +17,16 @@ public:
 
 	class Stage* getCurrentStage() const;
 
+	class Texture* getCurrentPlayer() const
+	{
+		return mCurrentPlayer;
+	}
+
+	void setCurrentPlayer(Texture* texture) 
+	{
+		mCurrentPlayer = texture;
+	}
+
 private:
 	StageManager();
 	~StageManager();
@@ -24,5 +34,6 @@ private:
 	static StageManager* mStageManager;
 	vector<class Stage*> mStages;
 	class Stage* mCurrentStage;
+	class Texture* mCurrentPlayer;
 };
 

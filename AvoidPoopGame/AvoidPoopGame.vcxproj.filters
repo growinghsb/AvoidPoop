@@ -64,6 +64,12 @@
     <Filter Include="Game\07.Resource\Sound">
       <UniqueIdentifier>{3ed27bb8-b2db-4611-b4cd-de679764ee83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\08.Button">
+      <UniqueIdentifier>{8961a7bb-ebed-4e47-ac6b-5d43fd1f6fd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\08.Button\Generic">
+      <UniqueIdentifier>{587fa9f7-11f9-4d12-b4dc-43489fb40e23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -135,6 +141,15 @@
     <ClInclude Include="CResource.h">
       <Filter>Game\07.Resource</Filter>
     </ClInclude>
+    <ClInclude Include="CButton.h">
+      <Filter>Game\08.Button</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericButton.h">
+      <Filter>Game\08.Button\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayStage2.h">
+      <Filter>Game\03.Stage\Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -187,6 +202,15 @@
     </ClCompile>
     <ClCompile Include="CResource.cpp">
       <Filter>Game\07.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="CButton.cpp">
+      <Filter>Game\08.Button</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericButton.cpp">
+      <Filter>Game\08.Button\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayStage2.cpp">
+      <Filter>Game\03.Stage\Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

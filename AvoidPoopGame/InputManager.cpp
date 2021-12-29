@@ -49,6 +49,8 @@ InputManager::InputManager()
 	VK_LSHIFT,
 	VK_LCONTROL,
 	VK_LMENU,
+	VK_LBUTTON, 
+	VK_RBUTTON
 }
 {
     mKeyInfo.reserve((UINT)KEY_LIST::END);

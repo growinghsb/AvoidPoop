@@ -1,16 +1,19 @@
 #include "StageManager.h"
 #include "IntroStage.h"
 #include "PlayStage.h"
+#include "PlayStage2.h"
 
 StageManager* StageManager::mStageManager = nullptr;
 
 StageManager::StageManager()
 	: mCurrentStage(nullptr)
+	, mCurrentPlayer(nullptr)
 {
 	mStages.reserve(10);
 
 	mStages.push_back(new IntroStage(0));
 	mStages.push_back(new PlayStage(1));
+	mStages.push_back(new PlayStage2(2));
 
 	mCurrentStage = mStages[0];
 }

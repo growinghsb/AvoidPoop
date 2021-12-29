@@ -43,9 +43,9 @@ void Core::deleteInstance()
 		mCore = nullptr;
 	}
 
-	ResourceManager::deleteInstance();
 	TimeManager::deleteInstance();
 	InputManager::deleteInstance();
+	ResourceManager::deleteInstance();
 	StageManager::deleteInstance();
 }
 
@@ -102,7 +102,7 @@ void Core::update()
 {
 	// 기본값은 false, 게임 시작시에 true 로 변경
 	// 게임 시작은 IntroStage 에서 시작 버튼 눌렀을 때
-	if (gameStart) 
+	if (gameStart)
 	{
 		TimeManager::getInstance()->update(mHwnd);
 	}
@@ -136,7 +136,7 @@ ATOM Core::MyRegisterClass()
 	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wcex.lpszMenuName = nullptr; // MAKEINTRESOURCEW(IDC_AVOIDPOOPGAME);
-	wcex.lpszClassName = TEXT("AvoidPoopGame");
+	wcex.lpszClassName = L"Shotting Game";
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
 	return RegisterClassExW(&wcex);
@@ -144,7 +144,7 @@ ATOM Core::MyRegisterClass()
 
 bool Core::Create()
 {
-	mHwnd = CreateWindowW(TEXT("AvoidPoopGame"), TEXT("AvoidPoopGame"), WS_OVERLAPPEDWINDOW,
+	mHwnd = CreateWindowW(L"Shotting Game", L"Shotting Game", WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, mHinstance, nullptr);
 
 	if (nullptr == mHwnd)

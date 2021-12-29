@@ -32,7 +32,7 @@ void PlayStage::enter()
 
 void PlayStage::init()
 {
-	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f, (Texture*)ResourceManager::getInstance()->findResource(L"player3")));
+	mObjs.push_back(new Player(FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, 50, 200.f, StageManager::getInstance()->getCurrentPlayer()));
 
 	createMonster();
 
@@ -44,6 +44,15 @@ void PlayStage::init()
 
 void PlayStage::update()
 {
+	static float second = 0.f;
+	second += DS;
+
+	if ((int)second >= 5) 
+	{
+		StageManager::getInstance()->changeNextStage();
+		return;
+	}
+
 	// monster 
 	static float ds = 0.f;
 	ds += DS;
@@ -125,11 +134,6 @@ void PlayStage::render(HDC backDC)
 // 다시 들어왔을 때 문제 생기지 않도록
 void PlayStage::exit()
 {
-	extern bool gameStart;
-	gameStart = false;
-
-	TimeManager::deleteInstance();
-
 	stageClear();
 }
 
@@ -138,7 +142,7 @@ void PlayStage::stageClear()
 	int size = (int)mObjs.size();
 	for (int i = 0; i < size; ++i)
 	{
-		delete mObjs[i];
+		delete mObjs[i];	
 	}
 	mObjs.clear();
 
