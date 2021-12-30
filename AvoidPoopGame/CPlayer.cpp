@@ -7,6 +7,7 @@
 #include "CBullet.h"
 #include "ResourceManager.h"
 #include "ObjLayer.h"
+#include "CollisionManager.h"
 
 CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speed, list<CBullet*>& bullets)
 	: CObj(tag, pos, size, texture)
@@ -16,6 +17,7 @@ CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer
 	, mMaxHp(100)
 	, mLaunchMode(true)
 	, mRefBullets(bullets)
+	, mBulletOffencePower(3)
 {
 }
 
@@ -101,11 +103,13 @@ void CPlayer::update()
 	if (ISTIC(KEY_LIST::_3))
 	{
 		// 총알 속도 증가
+		changeBulletWeight(true);
 	}
 
 	if (ISTIC(KEY_LIST::_4))
 	{
 		// 총알 속도 감소
+		changeBulletWeight(false);
 	}
 
 	if (ISTIC(KEY_LIST::LSHIFT))
@@ -139,7 +143,7 @@ void CPlayer::update()
 		(*bulletIter)->update();
 		++bulletIter;
 	}
- }
+}
 
 void CPlayer::render(HDC backDC)
 {
@@ -171,25 +175,24 @@ void CPlayer::render(HDC backDC)
 
 void CPlayer::collision()
 {
-	itemCollision();
 	enemyCollision();
 }
 
 void CPlayer::createBullet()
-  {
+{
 	mRefBullets = mLayer->getBullets();
 
 	wstring wstag(L"defaultBullet1");
 	Texture* texture = (Texture*)ResourceManager::getInstance()->findResource(wstag.c_str());
-	
-	float bulletPosX = float(mPos.mX + mSize.x / 3);
+
+	float bulletPosX = float(mPos.mX + (mSize.x - texture->getResolution().x) / 2);
 	float bulletPosY = float(mPos.mY);
 
 	if (mRefBullets.empty())
 	{
 		mRefBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer));
 	}
-	else 
+	else
 	{
 		if (mRefBullets.front()->isValid())
 		{
@@ -206,10 +209,44 @@ void CPlayer::createBullet()
 	}
 }
 
-void CPlayer::itemCollision()
+void CPlayer::changeBulletWeight(bool upDown)
 {
+	mRefBullets = mLayer->getBullets();
+
+	auto iter = mRefBullets.begin();
+	auto endIter = mRefBullets.end();
+
+	while (iter != endIter)
+	{
+		(*iter)->setSpeedWeight(upDown);
+		++iter;
+	}
 }
 
 void CPlayer::enemyCollision()
 {
+	list<CObj*>& objs = mLayer->getObjs();
+
+	auto iter = objs.begin();
+	auto endIter = objs.end();
+
+	// 플레이어와 적
+	while (iter != endIter)
+	{
+		if ((*iter)->getTag() == L"enemy" && CollisionManager::getInstance()->ractangleVsRactangle((*iter)->getCenter(), (*iter)->getRadius(), getCenter(), getRadius()))
+		{
+			CEnemy* enemy = (CEnemy*)(*iter);
+			mMaxHp -= enemy->getMaxHp();
+
+			delete (*iter);
+			iter = objs.erase(iter);
+			endIter = objs.end();
+
+			// mMaxHp 가 0 이 되면 바로 인트로 화면으로 이동
+		}
+		else 
+		{
+			++iter;
+		}
+	}
 }

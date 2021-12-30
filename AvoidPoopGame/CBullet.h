@@ -19,10 +19,33 @@ public:
 		return (int)mPos.mY > 0;
 	}
 
+	void setSpeedWeight(bool upDown) 
+	{
+		// true 면 증가, false 면 감소
+		if (upDown) 
+		{
+			mSpeedWeight += 0.1f;
+
+			if (mSpeedWeight > 2.0f)
+			{
+				mSpeedWeight = 2.0f;
+			}
+		}
+		else 
+		{
+			mSpeedWeight -= 0.1f;
+
+			if (mSpeedWeight < 1.0f) 
+			{
+				mSpeedWeight = 1.0f;
+			}
+		}
+	}
+
 private:
 	class ObjLayer* mLayer;
 	float mSpeed;
-	float mSpeedWeigth;
+	float mSpeedWeight;
 
 };
 

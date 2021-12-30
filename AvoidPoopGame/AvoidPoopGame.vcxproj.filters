@@ -100,6 +100,9 @@
     <Filter Include="Game2\01.Object\Item">
       <UniqueIdentifier>{afc98f8c-679e-4c9b-8bc3-3e49bab31aa8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game2\02.Collision">
+      <UniqueIdentifier>{b6373e3a-3d32-4038-9c77-7c26ed8b2933}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -201,6 +204,9 @@
     <ClInclude Include="CItem.h">
       <Filter>Game2\01.Object\Item</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Game2\02.Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -283,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="CItem.cpp">
       <Filter>Game2\01.Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Game2\02.Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,16 @@ FPOINT CObj::getPos() const
 	return mPos;
 }
 
+FPOINT CObj::getCenter() const
+{
+	return FPOINT{ float((mPos.mX + mSize.x) / 2), float((mPos.mY + mSize.y) / 2) };
+}
+
+int CObj::getRadius() const
+{
+	return mSize.x / 2;
+}
+
 POINT CObj::getSize() const
 {
 	return mSize;

@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "StageManager.h"
 #include "ResourceManager.h"
+#include "CollisionManager.h"
 
 Core* Core::mCore = nullptr;
 bool Core::mFlag = true;
@@ -43,6 +44,7 @@ void Core::deleteInstance()
 		mCore = nullptr;
 	}
 
+	CollisionManager::deleteInstance();
 	TimeManager::deleteInstance();
 	InputManager::deleteInstance();
 	ResourceManager::deleteInstance();
@@ -70,6 +72,10 @@ bool Core::init(HINSTANCE hInstance)
 
 	// Timer 초기화는 게임 시작시부터 실행시키기 위해
 	// introStage 내부에서 게임 시작 시 init() 실행
+
+	// Collision 같은 경우 객체만 한 번 생성되면 된다. 
+	// 따로 init, update 등의 작업이 필요 없다.
+
 	ResourceManager::getInstance()->init();
 	InputManager::getInstance()->init();
 	StageManager::getInstance()->init();

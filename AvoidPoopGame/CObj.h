@@ -15,6 +15,8 @@ public:
 
 	const wstring& getTag() const;
 	FPOINT getPos() const;
+	FPOINT getCenter() const;
+	int getRadius() const;
 	POINT getSize() const;
 	const class Texture& getTexture() const;
 

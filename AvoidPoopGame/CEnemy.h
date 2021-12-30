@@ -24,6 +24,11 @@ public:
         mMaxHp = hp;
     }
 
+    int getMaxHp() 
+    {
+        return mMaxHp;
+    }
+
 private:
     void bulletCollision();
 

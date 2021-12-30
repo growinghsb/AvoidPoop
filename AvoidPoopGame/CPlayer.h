@@ -16,7 +16,7 @@ public:
 
 private:
 	void createBullet();
-	void itemCollision();
+	void changeBulletWeight(bool upDown);
 	void enemyCollision();
 
 	class ObjLayer* mLayer;
@@ -24,6 +24,8 @@ private:
 	float mSpeedWeight;
 	int mMaxHp;
 	bool mLaunchMode;
+
 	list<class CBullet*>& mRefBullets;
+	int mBulletOffencePower;
 };
 

@@ -19,6 +19,11 @@ public:
 		return mBullets;
 	}
 
+	list<class CObj*>& getObjs() 
+	{
+		return mCObjs;
+	}
+
 private:
 	class Texture* getTexture(const wchar_t* tag);
 	void createEnemy();
