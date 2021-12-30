@@ -14,14 +14,14 @@ public:
 	void collision() override;
 	void render(HDC backDC) override;
 
-	list<class CBullet*>& getBullets()
-	{
-		return mBullets;
-	}
-
 	list<class CObj*>& getObjs() 
 	{
 		return mCObjs;
+	}
+
+	class CPlayer& getPlayer() 
+	{
+		return *(CPlayer*)mCObjs.front();
 	}
 
 private:
@@ -30,5 +30,4 @@ private:
 	void deleteObject();
 
 	list<class CObj*> mCObjs;
-	list<class CBullet*> mBullets;
 };

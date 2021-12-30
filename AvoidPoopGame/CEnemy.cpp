@@ -35,11 +35,7 @@ void CEnemy::render(HDC backDC)
 	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, res.x, res.y, mTexture->getTextureDC(), 0, 0, res.x, res.y, COLOR_WHITE);
 }
 
-void CEnemy::collision()
+bool CEnemy::collision()
 {
-	bulletCollision();
-}
-
-void CEnemy::bulletCollision()
-{
+	return false;
 }

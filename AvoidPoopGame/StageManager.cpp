@@ -87,6 +87,14 @@ void StageManager::changePrevStage()
 	}
 }
 
+void StageManager::changeIntroStage()
+{
+	mCurrentStage->exit();
+
+	mCurrentStage = mStages[0];
+	mCurrentStage->enter();
+}
+
 Stage* StageManager::getCurrentStage() const
 {
 	return mCurrentStage;

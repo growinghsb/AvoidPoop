@@ -12,16 +12,16 @@ public:
     void init()   override;
     void update() override;
     void render(HDC backDC) override;
-    void collision() override;
+    bool collision() override;
 
     void changeSpeed(const float speed)
     {
         mSpeed = speed;
     }
 
-    void changeMaxHp(const int hp) 
+    void decreaseHp(const int offencePower) 
     {
-        mMaxHp = hp;
+        mMaxHp -= offencePower;
     }
 
     int getMaxHp() 
@@ -29,9 +29,12 @@ public:
         return mMaxHp;
     }
 
-private:
-    void bulletCollision();
+    bool isDie() 
+    {
+        return mMaxHp <= 0;
+    }
 
+private:
     class ObjLayer* mLayer;
     float mSpeed;
     float mSpeedWeight;

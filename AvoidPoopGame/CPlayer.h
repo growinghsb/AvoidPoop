@@ -6,26 +6,27 @@ class CPlayer :
 	public CObj
 {
 public:
-	CPlayer(wstring tag, FPOINT pos, POINT size, class Texture* texture, class ObjLayer* layer, float speed, list<class CBullet*>& bullets);
-	virtual ~CPlayer() = default;
+	CPlayer(wstring tag, FPOINT pos, POINT size, class Texture* texture, class ObjLayer* layer, float speed);
+	virtual ~CPlayer();
 
 	void init() override;
 	void update() override;
 	void render(HDC backDC) override;
-	void collision() override;
+	bool collision() override;
 
 private:
-	void createBullet();
-	void changeBulletWeight(bool upDown);
 	void enemyCollision();
+	void createBullet();
+	void changeBulletWeight();
+
+	list<class CBullet*> mBullets;
 
 	class ObjLayer* mLayer;
 	float mSpeed;
 	float mSpeedWeight;
 	int mMaxHp;
 	bool mLaunchMode;
-
-	list<class CBullet*>& mRefBullets;
+	float mBulletSpeedWeight;
 	int mBulletOffencePower;
 };
 

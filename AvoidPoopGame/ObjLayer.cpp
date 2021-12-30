@@ -30,24 +30,13 @@ ObjLayer::~ObjLayer()
 		iter = mCObjs.erase(iter);
 		endIter = mCObjs.end();
 	}
-
-	auto bulletIter = mBullets.begin();
-	auto bulletEndIter = mBullets.end();
-
-	while (bulletIter != bulletEndIter)
-	{
-		delete (*bulletIter);
-
-		bulletIter = mBullets.erase(bulletIter);
-		bulletEndIter = mBullets.end();
-	}
 }
 
 void ObjLayer::init()
 {
 	// 이전 스테이지에 이어서 플레이어 텍스처 가져온 뒤 플레이어 생성
 	Texture* texture = StageManager::getInstance()->getCurrentPlayerTexture();
-	mCObjs.push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, this, 250.0f, mBullets));
+	mCObjs.push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, this, 250.0f));
 
 	createEnemy();
 
@@ -81,9 +70,6 @@ void ObjLayer::update()
 		++iter;
 	}
 
-	// 불릿에 대한 update 및 render 는
-	// 각각 플레이어쪽에서 처리
-
 	// 유효하지 않은 오브젝트 삭제
 	deleteObject();
 }
@@ -95,7 +81,18 @@ void ObjLayer::collision()
 
 	while (iter != endIter)
 	{
-		(*iter)->collision();
+		if ((*iter)->collision())
+		{
+			if ((*iter)->getTag() == L"player")
+			{
+				StageManager::getInstance()->changeIntroStage();
+				return;
+			}
+			else if ((*iter)->getTag() == L"item")
+			{
+				// 충돌 났는데 아이템이면 여기서 아이템 삭제
+			}
+		}
 		++iter;
 	}
 }

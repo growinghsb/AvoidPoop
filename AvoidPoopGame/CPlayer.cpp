@@ -8,17 +8,32 @@
 #include "ResourceManager.h"
 #include "ObjLayer.h"
 #include "CollisionManager.h"
+#include "StageManager.h"
 
-CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speed, list<CBullet*>& bullets)
+CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speed)
 	: CObj(tag, pos, size, texture)
 	, mLayer(layer)
 	, mSpeed(speed)
 	, mSpeedWeight(1.0f)
 	, mMaxHp(100)
 	, mLaunchMode(true)
-	, mRefBullets(bullets)
+	, mBulletSpeedWeight(1.0f)
 	, mBulletOffencePower(3)
 {
+}
+
+CPlayer::~CPlayer()
+{
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
+
+	while (iter != endIter)
+	{
+		delete (*iter);
+
+		iter = mBullets.erase(iter);
+		endIter = mBullets.end();
+	}
 }
 
 void CPlayer::init()
@@ -102,14 +117,28 @@ void CPlayer::update()
 
 	if (ISTIC(KEY_LIST::_3))
 	{
+		mBulletSpeedWeight += 0.1f;
+
+		if (mBulletSpeedWeight > 2.0f)
+		{
+			mBulletSpeedWeight = 2.0f;
+		}
+
 		// 총알 속도 증가
-		changeBulletWeight(true);
+		changeBulletWeight();
 	}
 
 	if (ISTIC(KEY_LIST::_4))
 	{
+		mBulletSpeedWeight -= 0.1f;
+
+		if (mBulletSpeedWeight < 1.0f)
+		{
+			mBulletSpeedWeight = 1.0f;
+		}
+
 		// 총알 속도 감소
-		changeBulletWeight(false);
+		changeBulletWeight();
 	}
 
 	if (ISTIC(KEY_LIST::LSHIFT))
@@ -134,19 +163,58 @@ void CPlayer::update()
 		}
 	}
 
-	// 불릿 업데이트
-	auto bulletIter = mRefBullets.begin();
-	auto bulletEndIter = mRefBullets.end();
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
 
-	while (bulletIter != bulletEndIter)
+	while (iter != endIter)
 	{
-		(*bulletIter)->update();
-		++bulletIter;
+		(*iter)->update();
+		++iter;
 	}
+}
+
+bool CPlayer::collision()
+{
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
+
+	while (iter != endIter)
+	{
+		if ((*iter)->collision())
+		{
+			delete (*iter);
+
+			iter = mBullets.erase(iter);
+			endIter = mBullets.end();
+		}
+		else
+		{
+			++iter;
+		}
+	}
+
+	// 플레이어와 적 충돌 처리
+	enemyCollision();
+
+	// mMaxHp 가 0 이 되면 바로 인트로 화면으로 이동
+	if (mMaxHp <= 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 void CPlayer::render(HDC backDC)
 {
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
+
+	while (iter != endIter)
+	{
+		(*iter)->render(backDC);
+		++iter;
+	}
+
 	SelectObject(backDC, GetStockObject(DC_BRUSH));
 
 	// hp bar
@@ -161,64 +229,45 @@ void CPlayer::render(HDC backDC)
 	// 아래 함수는 DC -> DC 의 복사를 진행 하는데 특정 컬러를 RGB 로 지정해 제거할 수 있다. 이를 이용해 배경을 제거한다.
 	POINT tRes = mTexture->getResolution();
 	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, tRes.x, tRes.y, mTexture->getTextureDC(), 0, 0, tRes.x, tRes.y, COLOR_WHITE);
-
-	// 불릿 렌더링
-	auto bulletIter = mRefBullets.begin();
-	auto bulletEndIter = mRefBullets.end();
-
-	while (bulletIter != bulletEndIter)
-	{
-		(*bulletIter)->render(backDC);
-		++bulletIter;
-	}
-}
-
-void CPlayer::collision()
-{
-	enemyCollision();
 }
 
 void CPlayer::createBullet()
 {
-	mRefBullets = mLayer->getBullets();
-
 	wstring wstag(L"defaultBullet1");
 	Texture* texture = (Texture*)ResourceManager::getInstance()->findResource(wstag.c_str());
 
 	float bulletPosX = float(mPos.mX + (mSize.x - texture->getResolution().x) / 2);
-	float bulletPosY = float(mPos.mY);
+	float bulletPosY = mPos.mY;
 
-	if (mRefBullets.empty())
+	if (mBullets.empty())
 	{
-		mRefBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer));
+		mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
 	}
 	else
 	{
-		if (mRefBullets.front()->isValid())
+		if (mBullets.front()->isValid())
 		{
-			mRefBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer));
+			mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
 		}
 		else
 		{
-			CBullet* invalidBullet = mRefBullets.front();
-			mRefBullets.pop_front();
+			CBullet* invalidBullet = mBullets.front();
+			mBullets.pop_front();
 
 			invalidBullet->changePos(FPOINT{ bulletPosX ,bulletPosY });
-			mRefBullets.push_back(invalidBullet);
+			mBullets.push_back(invalidBullet);
 		}
 	}
 }
 
-void CPlayer::changeBulletWeight(bool upDown)
+void CPlayer::changeBulletWeight()
 {
-	mRefBullets = mLayer->getBullets();
-
-	auto iter = mRefBullets.begin();
-	auto endIter = mRefBullets.end();
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
 
 	while (iter != endIter)
 	{
-		(*iter)->setSpeedWeight(upDown);
+		(*iter)->setSpeedWeight(mBulletSpeedWeight);
 		++iter;
 	}
 }
@@ -239,12 +288,13 @@ void CPlayer::enemyCollision()
 			mMaxHp -= enemy->getMaxHp();
 
 			delete (*iter);
+
 			iter = objs.erase(iter);
 			endIter = objs.end();
 
-			// mMaxHp 가 0 이 되면 바로 인트로 화면으로 이동
+			return;
 		}
-		else 
+		else
 		{
 			++iter;
 		}
