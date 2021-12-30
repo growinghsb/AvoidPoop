@@ -11,6 +11,7 @@
 #include "CBullet.h"
 
 ObjLayer::ObjLayer()
+	: mItemList{ ITEM_LIST::HP, ITEM_LIST::MP, ITEM_LIST::OFFENCE_POWER }
 {
 }
 
@@ -36,7 +37,7 @@ void ObjLayer::init()
 {
 	// 이전 스테이지에 이어서 플레이어 텍스처 가져온 뒤 플레이어 생성
 	Texture* texture = StageManager::getInstance()->getCurrentPlayerTexture();
-	mCObjs.push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, this, 250.0f));
+	mCObjs.push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, this, 200.0f));
 
 	createEnemy();
 
@@ -57,8 +58,8 @@ void ObjLayer::update()
 
 	if (regen > 0.35f)
 	{
-		regen -= 0.35f;
 		createEnemy();
+		regen = 0.f;
 	}
 
 	auto iter = mCObjs.begin();
@@ -85,15 +86,23 @@ void ObjLayer::collision()
 		{
 			if ((*iter)->getTag() == L"player")
 			{
+				// 플레이어의 경우 플레이어가 죽으면 true 반환
+				// 바로 인트로 화면으로 이동한다. 
 				StageManager::getInstance()->changeIntroStage();
 				return;
 			}
 			else if ((*iter)->getTag() == L"item")
 			{
 				// 충돌 났는데 아이템이면 여기서 아이템 삭제
+				delete (*iter);
+				iter = mCObjs.erase(iter);
+				endIter = mCObjs.end();
 			}
 		}
-		++iter;
+		else
+		{
+			++iter;
+		}
 	}
 }
 
@@ -107,6 +116,15 @@ void ObjLayer::render(HDC backDC)
 		(*iter)->render(backDC);
 		++iter;
 	}
+}
+
+void ObjLayer::createItem(FPOINT pos)
+{
+	Texture* texture = (Texture*)ResourceManager::getInstance()->findResource(L"HPPotion1");
+	int validTime = rand() % 20 + 10;
+	int itemCategory = 0; // rand() % (UINT)ITEM_LIST::END;  
+
+	mCObjs.push_back(new CItem(L"item", pos, texture->getResolution(), texture, this, validTime, mItemList[itemCategory]));
 }
 
 void ObjLayer::createEnemy()
@@ -139,6 +157,21 @@ void ObjLayer::deleteObject()
 			delete (*iter);
 			iter = mCObjs.erase(iter);
 			endIter = mCObjs.end();
+		}
+		else if ((*iter)->getTag() == L"item")
+		{
+			CItem* item = (CItem*)(*iter);
+
+			if (!item->isValidTime())
+			{
+				delete (*iter);
+				iter = mCObjs.erase(iter);
+				endIter = mCObjs.end();
+			}
+			else 
+			{
+				++iter;
+			}
 		}
 		else
 		{

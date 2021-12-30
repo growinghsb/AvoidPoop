@@ -14,6 +14,8 @@ public:
 	void collision() override;
 	void render(HDC backDC) override;
 
+	void createItem(FPOINT pos);
+
 	list<class CObj*>& getObjs() 
 	{
 		return mCObjs;
@@ -30,4 +32,5 @@ private:
 	void deleteObject();
 
 	list<class CObj*> mCObjs;
+	ITEM_LIST mItemList[(UINT)ITEM_LIST::END];
 };

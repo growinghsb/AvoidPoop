@@ -69,6 +69,14 @@ enum class KEY_STATE
 	END
 };
 
+enum class ITEM_LIST 
+{
+	HP, 
+	MP, 
+	OFFENCE_POWER, 
+	END
+};
+
 // float 타입의 x, y 값을 나타내는 구조체
 struct FPOINT
 {

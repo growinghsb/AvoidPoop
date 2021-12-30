@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma comment(lib, "Msimg32.lib")
+
 #include "framework.h"
 #include "AvoidPoopGame.h"
 #include "Define.h"

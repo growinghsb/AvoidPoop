@@ -10,8 +10,8 @@ public:
 
 	virtual void init() = 0;
 	virtual void update() = 0;
-	virtual void render(HDC backDC) = 0;
 	virtual bool collision() = 0;
+	virtual void render(HDC backDC) = 0;
 
 	const wstring& getTag() const;
 	FPOINT getPos() const;

@@ -15,6 +15,7 @@ CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer
 	, mLayer(layer)
 	, mSpeed(speed)
 	, mSpeedWeight(1.0f)
+	, mCurrentHp(100)
 	, mMaxHp(100)
 	, mLaunchMode(true)
 	, mBulletSpeedWeight(1.0f)
@@ -196,8 +197,8 @@ bool CPlayer::collision()
 	// 플레이어와 적 충돌 처리
 	enemyCollision();
 
-	// mMaxHp 가 0 이 되면 바로 인트로 화면으로 이동
-	if (mMaxHp <= 0)
+	// mCurrentHp 가 0 이 되면 바로 인트로 화면으로 이동
+	if (mCurrentHp <= 0)
 	{
 		return true;
 	}
@@ -221,7 +222,7 @@ void CPlayer::render(HDC backDC)
 	static int hpBarX = (mMaxHp - mSize.x) / 2;
 
 	SetDCBrushColor(backDC, COLOR_RED);
-	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize.x + 5, (int)mPos.mX - hpBarX + mMaxHp, (int)mPos.mY + mSize.x + 10);
+	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize.x + 5, (int)mPos.mX - hpBarX + mCurrentHp, (int)mPos.mY + mSize.x + 10);
 
 	SetDCBrushColor(backDC, COLOR_WHITE);
 
@@ -229,6 +230,35 @@ void CPlayer::render(HDC backDC)
 	// 아래 함수는 DC -> DC 의 복사를 진행 하는데 특정 컬러를 RGB 로 지정해 제거할 수 있다. 이를 이용해 배경을 제거한다.
 	POINT tRes = mTexture->getResolution();
 	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, tRes.x, tRes.y, mTexture->getTextureDC(), 0, 0, tRes.x, tRes.y, COLOR_WHITE);
+}
+
+void CPlayer::enemyCollision()
+{
+	list<CObj*>& objs = mLayer->getObjs();
+
+	auto iter = objs.begin();
+	auto endIter = objs.end();
+
+	// 플레이어와 적
+	while (iter != endIter)
+	{
+		if ((*iter)->getTag() == L"enemy" && CollisionManager::getInstance()->ractangleVsRactangle((*iter)->getCenter(), (*iter)->getRadius(), getCenter(), getRadius()))
+		{
+			CEnemy* enemy = (CEnemy*)(*iter);
+			mCurrentHp -= enemy->getMaxHp();
+
+			delete (*iter);
+
+			iter = objs.erase(iter);
+			endIter = objs.end();
+
+			return;
+		}
+		else
+		{
+			++iter;
+		}
+	}
 }
 
 void CPlayer::createBullet()
@@ -272,31 +302,3 @@ void CPlayer::changeBulletWeight()
 	}
 }
 
-void CPlayer::enemyCollision()
-{
-	list<CObj*>& objs = mLayer->getObjs();
-
-	auto iter = objs.begin();
-	auto endIter = objs.end();
-
-	// 플레이어와 적
-	while (iter != endIter)
-	{
-		if ((*iter)->getTag() == L"enemy" && CollisionManager::getInstance()->ractangleVsRactangle((*iter)->getCenter(), (*iter)->getRadius(), getCenter(), getRadius()))
-		{
-			CEnemy* enemy = (CEnemy*)(*iter);
-			mMaxHp -= enemy->getMaxHp();
-
-			delete (*iter);
-
-			iter = objs.erase(iter);
-			endIter = objs.end();
-
-			return;
-		}
-		else
-		{
-			++iter;
-		}
-	}
-}

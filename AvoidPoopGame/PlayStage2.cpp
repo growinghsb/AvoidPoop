@@ -76,5 +76,3 @@ void PlayStage2::stageClear()
 	// nullptr 초기화 x, 체크 x
 	mLayers.clear();
 }
-
-

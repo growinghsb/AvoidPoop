@@ -31,30 +31,32 @@ void CBullet::render(HDC backDC)
 
 bool CBullet::collision()
 {
-	// 적 가져와서 총알 하나당 적 전부 충돌 체크
-	// 후 충돌 나면 적 삭제 후 false 반환
-	// 충돌 안나면 true 반환.
-
 	list<CObj*>& objs = mLayer->getObjs();
 
 	auto iter = objs.begin();
 	auto endIter = objs.end();
 
-	while (iter != endIter) 
+	while (iter != endIter)
 	{
 		if ((*iter)->getTag() == L"enemy" && CollisionManager::getInstance()->ractangleVsRactangle((*iter)->getPos(), (*iter)->getSize().x, mPos, mSize.x))
 		{
 			CEnemy* enemy = (CEnemy*)(*iter);
 			enemy->decreaseHp(mOffencePower);
-			
+
 			if (enemy->isDie())
 			{
+				// 몬스터 죽으면 해당 포지션에 아이템 생성
+				if (0 == rand() % 3)
+				{
+					mLayer->createItem((*iter)->getPos());
+				}
+
 				delete (*iter);
 				objs.erase(iter);
 			}
 			return true;
 		}
-		else 
+		else
 		{
 			++iter;
 		}

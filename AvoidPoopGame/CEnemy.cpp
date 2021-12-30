@@ -2,6 +2,9 @@
 #include "CBullet.h"
 #include "Texture.h"
 #include "TimeManager.h"
+#include "CPlayer.h"
+#include "ObjLayer.h"
+#include "CollisionManager.h"
 
 CEnemy::CEnemy(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speed, int maxHp)
 	: CObj(tag, pos, size, texture)

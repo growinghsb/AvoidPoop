@@ -14,6 +14,21 @@ public:
 	void render(HDC backDC) override;
 	bool collision() override;
 
+	void increaseHp(int hp) 
+	{
+		mCurrentHp += hp;
+
+		if (mCurrentHp > mMaxHp) 
+		{
+			mCurrentHp = mMaxHp;
+		}
+	}
+
+	list<class CBullet*>* getBullets()
+	{
+		return &mBullets;
+	}
+
 private:
 	void enemyCollision();
 	void createBullet();
@@ -24,6 +39,7 @@ private:
 	class ObjLayer* mLayer;
 	float mSpeed;
 	float mSpeedWeight;
+	int mCurrentHp;
 	int mMaxHp;
 	bool mLaunchMode;
 	float mBulletSpeedWeight;

@@ -29,6 +29,11 @@ public:
 		mOffencePower = power;
 	}
 
+	int getOffencePower() const
+	{
+		return mOffencePower;
+	}
+
 private:
 	class ObjLayer* mLayer;
 	float mSpeed;

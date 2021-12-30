@@ -17,6 +17,8 @@ ResourceManager::ResourceManager()
 	L"enemy4",
 	L"enemy5",
 	L"HPPotion1",
+	L"MPPotion1", 
+	L"bulletPowerPotion1", 
 	L"defaultBullet1" }
 {
 	enum { LENGTH = 256 };
@@ -25,6 +27,17 @@ ResourceManager::ResourceManager()
 
 	wchar_t pullpath[LENGTH] = {};
 	GetCurrentDirectory(LENGTH, pullpath);
+
+	int len = (int)wcslen(pullpath);
+
+	for (int i = len - 1; i >= 0; --i) 
+	{
+		if ('\\' == pullpath[i])
+		{
+			pullpath[i] = '\0';
+			break;
+		}
+	}
 
 	mAbsolutePullPath = pullpath;
 	mAbsolutePullPath += L"\\texture";

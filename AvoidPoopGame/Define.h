@@ -8,3 +8,4 @@
 #define COLOR_WHITE RGB(255, 255, 255)
 #define COLOR_RED RGB(200, 0, 0)
 #define COLOR_GREEN RGB(0, 249, 0)
+#define COLOR_MAGENTA RGB(255, 0, 255)
