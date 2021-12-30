@@ -47,7 +47,7 @@ void PlayStage::update()
 	static float second = 0.f;
 	second += DS;
 
-	if ((int)second >= 5) 
+	if ((int)second >= 3) 
 	{
 		StageManager::getInstance()->changeNextStage();
 		second = 0.f;

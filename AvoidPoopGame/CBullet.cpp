@@ -46,7 +46,7 @@ bool CBullet::collision()
 			if (enemy->isDie())
 			{
 				// 몬스터 죽으면 해당 포지션에 아이템 생성
-				if (0 == rand() % 3)
+				if (0 == rand() % 4)
 				{
 					mLayer->createItem((*iter)->getPos());
 				}

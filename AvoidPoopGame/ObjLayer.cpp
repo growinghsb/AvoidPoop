@@ -120,11 +120,30 @@ void ObjLayer::render(HDC backDC)
 
 void ObjLayer::createItem(FPOINT pos)
 {
-	Texture* texture = (Texture*)ResourceManager::getInstance()->findResource(L"HPPotion1");
-	int validTime = rand() % 20 + 10;
-	int itemCategory = 0; // rand() % (UINT)ITEM_LIST::END;  
+	Texture* texture;
+	ITEM_LIST item = mItemList[rand() % (UINT)ITEM_LIST::END];
 
-	mCObjs.push_back(new CItem(L"item", pos, texture->getResolution(), texture, this, validTime, mItemList[itemCategory]));
+	switch (item)
+	{
+	case ITEM_LIST::HP:
+		texture = (Texture*)ResourceManager::getInstance()->findResource(L"HPPotion1");
+		break;
+
+	case ITEM_LIST::MP:
+		texture = (Texture*)ResourceManager::getInstance()->findResource(L"MPPotion1");
+		break;
+
+	case ITEM_LIST::OFFENCE_POWER:
+		texture = (Texture*)ResourceManager::getInstance()->findResource(L"bulletPowerPotion1");
+		break;
+
+	default:
+		texture = texture = (Texture*)ResourceManager::getInstance()->findResource(L"HPPotion1");
+		break;
+	}
+	int validTime = rand() % 20 + 10;
+
+	mCObjs.push_back(new CItem(L"item", pos, texture->getResolution(), texture, this, validTime, item));
 }
 
 void ObjLayer::createEnemy()
@@ -168,7 +187,7 @@ void ObjLayer::deleteObject()
 				iter = mCObjs.erase(iter);
 				endIter = mCObjs.end();
 			}
-			else 
+			else
 			{
 				++iter;
 			}

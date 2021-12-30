@@ -24,6 +24,26 @@ public:
 		}
 	}
 
+	void increaseMp(int mp)
+	{
+		mCurrentMp += mp;
+
+		if (mCurrentMp > mMaxMp)
+		{
+			mCurrentMp = mMaxMp;
+		}
+	}
+
+	void bulletOffencePowerUp(int power) 
+	{
+		mBulletOffencePower += power;
+
+		if (mBulletOffencePower > 10) 
+		{
+			mBulletOffencePower = 10;
+		}
+	}
+
 	list<class CBullet*>* getBullets()
 	{
 		return &mBullets;
@@ -41,7 +61,9 @@ private:
 	float mSpeedWeight;
 	int mCurrentHp;
 	int mMaxHp;
-	bool mLaunchMode;
+	int mCurrentMp;
+	int mMaxMp;
+	bool mCLaunchMode;
 	float mBulletSpeedWeight;
 	int mBulletOffencePower;
 };

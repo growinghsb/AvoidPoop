@@ -37,8 +37,10 @@ bool CItem::collision()
 			player.increaseHp(5);
 			break;
 		case ITEM_LIST::MP:
+			player.increaseMp(10);
 			break;
 		case ITEM_LIST::OFFENCE_POWER:
+			player.bulletOffencePowerUp(2);
 			break;
 		default:
 			break;

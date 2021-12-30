@@ -17,7 +17,9 @@ CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer
 	, mSpeedWeight(1.0f)
 	, mCurrentHp(100)
 	, mMaxHp(100)
-	, mLaunchMode(true)
+	, mCurrentMp(100)
+	, mMaxMp(100)
+	, mCLaunchMode(true)
 	, mBulletSpeedWeight(1.0f)
 	, mBulletOffencePower(3)
 {
@@ -144,11 +146,11 @@ void CPlayer::update()
 
 	if (ISTIC(KEY_LIST::LSHIFT))
 	{
-		mLaunchMode ? mLaunchMode = false : mLaunchMode = true;
+		mCLaunchMode ? mCLaunchMode = false : mCLaunchMode = true;
 	}
 
 	// 연사모드
-	if (mLaunchMode)
+	if (mCLaunchMode)
 	{
 		if (ISTIC(KEY_LIST::SPACE))
 		{
@@ -218,18 +220,22 @@ void CPlayer::render(HDC backDC)
 
 	SelectObject(backDC, GetStockObject(DC_BRUSH));
 
-	// hp bar
 	static int hpBarX = (mMaxHp - mSize.x) / 2;
 
+	// hp bar
 	SetDCBrushColor(backDC, COLOR_RED);
 	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize.x + 5, (int)mPos.mX - hpBarX + mCurrentHp, (int)mPos.mY + mSize.x + 10);
+
+	// mp bar
+	SetDCBrushColor(backDC, COLOR_BLUE);
+	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize.x + 15, (int)mPos.mX - hpBarX + mCurrentMp, (int)mPos.mY + mSize.x + 20);
 
 	SetDCBrushColor(backDC, COLOR_WHITE);
 
 	// player
 	// 아래 함수는 DC -> DC 의 복사를 진행 하는데 특정 컬러를 RGB 로 지정해 제거할 수 있다. 이를 이용해 배경을 제거한다.
-	POINT tRes = mTexture->getResolution();
-	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, tRes.x, tRes.y, mTexture->getTextureDC(), 0, 0, tRes.x, tRes.y, COLOR_WHITE);
+	POINT res = mTexture->getResolution();
+	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, res.x, res.y, mTexture->getTextureDC(), 0, 0, res.x, res.y, COLOR_WHITE);
 }
 
 void CPlayer::enemyCollision()
