@@ -16,6 +16,8 @@ public:
 
 	void createItem(FPOINT pos);
 
+	class Texture* getTexture(const wchar_t* tag, int range);
+
 	list<class CObj*>& getObjs() 
 	{
 		return mCObjs;
@@ -27,7 +29,7 @@ public:
 	}
 
 private:
-	class Texture* getTexture(const wchar_t* tag);
+	class Texture* itemChoice(ITEM_LIST item);
 	void createEnemy();
 	void deleteObject();
 

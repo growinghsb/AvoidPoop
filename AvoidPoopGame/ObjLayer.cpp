@@ -11,7 +11,14 @@
 #include "CBullet.h"
 
 ObjLayer::ObjLayer()
-	: mItemList{ ITEM_LIST::HP, ITEM_LIST::MP, ITEM_LIST::OFFENCE_POWER }
+	: mItemList{
+	ITEM_LIST::HP,
+	ITEM_LIST::MP,
+	ITEM_LIST::OFFENCE_POWER,
+	ITEM_LIST::BULLET1,
+	ITEM_LIST::BULLET2,
+	ITEM_LIST::BULLET3,
+	ITEM_LIST::MISSILE}
 {
 }
 
@@ -91,7 +98,8 @@ void ObjLayer::collision()
 				StageManager::getInstance()->changeIntroStage();
 				return;
 			}
-			else if ((*iter)->getTag() == L"item")
+
+			if ((*iter)->getTag() == L"item")
 			{
 				// 충돌 났는데 아이템이면 여기서 아이템 삭제
 				delete (*iter);
@@ -120,48 +128,71 @@ void ObjLayer::render(HDC backDC)
 
 void ObjLayer::createItem(FPOINT pos)
 {
-	Texture* texture;
 	ITEM_LIST item = mItemList[rand() % (UINT)ITEM_LIST::END];
+	Texture* texture = itemChoice(item);
 
-	switch (item)
-	{
-	case ITEM_LIST::HP:
-		texture = (Texture*)ResourceManager::getInstance()->findResource(L"HPPotion1");
-		break;
-
-	case ITEM_LIST::MP:
-		texture = (Texture*)ResourceManager::getInstance()->findResource(L"MPPotion1");
-		break;
-
-	case ITEM_LIST::OFFENCE_POWER:
-		texture = (Texture*)ResourceManager::getInstance()->findResource(L"bulletPowerPotion1");
-		break;
-
-	default:
-		texture = texture = (Texture*)ResourceManager::getInstance()->findResource(L"HPPotion1");
-		break;
-	}
 	int validTime = rand() % 20 + 10;
 
 	mCObjs.push_back(new CItem(L"item", pos, texture->getResolution(), texture, this, validTime, item));
 }
 
+Texture* ObjLayer::itemChoice(ITEM_LIST item)
+{
+	Texture* texture;
+
+	switch (item)
+	{
+	case ITEM_LIST::HP:
+		texture = getTexture(L"HPPotion", 1);
+		break;
+
+	case ITEM_LIST::MP:
+		texture = getTexture(L"MPPotion", 1);
+		break;
+
+	case ITEM_LIST::OFFENCE_POWER:
+		texture = getTexture(L"bulletPowerPotion", 1);
+		break;
+
+	case ITEM_LIST::BULLET1:
+		texture = FIND_TEXTURE(L"bullet1");
+		break;
+
+	case ITEM_LIST::BULLET2:
+		texture = FIND_TEXTURE(L"bullet2");
+		break;
+
+	case ITEM_LIST::BULLET3:
+		texture = FIND_TEXTURE(L"bullet3");
+		break;
+
+	case ITEM_LIST::MISSILE:
+		texture = FIND_TEXTURE(L"missileCountUp");
+		break;
+
+	default:
+		texture = getTexture(L"HPPotion", 1);
+		break;
+	}
+	return texture;
+}
+
 void ObjLayer::createEnemy()
 {
-	Texture* texture = getTexture(L"enemy");
+	Texture* texture = getTexture(L"enemy", 5);
 	POINT size = texture->getResolution();
 	float x = float(rand() % (WINDOW.right - size.x));
 	float speed = float((rand() % 300) + 200);
-	int	  hp = rand() % 15 + 5;
+	int	  hp = rand() % 15 + 10;
 
 	mCObjs.push_back(new CEnemy(L"enemy", FPOINT{ x, 0 }, size, texture, this, speed, hp));
 }
 
-Texture* ObjLayer::getTexture(const wchar_t* tag)
+Texture* ObjLayer::getTexture(const wchar_t* tag, int range)
 {
 	wstring wstag(tag);
-	wstag += to_wstring(rand() % 5 + 1);
-	return (Texture*)ResourceManager::getInstance()->findResource(wstag.c_str());
+	wstag += to_wstring(rand() % range + 1);
+	return FIND_TEXTURE(wstag.c_str());
 }
 
 void ObjLayer::deleteObject()

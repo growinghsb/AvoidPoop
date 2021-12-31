@@ -9,7 +9,7 @@
 CBullet::CBullet(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speedWeight, int offencePower)
 	: CObj(tag, pos, size, texture)
 	, mLayer(layer)
-	, mSpeed(350.0f)
+	, mSpeed(450.0f)
 	, mSpeedWeight(speedWeight)
 	, mOffencePower(offencePower)
 {
@@ -26,7 +26,8 @@ void CBullet::update()
 
 void CBullet::render(HDC backDC)
 {
-	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, mSize.x, mSize.y, mTexture->getTextureDC(), 0, 0, mSize.x, mSize.y, COLOR_WHITE);
+	POINT res = mTexture->getResolution();
+	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, res.x, res.y, mTexture->getTextureDC(), 0, 0, res.x, res.y, COLOR_WHITE);
 }
 
 bool CBullet::collision()

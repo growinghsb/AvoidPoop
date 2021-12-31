@@ -14,6 +14,8 @@ public:
 	void render(HDC backDC) override;
 	bool collision() override;
 
+	void changeBulletTexture(class Texture* texture);
+
 	void increaseHp(int hp) 
 	{
 		mCurrentHp += hp;
@@ -44,6 +46,16 @@ public:
 		}
 	}
 
+	void missileCountUp() 
+	{
+		mMissileCount += 1;
+
+		if (mMissileCount > 4) 
+		{
+			mMissileCount = 4;
+		}
+	}
+
 	list<class CBullet*>* getBullets()
 	{
 		return &mBullets;
@@ -52,9 +64,11 @@ public:
 private:
 	void enemyCollision();
 	void createBullet();
+	void createMissile();
 	void changeBulletWeight();
 
 	list<class CBullet*> mBullets;
+	list<class CBullet*> mMissiles;
 
 	class ObjLayer* mLayer;
 	float mSpeed;
@@ -63,8 +77,9 @@ private:
 	int mMaxHp;
 	int mCurrentMp;
 	int mMaxMp;
-	bool mCLaunchMode;
+	class Texture* mBulletTexture;
 	float mBulletSpeedWeight;
 	int mBulletOffencePower;
+	int mMissileCount;
 };
 

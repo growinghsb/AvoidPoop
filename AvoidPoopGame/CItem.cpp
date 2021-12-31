@@ -5,6 +5,7 @@
 #include "CollisionManager.h"
 #include "TimeManager.h"
 #include "Texture.h"
+#include "ResourceManager.h"
 
 CItem::CItem(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer,  int validTime, ITEM_LIST category)
 	: CObj(tag, pos, size, texture)
@@ -40,7 +41,23 @@ bool CItem::collision()
 			player.increaseMp(10);
 			break;
 		case ITEM_LIST::OFFENCE_POWER:
-			player.bulletOffencePowerUp(2);
+			player.bulletOffencePowerUp(1);
+			break;
+
+		case ITEM_LIST::BULLET1:
+			player.changeBulletTexture(FIND_TEXTURE(L"bullet1"));
+			break;
+
+		case ITEM_LIST::BULLET2:
+			player.changeBulletTexture(FIND_TEXTURE(L"bullet2"));
+			break;
+
+		case ITEM_LIST::BULLET3:
+			player.changeBulletTexture(FIND_TEXTURE(L"bullet3"));
+			break;
+
+		case ITEM_LIST::MISSILE:
+			player.missileCountUp();
 			break;
 		default:
 			break;
@@ -52,6 +69,6 @@ bool CItem::collision()
 
 void CItem::render(HDC backDC)
 {
-	POINT tRes = mTexture->getResolution();
-	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, tRes.x, tRes.y, mTexture->getTextureDC(), 0, 0, tRes.x, tRes.y, COLOR_MAGENTA);
+	POINT res = mTexture->getResolution();
+	TransparentBlt(backDC, (int)mPos.mX, (int)mPos.mY, res.x, res.y, mTexture->getTextureDC(), 0, 0, res.x, res.y, COLOR_WHITE);
 }

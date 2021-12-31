@@ -19,9 +19,10 @@ CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer
 	, mMaxHp(100)
 	, mCurrentMp(100)
 	, mMaxMp(100)
-	, mCLaunchMode(true)
+	, mBulletTexture(FIND_TEXTURE(L"bullet1"))
 	, mBulletSpeedWeight(1.0f)
 	, mBulletOffencePower(3)
+	, mMissileCount(1)
 {
 }
 
@@ -36,6 +37,17 @@ CPlayer::~CPlayer()
 
 		iter = mBullets.erase(iter);
 		endIter = mBullets.end();
+	}
+
+	auto missileIter = mMissiles.begin();
+	auto missileEndIter = mMissiles.end();
+
+	while (missileIter != missileEndIter)
+	{
+		delete (*missileIter);
+
+		iter = mMissiles.erase(iter);
+		endIter = mMissiles.end();
 	}
 }
 
@@ -144,28 +156,31 @@ void CPlayer::update()
 		changeBulletWeight();
 	}
 
-	if (ISTIC(KEY_LIST::LSHIFT))
+	// 총알 발사
+	static float delay = 0.f;
+	delay += DS;
+	if (ISPRESS(KEY_LIST::SPACE))
 	{
-		mCLaunchMode ? mCLaunchMode = false : mCLaunchMode = true;
-	}
-
-	// 연사모드
-	if (mCLaunchMode)
-	{
-		if (ISTIC(KEY_LIST::SPACE))
+		if (delay > 0.07f)
 		{
 			createBullet();
-		}
-	}
-	// 속사모드
-	else
-	{
-		if (ISPRESS(KEY_LIST::SPACE))
-		{
-			createBullet();
+			delay = 0.f;
 		}
 	}
 
+	// 자동 미사일
+	static float second = 0.f;
+	second += DS;
+	if (second > 1.5f)
+	{
+		for (int i = 0; i < mMissileCount; ++i) 
+		{
+			createMissile();
+		}
+		second = 0.f;
+	}
+
+	// 불릿
 	auto iter = mBullets.begin();
 	auto endIter = mBullets.end();
 
@@ -173,6 +188,16 @@ void CPlayer::update()
 	{
 		(*iter)->update();
 		++iter;
+	}
+
+	// 미사일
+	auto missileIter = mMissiles.begin();
+	auto missileEndIter = mMissiles.end();
+
+	while (missileIter != missileEndIter)
+	{
+		(*missileIter)->update();
+		++missileIter;
 	}
 }
 
@@ -196,6 +221,24 @@ bool CPlayer::collision()
 		}
 	}
 
+	auto missileIter = mMissiles.begin();
+	auto missileEndIter = mMissiles.end();
+
+	while (missileIter != missileEndIter)
+	{
+		if ((*missileIter)->collision())
+		{
+			delete (*missileIter);
+
+			missileIter = mMissiles.erase(missileIter);
+			missileEndIter = mMissiles.end();
+		}
+		else
+		{
+			++missileIter;
+		}
+	}
+
 	// 플레이어와 적 충돌 처리
 	enemyCollision();
 
@@ -207,6 +250,20 @@ bool CPlayer::collision()
 	return false;
 }
 
+void CPlayer::changeBulletTexture(Texture* texture)
+{
+	mBulletTexture = texture;
+
+	auto iter = mBullets.begin();
+	auto endIter = mBullets.end();
+
+	while (iter != endIter)
+	{
+		(*iter)->changeTexture(mBulletTexture);
+		++iter;
+	}
+}
+
 void CPlayer::render(HDC backDC)
 {
 	auto iter = mBullets.begin();
@@ -216,6 +273,15 @@ void CPlayer::render(HDC backDC)
 	{
 		(*iter)->render(backDC);
 		++iter;
+	}
+
+	auto missileIter = mMissiles.begin();
+	auto missileEndIter = mMissiles.end();
+
+	while (missileIter != missileEndIter)
+	{
+		(*missileIter)->render(backDC);
+		++missileIter;
 	}
 
 	SelectObject(backDC, GetStockObject(DC_BRUSH));
@@ -269,21 +335,19 @@ void CPlayer::enemyCollision()
 
 void CPlayer::createBullet()
 {
-	wstring wstag(L"defaultBullet1");
-	Texture* texture = (Texture*)ResourceManager::getInstance()->findResource(wstag.c_str());
-
-	float bulletPosX = float(mPos.mX + (mSize.x - texture->getResolution().x) / 2);
+	POINT res = mBulletTexture->getResolution();
+	float bulletPosX = float(mPos.mX + (mSize.x - res.x) / 2);
 	float bulletPosY = mPos.mY;
 
 	if (mBullets.empty())
 	{
-		mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
+		mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, res, mBulletTexture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
 	}
 	else
 	{
 		if (mBullets.front()->isValid())
 		{
-			mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, texture->getResolution(), texture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
+			mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, res, mBulletTexture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
 		}
 		else
 		{
@@ -291,7 +355,39 @@ void CPlayer::createBullet()
 			mBullets.pop_front();
 
 			invalidBullet->changePos(FPOINT{ bulletPosX ,bulletPosY });
+			invalidBullet->changeSize(res);
+			invalidBullet->changeTexture(mBulletTexture);
+			invalidBullet->setSpeedWeight(mBulletSpeedWeight);
+			invalidBullet->setOffencePower(mBulletOffencePower);
+
 			mBullets.push_back(invalidBullet);
+		}
+	}
+}
+
+void CPlayer::createMissile()
+{
+	Texture* texture = FIND_TEXTURE(L"missile1");
+	POINT res = texture->getResolution();
+
+	if (mMissiles.empty())
+	{
+		mMissiles.push_back(new CBullet(L"bullet", FPOINT{ mPos.mX, mPos.mY }, res, texture, mLayer, 0.6f, 7));
+	}
+	else
+	{
+		if (mMissiles.front()->isValid())
+		{
+			mMissiles.push_back(new CBullet(L"bullet", FPOINT{ mPos.mX, mPos.mY }, res, texture, mLayer, 0.6f, 7));
+		}
+		else
+		{
+			CBullet* invalidMissile = mMissiles.front();
+			mMissiles.pop_front();
+
+			invalidMissile->changePos(FPOINT{ mPos.mX ,mPos.mY });
+
+			mMissiles.push_back(invalidMissile);
 		}
 	}
 }

@@ -74,6 +74,10 @@ enum class ITEM_LIST
 	HP, 
 	MP, 
 	OFFENCE_POWER, 
+	BULLET1, 
+	BULLET2, 
+	BULLET3,
+	MISSILE,
 	END
 };
 

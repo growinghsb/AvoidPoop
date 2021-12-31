@@ -17,9 +17,13 @@ ResourceManager::ResourceManager()
 	L"enemy4",
 	L"enemy5",
 	L"HPPotion1",
-	L"MPPotion1", 
-	L"bulletPowerPotion1", 
-	L"defaultBullet1" }
+	L"MPPotion1",
+	L"bulletPowerPotion1",
+	L"bullet1",
+	L"bullet2",
+	L"bullet3",
+	L"missile1",
+	L"missileCountUp"}
 {
 	enum { LENGTH = 256 };
 
@@ -30,7 +34,7 @@ ResourceManager::ResourceManager()
 
 	int len = (int)wcslen(pullpath);
 
-	for (int i = len - 1; i >= 0; --i) 
+	for (int i = len - 1; i >= 0; --i)
 	{
 		if ('\\' == pullpath[i])
 		{
