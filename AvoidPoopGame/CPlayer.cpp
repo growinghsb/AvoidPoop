@@ -19,10 +19,11 @@ CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer
 	, mMaxHp(100)
 	, mCurrentMp(100)
 	, mMaxMp(100)
-	, mBulletTexture(FIND_TEXTURE(L"bullet1"))
+	, mBulletTexture(FIND_TEXTURE(L"bullet0"))
+	, mBulletCurLevel(0)
+	, mBulletMaxLevel(4)
 	, mBulletSpeedWeight(1.0f)
 	, mBulletOffencePower(3)
-	, mMissileCount(1)
 {
 }
 
@@ -46,8 +47,8 @@ CPlayer::~CPlayer()
 	{
 		delete (*missileIter);
 
-		iter = mMissiles.erase(iter);
-		endIter = mMissiles.end();
+		missileIter = mMissiles.erase(missileIter);
+		missileEndIter = mMissiles.end();
 	}
 }
 
@@ -171,9 +172,10 @@ void CPlayer::update()
 	// 자동 미사일
 	static float second = 0.f;
 	second += DS;
-	if (second > 1.5f)
+
+	if (second > 1.f)
 	{
-		for (int i = 0; i < mMissileCount; ++i) 
+		if (decreaseMp(2))
 		{
 			createMissile();
 		}
@@ -250,6 +252,19 @@ bool CPlayer::collision()
 	return false;
 }
 
+void CPlayer::bulletLevelUp()
+{
+	mBulletCurLevel += 1;
+
+	if (mBulletCurLevel > mBulletMaxLevel)
+	{
+		mBulletCurLevel = mBulletMaxLevel;
+	}
+
+	wstring tag = L"bullet" + to_wstring(mBulletCurLevel);
+	changeBulletTexture(FIND_TEXTURE(tag.c_str()));
+}
+
 void CPlayer::changeBulletTexture(Texture* texture)
 {
 	mBulletTexture = texture;
@@ -286,15 +301,15 @@ void CPlayer::render(HDC backDC)
 
 	SelectObject(backDC, GetStockObject(DC_BRUSH));
 
-	static int hpBarX = (mMaxHp - mSize.x) / 2;
+	static int barX = (mMaxHp - mSize.x) / 2;
 
 	// hp bar
 	SetDCBrushColor(backDC, COLOR_RED);
-	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize.x + 5, (int)mPos.mX - hpBarX + mCurrentHp, (int)mPos.mY + mSize.x + 10);
+	Rectangle(backDC, (int)mPos.mX - barX, (int)mPos.mY + mSize.x + 5, (int)mPos.mX - barX + mCurrentHp, (int)mPos.mY + mSize.x + 10);
 
 	// mp bar
 	SetDCBrushColor(backDC, COLOR_BLUE);
-	Rectangle(backDC, (int)mPos.mX - hpBarX, (int)mPos.mY + mSize.x + 15, (int)mPos.mX - hpBarX + mCurrentMp, (int)mPos.mY + mSize.x + 20);
+	Rectangle(backDC, (int)mPos.mX - barX, (int)mPos.mY + mSize.x + 15, (int)mPos.mX - barX + mCurrentMp, (int)mPos.mY + mSize.x + 20);
 
 	SetDCBrushColor(backDC, COLOR_WHITE);
 
@@ -306,7 +321,7 @@ void CPlayer::render(HDC backDC)
 
 void CPlayer::enemyCollision()
 {
-	list<CObj*>& objs = mLayer->getObjs();
+	list<CEnemy*>& objs = (list<CEnemy*>&)mLayer->getObstacle();
 
 	auto iter = objs.begin();
 	auto endIter = objs.end();
@@ -314,7 +329,7 @@ void CPlayer::enemyCollision()
 	// 플레이어와 적
 	while (iter != endIter)
 	{
-		if ((*iter)->getTag() == L"enemy" && CollisionManager::getInstance()->ractangleVsRactangle((*iter)->getCenter(), (*iter)->getRadius(), getCenter(), getRadius()))
+		if ((*iter)->getTag() == L"obstacle" && CollisionManager::getInstance()->ractangleVsRactangle((*iter)->getCenter(), (*iter)->getRadius(), getCenter(), getRadius()))
 		{
 			CEnemy* enemy = (CEnemy*)(*iter);
 			mCurrentHp -= enemy->getMaxHp();
@@ -369,25 +384,24 @@ void CPlayer::createMissile()
 {
 	Texture* texture = FIND_TEXTURE(L"missile1");
 	POINT res = texture->getResolution();
+	float x = mPos.mX + (rand() % mSize.x);
 
-	if (mMissiles.empty())
+	mMissiles.push_back(new CBullet(L"bullet", FPOINT{ x, mPos.mY }, res, texture, mLayer, 0.6f, 7));
+
+	auto iter = mMissiles.begin();
+	auto endIter = mMissiles.end();
+
+	while (iter != endIter)
 	{
-		mMissiles.push_back(new CBullet(L"bullet", FPOINT{ mPos.mX, mPos.mY }, res, texture, mLayer, 0.6f, 7));
-	}
-	else
-	{
-		if (mMissiles.front()->isValid())
+		if (!(*iter)->isValid())
 		{
-			mMissiles.push_back(new CBullet(L"bullet", FPOINT{ mPos.mX, mPos.mY }, res, texture, mLayer, 0.6f, 7));
+			delete (*iter);
+			iter = mMissiles.erase(iter);
+			endIter = mMissiles.end();
 		}
 		else
 		{
-			CBullet* invalidMissile = mMissiles.front();
-			mMissiles.pop_front();
-
-			invalidMissile->changePos(FPOINT{ mPos.mX ,mPos.mY });
-
-			mMissiles.push_back(invalidMissile);
+			++iter;
 		}
 	}
 }

@@ -29,36 +29,27 @@ bool CItem::collision()
 {
 	CPlayer& player = mLayer->getPlayer();
 	
-	if (CollisionManager::getInstance()->ractangleVsRactangle(player.getPos(), player.getSize().x, mPos, mSize.x)) 
+	if (COLLISION_REC(player.getPos(), player.getSize().x, mPos, mSize.x))
 	{
 		// 플레이어 한테 아이템 효과 적용 시킨 후 true 리턴
 		switch (mCategory)
 		{
 		case ITEM_LIST::HP:
-			player.increaseHp(5);
+			player.increaseHp(10);
 			break;
+
 		case ITEM_LIST::MP:
-			player.increaseMp(10);
+			player.increaseMp(20);
 			break;
+
 		case ITEM_LIST::OFFENCE_POWER:
 			player.bulletOffencePowerUp(1);
 			break;
 
-		case ITEM_LIST::BULLET1:
-			player.changeBulletTexture(FIND_TEXTURE(L"bullet1"));
+		case ITEM_LIST::BULLET_UP:
+			player.bulletLevelUp();
 			break;
 
-		case ITEM_LIST::BULLET2:
-			player.changeBulletTexture(FIND_TEXTURE(L"bullet2"));
-			break;
-
-		case ITEM_LIST::BULLET3:
-			player.changeBulletTexture(FIND_TEXTURE(L"bullet3"));
-			break;
-
-		case ITEM_LIST::MISSILE:
-			player.missileCountUp();
-			break;
 		default:
 			break;
 		}

@@ -13,26 +13,25 @@ public:
 	void update() override;
 	void collision() override;
 	void render(HDC backDC) override;
-
 	void createItem(FPOINT pos);
-
 	class Texture* getTexture(const wchar_t* tag, int range);
 
-	list<class CObj*>& getObjs() 
+	list<class CObj*>& getObstacle() 
 	{
-		return mCObjs;
+		return mLists[(UINT)OBJ_TYPE::OBSTACLE];
 	}
 
 	class CPlayer& getPlayer() 
 	{
-		return *(CPlayer*)mCObjs.front();
+		return *(CPlayer*)mLists[(UINT)OBJ_TYPE::PLAYER].front();
 	}
 
 private:
 	class Texture* itemChoice(ITEM_LIST item);
+	void createObstacle();
 	void createEnemy();
 	void deleteObject();
 
-	list<class CObj*> mCObjs;
+	list<class CObj*> mLists[(UINT)OBJ_TYPE::END];
 	ITEM_LIST mItemList[(UINT)ITEM_LIST::END];
 };

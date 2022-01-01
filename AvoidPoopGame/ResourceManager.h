@@ -32,7 +32,7 @@ private:
 	wstring mAbsolutePullPath;
 	unordered_map<wstring, class CResource*> mResources;
 	
-	enum {RESOURCE_COUNT = 18};
+	enum {RESOURCE_COUNT = 25};
 	const wchar_t* mLoadResourceList[RESOURCE_COUNT];
 };
 

@@ -11,14 +11,12 @@
 #include "CBullet.h"
 
 ObjLayer::ObjLayer()
-	: mItemList{
+	: mLists{}
+	, mItemList{
 	ITEM_LIST::HP,
 	ITEM_LIST::MP,
 	ITEM_LIST::OFFENCE_POWER,
-	ITEM_LIST::BULLET1,
-	ITEM_LIST::BULLET2,
-	ITEM_LIST::BULLET3,
-	ITEM_LIST::MISSILE}
+	ITEM_LIST::BULLET_UP }
 {
 }
 
@@ -28,15 +26,17 @@ ObjLayer::~ObjLayer()
 	// 메모리만 지워주면 된다.
 	// 모든 오브젝트의 생성과 소멸을 담당한다.
 
-	auto iter = mCObjs.begin();
-	auto endIter = mCObjs.end();
-
-	while (iter != endIter)
+	for (int i = 0; i < (UINT)OBJ_TYPE::END; ++i)
 	{
-		delete (*iter);
+		auto iter = mLists[i].begin();
+		auto endIter = mLists[i].end();
 
-		iter = mCObjs.erase(iter);
-		endIter = mCObjs.end();
+		while (iter != endIter)
+		{
+			delete (*iter);
+			iter = mLists[i].erase(iter);
+			endIter = mLists[i].end();
+		}
 	}
 }
 
@@ -44,38 +44,53 @@ void ObjLayer::init()
 {
 	// 이전 스테이지에 이어서 플레이어 텍스처 가져온 뒤 플레이어 생성
 	Texture* texture = StageManager::getInstance()->getCurrentPlayerTexture();
-	mCObjs.push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, this, 200.0f));
+	mLists[(UINT)OBJ_TYPE::PLAYER].push_back(new CPlayer(L"player", FPOINT{ (float)WINDOW.right / 2, (float)WINDOW.bottom / 2 }, texture->getResolution(), texture, this, 200.0f));
 
-	createEnemy();
+	createObstacle();
 
-	auto iter = mCObjs.begin();
-	auto endIter = mCObjs.end();
-
-	while (iter != endIter)
+	for (int i = 0; i < (UINT)OBJ_TYPE::END; ++i)
 	{
-		(*iter)->init();
-		++iter;
+		auto iter = mLists[i].begin();
+		auto endIter = mLists[i].end();
+
+		while (iter != endIter)
+		{
+			(*iter)->init();
+			++iter;
+		}
 	}
 }
 
 void ObjLayer::update()
 {
-	static float regen = 0.f;
-	regen += DS;
+	static float obstacleRegen = 0.f;
+	obstacleRegen += DS;
 
-	if (regen > 0.35f)
+	if (obstacleRegen > 0.35f)
 	{
-		createEnemy();
-		regen = 0.f;
+		createObstacle();
+		obstacleRegen = 0.f;
 	}
 
-	auto iter = mCObjs.begin();
-	auto endIter = mCObjs.end();
+	static float enemyRegen = 0.f;
+	enemyRegen += DS;
 
-	while (iter != endIter)
+	if (enemyRegen > 10 && mLists[(UINT)OBJ_TYPE::ENEMY].size() < 3)
 	{
-		(*iter)->update();
-		++iter;
+		createEnemy();
+		enemyRegen = 0.f;
+	}
+
+	for (int i = 0; i < (UINT)OBJ_TYPE::END; ++i)
+	{
+		auto iter = mLists[i].begin();
+		auto endIter = mLists[i].end();
+
+		while (iter != endIter)
+		{
+			(*iter)->update();
+			++iter;
+		}
 	}
 
 	// 유효하지 않은 오브젝트 삭제
@@ -84,45 +99,51 @@ void ObjLayer::update()
 
 void ObjLayer::collision()
 {
-	auto iter = mCObjs.begin();
-	auto endIter = mCObjs.end();
-
-	while (iter != endIter)
+	for (int i = 0; i < (UINT)OBJ_TYPE::END; ++i)
 	{
-		if ((*iter)->collision())
-		{
-			if ((*iter)->getTag() == L"player")
-			{
-				// 플레이어의 경우 플레이어가 죽으면 true 반환
-				// 바로 인트로 화면으로 이동한다. 
-				StageManager::getInstance()->changeIntroStage();
-				return;
-			}
+		auto iter = mLists[i].begin();
+		auto endIter = mLists[i].end();
 
-			if ((*iter)->getTag() == L"item")
-			{
-				// 충돌 났는데 아이템이면 여기서 아이템 삭제
-				delete (*iter);
-				iter = mCObjs.erase(iter);
-				endIter = mCObjs.end();
-			}
-		}
-		else
+		while (iter != endIter)
 		{
-			++iter;
+			if ((*iter)->collision())
+			{
+				if ((*iter)->getTag() == L"player")
+				{
+					// 플레이어의 경우 플레이어가 죽으면 true 반환
+					// 바로 인트로 화면으로 이동한다. 
+					StageManager::getInstance()->changeIntroStage();
+					return;
+				}
+
+				if ((*iter)->getTag() == L"item")
+				{
+					// 충돌 났는데 아이템이면 여기서 아이템 삭제
+					delete (*iter);
+					iter = mLists[i].erase(iter);
+					endIter = mLists[i].end();
+				}
+			}
+			else
+			{
+				++iter;
+			}
 		}
 	}
 }
 
 void ObjLayer::render(HDC backDC)
 {
-	auto iter = mCObjs.begin();
-	auto endIter = mCObjs.end();
-
-	while (iter != endIter)
+	for (int i = 0; i < (UINT)OBJ_TYPE::END; ++i)
 	{
-		(*iter)->render(backDC);
-		++iter;
+		auto iter = mLists[i].begin();
+		auto endIter = mLists[i].end();
+
+		while (iter != endIter)
+		{
+			(*iter)->render(backDC);
+			++iter;
+		}
 	}
 }
 
@@ -131,9 +152,9 @@ void ObjLayer::createItem(FPOINT pos)
 	ITEM_LIST item = mItemList[rand() % (UINT)ITEM_LIST::END];
 	Texture* texture = itemChoice(item);
 
-	int validTime = rand() % 20 + 10;
+	int validTime = rand() % 10 + 5;
 
-	mCObjs.push_back(new CItem(L"item", pos, texture->getResolution(), texture, this, validTime, item));
+	mLists[(UINT)OBJ_TYPE::ITEM].push_back(new CItem(L"item", pos, texture->getResolution(), texture, this, validTime, item));
 }
 
 Texture* ObjLayer::itemChoice(ITEM_LIST item)
@@ -154,19 +175,7 @@ Texture* ObjLayer::itemChoice(ITEM_LIST item)
 		texture = getTexture(L"bulletPowerPotion", 1);
 		break;
 
-	case ITEM_LIST::BULLET1:
-		texture = FIND_TEXTURE(L"bullet1");
-		break;
-
-	case ITEM_LIST::BULLET2:
-		texture = FIND_TEXTURE(L"bullet2");
-		break;
-
-	case ITEM_LIST::BULLET3:
-		texture = FIND_TEXTURE(L"bullet3");
-		break;
-
-	case ITEM_LIST::MISSILE:
+	case ITEM_LIST::BULLET_UP:
 		texture = FIND_TEXTURE(L"missileCountUp");
 		break;
 
@@ -177,17 +186,6 @@ Texture* ObjLayer::itemChoice(ITEM_LIST item)
 	return texture;
 }
 
-void ObjLayer::createEnemy()
-{
-	Texture* texture = getTexture(L"enemy", 5);
-	POINT size = texture->getResolution();
-	float x = float(rand() % (WINDOW.right - size.x));
-	float speed = float((rand() % 300) + 200);
-	int	  hp = rand() % 15 + 10;
-
-	mCObjs.push_back(new CEnemy(L"enemy", FPOINT{ x, 0 }, size, texture, this, speed, hp));
-}
-
 Texture* ObjLayer::getTexture(const wchar_t* tag, int range)
 {
 	wstring wstag(tag);
@@ -195,37 +193,63 @@ Texture* ObjLayer::getTexture(const wchar_t* tag, int range)
 	return FIND_TEXTURE(wstag.c_str());
 }
 
+void ObjLayer::createObstacle()
+{
+	Texture* texture = getTexture(L"obstacle", 5);
+	POINT size = texture->getResolution();
+	float x = float(rand() % (WINDOW.right - size.x));
+	float speed = float((rand() % 300) + 200);
+	int	  hp = rand() % 15 + 10;
+
+	mLists[(UINT)OBJ_TYPE::OBSTACLE].push_back(new CEnemy(L"obstacle", FPOINT{ x, 0 }, size, texture, this, speed, hp));
+}
+
+void ObjLayer::createEnemy()
+{
+	Texture* texture = getTexture(L"enemy", 5);
+	POINT size = texture->getResolution();
+	float x = float(rand() % (WINDOW.right - size.x));
+	float y = float(rand() % 100 + 50);
+	float speed = 0.f;
+	int	  hp = rand() % 51 + 50;
+
+	mLists[(UINT)OBJ_TYPE::ENEMY].push_back(new CEnemy(L"enemy", FPOINT{ x, y }, size, texture, this, speed, hp));
+}
+
 void ObjLayer::deleteObject()
 {
-	auto iter = mCObjs.begin();
-	auto endIter = mCObjs.end();
-
-	while (iter != endIter)
+	for (int i = 0; i < (UINT)OBJ_TYPE::END; ++i)
 	{
-		if ((*iter)->getPos().mY - 10 > WINDOW.bottom)
-		{
-			delete (*iter);
-			iter = mCObjs.erase(iter);
-			endIter = mCObjs.end();
-		}
-		else if ((*iter)->getTag() == L"item")
-		{
-			CItem* item = (CItem*)(*iter);
+		auto iter = mLists[i].begin();
+		auto endIter = mLists[i].end();
 
-			if (!item->isValidTime())
+		while (iter != endIter)
+		{
+			if ((*iter)->getPos().mY > WINDOW.bottom)
 			{
 				delete (*iter);
-				iter = mCObjs.erase(iter);
-				endIter = mCObjs.end();
+				iter = mLists[i].erase(iter);
+				endIter = mLists[i].end();
+			}
+			else if ((*iter)->getTag() == L"item")
+			{
+				CItem* item = (CItem*)(*iter);
+
+				if (!item->isValidTime())
+				{
+					delete (*iter);
+					iter = mLists[i].erase(iter);
+					endIter = mLists[i].end();
+				}
+				else
+				{
+					++iter;
+				}
 			}
 			else
 			{
 				++iter;
 			}
-		}
-		else
-		{
-			++iter;
 		}
 	}
 }

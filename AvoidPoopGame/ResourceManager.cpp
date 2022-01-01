@@ -19,11 +19,18 @@ ResourceManager::ResourceManager()
 	L"HPPotion1",
 	L"MPPotion1",
 	L"bulletPowerPotion1",
+	L"bullet0",
 	L"bullet1",
 	L"bullet2",
 	L"bullet3",
+	L"bullet4",
 	L"missile1",
-	L"missileCountUp"}
+	L"missileCountUp",
+	L"obstacle1",
+    L"obstacle2",
+    L"obstacle3",
+    L"obstacle4",
+    L"obstacle5" }
 {
 	enum { LENGTH = 256 };
 

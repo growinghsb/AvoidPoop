@@ -13,14 +13,13 @@ public:
 	void update() override;
 	void render(HDC backDC) override;
 	bool collision() override;
+	void bulletLevelUp();
 
-	void changeBulletTexture(class Texture* texture);
-
-	void increaseHp(int hp) 
+	void increaseHp(int hp)
 	{
 		mCurrentHp += hp;
 
-		if (mCurrentHp > mMaxHp) 
+		if (mCurrentHp > mMaxHp)
 		{
 			mCurrentHp = mMaxHp;
 		}
@@ -36,23 +35,13 @@ public:
 		}
 	}
 
-	void bulletOffencePowerUp(int power) 
+	void bulletOffencePowerUp(int power)
 	{
 		mBulletOffencePower += power;
 
-		if (mBulletOffencePower > 10) 
+		if (mBulletOffencePower > 10)
 		{
 			mBulletOffencePower = 10;
-		}
-	}
-
-	void missileCountUp() 
-	{
-		mMissileCount += 1;
-
-		if (mMissileCount > 4) 
-		{
-			mMissileCount = 4;
 		}
 	}
 
@@ -66,6 +55,17 @@ private:
 	void createBullet();
 	void createMissile();
 	void changeBulletWeight();
+	void changeBulletTexture(class Texture* texture);
+	
+	bool decreaseMp(const int usage) 
+	{
+		if (mCurrentMp - usage >= 0) 
+		{
+			mCurrentMp -= usage;
+			return true;
+		}
+		return false;
+	}
 
 	list<class CBullet*> mBullets;
 	list<class CBullet*> mMissiles;
@@ -78,8 +78,9 @@ private:
 	int mCurrentMp;
 	int mMaxMp;
 	class Texture* mBulletTexture;
+	int mBulletCurLevel;
+	int mBulletMaxLevel;
 	float mBulletSpeedWeight;
 	int mBulletOffencePower;
-	int mMissileCount;
 };
 

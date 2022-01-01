@@ -32,14 +32,14 @@ void CBullet::render(HDC backDC)
 
 bool CBullet::collision()
 {
-	list<CObj*>& objs = mLayer->getObjs();
+	list<CEnemy*>& objs = (list<CEnemy*>&)mLayer->getObstacle();
 
 	auto iter = objs.begin();
 	auto endIter = objs.end();
 
 	while (iter != endIter)
 	{
-		if ((*iter)->getTag() == L"enemy" && CollisionManager::getInstance()->ractangleVsRactangle((*iter)->getPos(), (*iter)->getSize().x, mPos, mSize.x))
+		if ((*iter)->getTag() == L"obstacle" && COLLISION_REC((*iter)->getPos(), (*iter)->getSize().x, mPos, mSize.x))
 		{
 			CEnemy* enemy = (CEnemy*)(*iter);
 			enemy->decreaseHp(mOffencePower);
