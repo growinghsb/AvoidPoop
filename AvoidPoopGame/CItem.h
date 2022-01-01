@@ -21,6 +21,7 @@ public:
 
 private:
     class ObjLayer* mLayer;
+    float mSpeed;
     float mCreateTime; // 생성시간
     int mValidTime; // 유효시간
     ITEM_LIST mCategory; // 아이템 종류

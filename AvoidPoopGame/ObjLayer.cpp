@@ -99,35 +99,29 @@ void ObjLayer::update()
 
 void ObjLayer::collision()
 {
-	for (int i = 0; i < (UINT)OBJ_TYPE::END; ++i)
+	if (mLists[(UINT)OBJ_TYPE::PLAYER].front()->collision())
 	{
-		auto iter = mLists[i].begin();
-		auto endIter = mLists[i].end();
+		// 플레이어의 경우 플레이어가 죽으면 true 반환
+		// 바로 인트로 화면으로 이동한다. 
+		StageManager::getInstance()->changeIntroStage();
+		return;
+	}
 
-		while (iter != endIter)
+	auto iter = mLists[(UINT)OBJ_TYPE::ITEM].begin();
+	auto endIter = mLists[(UINT)OBJ_TYPE::ITEM].end();
+
+	while (iter != endIter)
+	{
+		if ((*iter)->collision())
 		{
-			if ((*iter)->collision())
-			{
-				if ((*iter)->getTag() == L"player")
-				{
-					// 플레이어의 경우 플레이어가 죽으면 true 반환
-					// 바로 인트로 화면으로 이동한다. 
-					StageManager::getInstance()->changeIntroStage();
-					return;
-				}
-
-				if ((*iter)->getTag() == L"item")
-				{
-					// 충돌 났는데 아이템이면 여기서 아이템 삭제
-					delete (*iter);
-					iter = mLists[i].erase(iter);
-					endIter = mLists[i].end();
-				}
-			}
-			else
-			{
-				++iter;
-			}
+			// 충돌 났는데 아이템이면 여기서 아이템 삭제
+			delete (*iter);
+			iter	= mLists[(UINT)OBJ_TYPE::ITEM].erase(iter);
+			endIter = mLists[(UINT)OBJ_TYPE::ITEM].end();
+		}
+		else
+		{
+			++iter;
 		}
 	}
 }

@@ -259,6 +259,9 @@ void CPlayer::bulletLevelUp()
 	if (mBulletCurLevel > mBulletMaxLevel)
 	{
 		mBulletCurLevel = mBulletMaxLevel;
+		increaseHp(10);
+
+		return;
 	}
 
 	wstring tag = L"bullet" + to_wstring(mBulletCurLevel);

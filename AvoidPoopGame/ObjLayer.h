@@ -9,9 +9,9 @@ public:
 	ObjLayer();
 	~ObjLayer();
 
-	void init() override;
-	void update() override;
-	void collision() override;
+	void init()				override;
+	void update()			override;
+	void collision()		override;
 	void render(HDC backDC) override;
 	void createItem(FPOINT pos);
 	class Texture* getTexture(const wchar_t* tag, int range);

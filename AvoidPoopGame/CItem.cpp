@@ -10,6 +10,7 @@
 CItem::CItem(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer,  int validTime, ITEM_LIST category)
 	: CObj(tag, pos, size, texture)
 	, mLayer(layer)
+	, mSpeed(250)
 	, mCreateTime(0)
 	, mValidTime(validTime)
 	, mCategory(category)
@@ -23,6 +24,7 @@ void CItem::init()
 void CItem::update()
 {
 	mCreateTime += DS;
+	mPos.mY += mSpeed * DS;
 }
 
 bool CItem::collision()
