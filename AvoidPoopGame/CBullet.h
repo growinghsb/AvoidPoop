@@ -6,7 +6,7 @@ class CBullet
 	: public CObj
 {
 public:
-	CBullet(wstring tag, FPOINT pos, POINT size, class Texture* texture, class ObjLayer* layer, float speedWeight, int offencePower);
+	CBullet(wstring tag, FPOINT pos, POINT size, class Texture* texture, class ObjLayer* layer, FPOINT ownerPos, float speedWeight, int offencePower, float angle);
 	virtual ~CBullet() = default;
 
 	virtual void init();
@@ -19,25 +19,32 @@ public:
 		return (int)mPos.mY > 0;
 	}
 
-	void setSpeedWeight(float weight)
-	{
-		mSpeedWeight = weight;
-	}
-
-	void setOffencePower(int power)
-	{
-		mOffencePower = power;
-	}
-
 	int getOffencePower() const
 	{
 		return mOffencePower;
 	}
 
+	void setSpeedWeight(const float weight)
+	{
+		mSpeedWeight = weight;
+	}
+
+	void setOffencePower(const int power)
+	{
+		mOffencePower = power;
+	}
+
+	void setOwnerPos(const FPOINT pos) 
+	{
+		mOwnerPos = pos;
+	}
+	
 private:
 	class ObjLayer* mLayer;
+	FPOINT mOwnerPos;
 	float mSpeed;
 	float mSpeedWeight;
 	int mOffencePower;
+	float mAngle;
 };
 

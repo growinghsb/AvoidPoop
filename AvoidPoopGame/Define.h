@@ -1,5 +1,6 @@
 #pragma once
 
+#define PI 3.141592f;
 #define DS TimeManager::getInstance()->getDS()
 #define ISPRESS(key) InputManager::getInstance()->isPress(key)
 #define ISTIC(key) InputManager::getInstance()->isTic(key)
@@ -11,3 +12,5 @@
 #define COLOR_GREEN RGB(0, 249, 0)
 #define COLOR_MAGENTA RGB(255, 0, 255)
 #define COLOR_BLUE RGB(0, 0, 245)
+
+HBITMAP GetRotatedBitmap(HDC hdc, HDC sourceDC, HBITMAP sourceBitmap, int dest_width, int dest_height, float angle, COLORREF bkColor);

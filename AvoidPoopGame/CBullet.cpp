@@ -6,12 +6,14 @@
 #include "CollisionManager.h"
 #include "CEnemy.h"
 
-CBullet::CBullet(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, float speedWeight, int offencePower)
+CBullet::CBullet(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer* layer, FPOINT ownerPos, float speedWeight, int offencePower, float angle)
 	: CObj(tag, pos, size, texture)
 	, mLayer(layer)
+	, mOwnerPos(ownerPos)
 	, mSpeed(450.0f)
 	, mSpeedWeight(speedWeight)
 	, mOffencePower(offencePower)
+	, mAngle(angle)
 {
 }
 
@@ -21,7 +23,15 @@ void CBullet::init()
 
 void CBullet::update()
 {
-	mPos.mY -= (mSpeed * DS) * mSpeedWeight;
+	if (mTag == L"eBullet")
+	{
+		mPos.mX += (mSpeed * DS * mSpeedWeight) * cosf(mAngle);
+		mPos.mY += (mSpeed * DS * mSpeedWeight) * sinf(mAngle);
+	}
+	else
+	{
+		mPos.mY -= (mSpeed * DS) * mSpeedWeight;
+	}
 }
 
 void CBullet::render(HDC backDC)

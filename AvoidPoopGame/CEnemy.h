@@ -7,7 +7,7 @@ class CEnemy :
 {
 public:
     CEnemy(wstring tag, FPOINT pos, POINT size, class Texture* texture, class ObjLayer* layer, float speed, int maxHp);
-    virtual ~CEnemy() = default;
+    virtual ~CEnemy();
 
     void init()   override;
     void update() override;
@@ -35,9 +35,17 @@ public:
     }
 
 private:
+    void createBullet();
+
     class ObjLayer* mLayer;
     float mSpeed;
     float mSpeedWeight;
     int mMaxHp;
+    float mRelativeAngle;
+    float mAbsoluteAngle;
+    float mRotateX;
+    float mRotateY;
+
+    list<class CBullet*> mBullets;
 };
 

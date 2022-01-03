@@ -193,6 +193,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CResource.cpp" />
+    <ClCompile Include="func.cpp" />
     <ClCompile Include="GenericButton.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="InputManager.cpp" />

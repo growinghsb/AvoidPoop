@@ -293,6 +293,9 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Game2\02.Collision</Filter>
     </ClCompile>
+    <ClCompile Include="func.cpp">
+      <Filter>Game\00.Header</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AvoidPoopGame.rc">

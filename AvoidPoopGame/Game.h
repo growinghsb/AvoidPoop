@@ -8,6 +8,7 @@
 #include "Sturct.h"
 
 #include <crtdbg.h>
+#include <math.h>
 
 #include <iostream>
 #include <vector>

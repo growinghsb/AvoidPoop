@@ -21,7 +21,7 @@ public:
 		return mLists[(UINT)OBJ_TYPE::OBSTACLE];
 	}
 
-	class CPlayer& getPlayer() 
+	class CPlayer& getPlayer() const 
 	{
 		return *(CPlayer*)mLists[(UINT)OBJ_TYPE::PLAYER].front();
 	}

@@ -66,7 +66,7 @@ void ObjLayer::update()
 	static float obstacleRegen = 0.f;
 	obstacleRegen += DS;
 
-	if (obstacleRegen > 0.35f)
+	if (obstacleRegen > 0.7f)
 	{
 		createObstacle();
 		obstacleRegen = 0.f;

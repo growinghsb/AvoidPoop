@@ -19,12 +19,14 @@ CPlayer::CPlayer(wstring tag, FPOINT pos, POINT size, Texture* texture, ObjLayer
 	, mMaxHp(100)
 	, mCurrentMp(100)
 	, mMaxMp(100)
-	, mBulletTexture(FIND_TEXTURE(L"bullet0"))
-	, mBulletCurLevel(0)
+	, mBulletTexture(nullptr)
+	, mBulletCurLevel(1)
 	, mBulletMaxLevel(4)
 	, mBulletSpeedWeight(1.0f)
 	, mBulletOffencePower(3)
 {
+	wstring bulletTag = L"bullet" + to_wstring(mBulletCurLevel);
+	mBulletTexture = FIND_TEXTURE(bulletTag.c_str());
 }
 
 CPlayer::~CPlayer()
@@ -359,13 +361,13 @@ void CPlayer::createBullet()
 
 	if (mBullets.empty())
 	{
-		mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, res, mBulletTexture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
+		mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, res, mBulletTexture, mLayer, mPos, mBulletSpeedWeight, mBulletOffencePower, 0.f));
 	}
 	else
 	{
 		if (mBullets.front()->isValid())
 		{
-			mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, res, mBulletTexture, mLayer, mBulletSpeedWeight, mBulletOffencePower));
+			mBullets.push_back(new CBullet(L"bullet", FPOINT{ bulletPosX, bulletPosY }, res, mBulletTexture, mLayer, mPos, mBulletSpeedWeight, mBulletOffencePower, 0.f));
 		}
 		else
 		{
@@ -377,6 +379,7 @@ void CPlayer::createBullet()
 			invalidBullet->changeTexture(mBulletTexture);
 			invalidBullet->setSpeedWeight(mBulletSpeedWeight);
 			invalidBullet->setOffencePower(mBulletOffencePower);
+			invalidBullet->setOwnerPos(mPos);
 
 			mBullets.push_back(invalidBullet);
 		}
@@ -389,7 +392,7 @@ void CPlayer::createMissile()
 	POINT res = texture->getResolution();
 	float x = mPos.mX + (rand() % mSize.x);
 
-	mMissiles.push_back(new CBullet(L"bullet", FPOINT{ x, mPos.mY }, res, texture, mLayer, 0.6f, 7));
+	mMissiles.push_back(new CBullet(L"bullet", FPOINT{ x, mPos.mY }, res, texture, mLayer, mPos, 0.6f, 7, 0.f));
 
 	auto iter = mMissiles.begin();
 	auto endIter = mMissiles.end();
