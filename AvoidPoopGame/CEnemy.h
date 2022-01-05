@@ -35,7 +35,7 @@ public:
     }
 
 private:
-    void createBullet();
+    //void createBullet(); 나중에, 일단 구조적인 부분에 집중
 
     class ObjLayer* mLayer;
     float mSpeed;

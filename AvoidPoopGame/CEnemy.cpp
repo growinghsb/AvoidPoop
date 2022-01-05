@@ -53,12 +53,12 @@ void CEnemy::update()
 		mRelativeAngle = degree - 90.f;
 		mAbsoluteAngle = 270.f + mRelativeAngle;
 
-		if (bulletRegen > 1.0f) 
+		/*if (bulletRegen > 1.0f) 
 		{
 			createBullet();
 			bulletRegen = 0.f;
-		}	
-	}
+		}	*/
+	}  
 
 	for (auto item : mBullets)
 	{
@@ -117,31 +117,31 @@ bool CEnemy::collision()
 	return false;
 }
 
-void CEnemy::createBullet()
-{
-	Texture* texture = FIND_TEXTURE(L"bullet0");
-	POINT res = texture->getResolution();
-
-	FPOINT gunPos{mPos.mX + cosf(mAbsoluteAngle), mPos.mY + sinf(mAbsoluteAngle)};
-	float bulletPosX = gunPos.mX + mRotateX;
-	float bulletPosY = gunPos.mY;
-
-	mBullets.push_back(new CBullet(L"eBullet", FPOINT{ bulletPosX, bulletPosY }, res, texture, mLayer, mPos, 1.5f, 3, mAbsoluteAngle));
-	
-	auto iter = mBullets.begin();
-	auto endIter = mBullets.end();
-
-	while (iter != endIter) 
-	{
-		if (!(*iter)->isValid())
-		{
-			delete (*iter);
-			iter = mBullets.erase(iter);
-			endIter = mBullets.end();
-		}
-		else 
-		{
-			++iter;
-		}
-	}
-}
+//void CEnemy::createBullet()
+//{
+//	Texture* texture = FIND_TEXTURE(L"bullet0");
+//	POINT res = texture->getResolution();
+//
+//	FPOINT gunPos{mPos.mX + cosf(mAbsoluteAngle), mPos.mY + sinf(mAbsoluteAngle)};
+//	float bulletPosX = gunPos.mX + mRotateX;
+//	float bulletPosY = gunPos.mY;
+//
+//	mBullets.push_back(new CBullet(L"eBullet", FPOINT{ bulletPosX, bulletPosY }, res, texture, mLayer, mPos, 1.5f, 3, 60));
+//	
+//	auto iter = mBullets.begin();
+//	auto endIter = mBullets.end();
+//
+//	while (iter != endIter) 
+//	{
+//		if (!(*iter)->isValid())
+//		{
+//			delete (*iter);
+//			iter = mBullets.erase(iter);
+//			endIter = mBullets.end();
+//		}
+//		else 
+//		{
+//			++iter;
+//		}
+//	}
+//}

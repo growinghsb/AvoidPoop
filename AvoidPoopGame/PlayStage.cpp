@@ -8,6 +8,7 @@
 #include "StageManager.h"
 #include "ResourceManager.h"
 #include "Texture.h"
+#include "EventManager.h"
 
 PlayStage::PlayStage(int order)
 	: Stage(order)
@@ -49,7 +50,7 @@ void PlayStage::update()
 
 	if ((int)second >= 3) 
 	{
-		StageManager::getInstance()->changeNextStage();
+		ChangeStage(eEVENT_TYPE::CHANGE_STAGE, STAGE_MODE::NEXT);
 		second = 0.f;
 
 		return;
@@ -216,7 +217,7 @@ void PlayStage::crushCheckMonsterPlayer()
 			}
 			else
 			{
-				StageManager::getInstance()->changePrevStage();
+				ChangeStage(eEVENT_TYPE::CHANGE_STAGE, STAGE_MODE::PREV);
 				return;
 			}
 		}

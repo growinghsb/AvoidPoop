@@ -4,6 +4,7 @@
 #include "StageManager.h"
 #include "ResourceManager.h"
 #include "CollisionManager.h"
+#include "EventManager.h"
 
 Core* Core::mCore = nullptr;
 bool Core::mFlag = true;
@@ -43,11 +44,12 @@ void Core::deleteInstance()
 		delete mCore;
 		mCore = nullptr;
 	}
-
+	
 	CollisionManager::deleteInstance();
 	TimeManager::deleteInstance();
 	InputManager::deleteInstance();
 	ResourceManager::deleteInstance();
+	EventManager::deleteInstance();
 	StageManager::deleteInstance();
 }
 
@@ -76,6 +78,7 @@ bool Core::init(HINSTANCE hInstance)
 	// Collision 같은 경우 객체만 한 번 생성되면 된다. 
 	// 따로 init, update 등의 작업이 필요 없다.
 
+	EventManager::getInstance()->init();
 	ResourceManager::getInstance()->init();
 	InputManager::getInstance()->init();
 	StageManager::getInstance()->init();
@@ -125,6 +128,11 @@ void Core::render()
 	StageManager::getInstance()->render(mBackDC);
 
 	BitBlt(mHdc, 0, 0, mWindow.right, mWindow.bottom, mBackDC, 0, 0, SRCCOPY);
+	
+	// 이벤트매니저는 모든 작업이 종료된 뒤 
+	// 업데이트를 진행한다. 프레임이 종료된 후 
+	// 진행되야 하는 작업들을 처리하기 때문
+	EventManager::getInstance()->update();
 }
 
 ATOM Core::MyRegisterClass()

@@ -23,15 +23,7 @@ void CBullet::init()
 
 void CBullet::update()
 {
-	if (mTag == L"eBullet")
-	{
-		mPos.mX += (mSpeed * DS * mSpeedWeight) * cosf(mAngle);
-		mPos.mY += (mSpeed * DS * mSpeedWeight) * sinf(mAngle);
-	}
-	else
-	{
-		mPos.mY -= (mSpeed * DS) * mSpeedWeight;
-	}
+	mPos.mY -= (mSpeed * DS) * mSpeedWeight;
 }
 
 void CBullet::render(HDC backDC)

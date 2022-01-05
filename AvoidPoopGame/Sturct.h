@@ -89,6 +89,22 @@ enum class OBJ_TYPE
 	END
 };
 
+enum class STAGE_MODE 
+{
+	INTRO, 
+	NEXT, 
+	PREV, 
+	END
+};
+
+enum class eEVENT_TYPE 
+{
+	CHANGE_STAGE, 
+	CREATE_OBJ, 
+	DELETE_OBJ, 
+	END
+};
+
 // float 타입의 x, y 값을 나타내는 구조체
 struct FPOINT
 {
@@ -183,4 +199,11 @@ struct COLOR
 	int r, g, b;
 };
 
+struct EVENT_STATE 
+{
+public:
+	eEVENT_TYPE mType; // 이벤트의 종류
+	DWORD_PTR mLow;	  // 먼저 사용하는 포인터
+	DWORD_PTR mHigh;  // 나중에 사용하는 포인터
+};
 

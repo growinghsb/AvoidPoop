@@ -11,5 +11,5 @@ GenericButton::GenericButton(FPOINT pos, int size, Texture* texture)
 void GenericButton::isClicked()
 {
 	// 왼쪽 마우스 클릭 이벤트 수신
-	StageManager::getInstance()->changeNextStage();
+	ChangeStage(eEVENT_TYPE::CHANGE_STAGE, STAGE_MODE::NEXT);
 }	

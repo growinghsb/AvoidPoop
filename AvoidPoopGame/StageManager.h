@@ -12,11 +12,7 @@ public:
 	void update();
 	void render(HDC backDC);
 
-	void changeNextStage();
-	void changePrevStage();
-	
-	// 바로 인트로 화면으로 가는 함수
-	void changeIntroStage();
+	void changeStage(STAGE_MODE mode);
 
 	class Stage* getCurrentStage() const;
 

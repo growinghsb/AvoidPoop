@@ -12,5 +12,6 @@
 #define COLOR_GREEN RGB(0, 249, 0)
 #define COLOR_MAGENTA RGB(255, 0, 255)
 #define COLOR_BLUE RGB(0, 0, 245)
+#define ADD_EVENT(e) EventManager::getInstance()->addEvent(e);
 
 HBITMAP GetRotatedBitmap(HDC hdc, HDC sourceDC, HBITMAP sourceBitmap, int dest_width, int dest_height, float angle, COLORREF bkColor);

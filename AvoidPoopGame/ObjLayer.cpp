@@ -103,7 +103,7 @@ void ObjLayer::collision()
 	{
 		// 플레이어의 경우 플레이어가 죽으면 true 반환
 		// 바로 인트로 화면으로 이동한다. 
-		StageManager::getInstance()->changeIntroStage();
+		ChangeStage(eEVENT_TYPE::CHANGE_STAGE, STAGE_MODE::INTRO);
 		return;
 	}
 

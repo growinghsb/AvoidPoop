@@ -61,37 +61,28 @@ void StageManager::render(HDC backDC)
 	mCurrentStage->render(backDC);
 }
 
-void StageManager::changeNextStage()
+void StageManager::changeStage(STAGE_MODE mode)
 {
 	mCurrentStage->exit();
 
-	int nextOrderNum = mCurrentStage->getOrder() + 1;
+	int orderNum = mCurrentStage->getOrder();
 
-	if (nextOrderNum != mStages.size())
+	switch (mode)
 	{
-		mCurrentStage = mStages[nextOrderNum];
-		mCurrentStage->enter();
+	case STAGE_MODE::INTRO:
+		orderNum = 0;
+		break;
+	case STAGE_MODE::NEXT:
+		orderNum += 1;
+		break;
+	case STAGE_MODE::PREV:
+		orderNum -= 1;
+		break;
+	default:
+		break;
 	}
-}
 
-void StageManager::changePrevStage()
-{
-	mCurrentStage->exit();
-
-	int prevOrderNum = mCurrentStage->getOrder() - 1;
-
-	if (prevOrderNum >= 0)
-	{
-		mCurrentStage = mStages[prevOrderNum];
-		mCurrentStage->enter();
-	}
-}
-
-void StageManager::changeIntroStage()
-{
-	mCurrentStage->exit();
-
-	mCurrentStage = mStages[0];
+	mCurrentStage = mStages[orderNum];
 	mCurrentStage->enter();
 }
 

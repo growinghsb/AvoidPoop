@@ -103,6 +103,42 @@
     <Filter Include="Game2\02.Collision">
       <UniqueIdentifier>{b6373e3a-3d32-4038-9c77-7c26ed8b2933}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game3">
+      <UniqueIdentifier>{04997757-21e1-4013-9a42-e7be61881367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\EventManager">
+      <UniqueIdentifier>{7ba43c15-1f4a-4342-9e88-e0f26fce7427}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Component">
+      <UniqueIdentifier>{13fc1651-2115-41fc-aabe-83653d150727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\CollisionManager">
+      <UniqueIdentifier>{49da8fc8-d849-45d2-b0d4-70ce102b051b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Object">
+      <UniqueIdentifier>{aff9db8f-0ca3-4c25-a8e3-f4e78671bb9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Object\01.Player">
+      <UniqueIdentifier>{a0fe21fb-77a3-47a8-9604-56a8873e2e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Object\02.Enemy">
+      <UniqueIdentifier>{633685fc-3168-4c93-984e-073647846fab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Object\03.Obstacle">
+      <UniqueIdentifier>{8cecadef-668a-4d4e-be10-8a2edf8d7cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Object\04.Item">
+      <UniqueIdentifier>{87971ebf-c51f-44a5-a153-0ee2f9f437c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Object\05.Bullet">
+      <UniqueIdentifier>{9af103b5-efde-4d0e-8279-777d310e6400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Object\06.Obj">
+      <UniqueIdentifier>{18676d8a-21c0-4e65-a622-20793f699913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game3\Component\Collision">
+      <UniqueIdentifier>{dfeddd60-1e16-43cd-a4f7-a26f6ad61688}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -207,6 +243,15 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>Game2\02.Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Game3\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Game3\Component\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Game3\EventManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -295,6 +340,15 @@
     </ClCompile>
     <ClCompile Include="func.cpp">
       <Filter>Game\00.Header</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Game3\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Game3\Component\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Game3\EventManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

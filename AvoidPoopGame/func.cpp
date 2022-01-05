@@ -1,5 +1,14 @@
 #include "Game.h"
 #include "Core.h"
+#include "EventManager.h"
+
+void ChangeStage(eEVENT_TYPE type, STAGE_MODE mode)
+{
+	EVENT_STATE info = {type, (UINT)mode, (DWORD_PTR)nullptr};
+	ADD_EVENT(info);
+}
+void CreateObject() {}
+void DeleteObject() {}
 
 HBITMAP GetRotatedBitmap(HDC hdc, HDC sourceDC, HBITMAP sourceBitmap, int dest_width, int dest_height, float angle, COLORREF bkColor) {
 	// 회전할 비트맵을 출력받을 DC
