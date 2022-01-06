@@ -38,6 +38,7 @@ void EventManager::update()
 		{
 		case eEVENT_TYPE::CHANGE_STAGE:
 			ChangeStage(mEvents[i]);
+			goto EXIT;
 			break;
 		case eEVENT_TYPE::CREATE_OBJ:
 			CreateObj(mEvents[i]);
@@ -49,6 +50,8 @@ void EventManager::update()
 			break;
 		}
 	}
+
+	EXIT:
 	mEvents.clear();
 }
 
